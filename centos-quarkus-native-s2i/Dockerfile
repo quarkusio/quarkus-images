@@ -3,7 +3,7 @@
 ###
 FROM centos:7
 
-ARG GRAAL_VERSION=1.0.0-rc13
+ARG GRAAL_VERSION=1.0.0-rc14
 ARG MAVEN_VERSION=3.6.0
 
 ENV GRAAL_CE_URL=https://github.com/oracle/graal/releases/download/vm-${GRAAL_VERSION}/graalvm-ce-${GRAAL_VERSION}-linux-amd64.tar.gz
