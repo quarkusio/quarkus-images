@@ -1,9 +1,9 @@
 ###
-# This image provides GraalVM CE.
-# The version can be passed as argument.
+# Docker image providing the `native-image` executable.
+# It requires the the application to be mounted into the `/project` directory.
 ###
 
-FROM centos:7.6.1810
+FROM centos:7
 
 ARG GRAAL_VERSION
 ENV GRAAL_VERSION=${GRAAL_VERSION:-1.0.0-rc13}
@@ -13,9 +13,15 @@ ENV JAVA_HOME=/opt/graalvm
 ENV PATH=$PATH:$JAVA_HOME/bin
 ENV GRAALVM_HOME=/opt/graalvm
 
-
 RUN  yum update -y && \
 	 yum install -y tar gzip gcc glibc-devel zlib-devel curl && \
+    ### Installation of GraalVM
 	 mkdir -p /opt/graalvm && \
 	 cd /opt/graalvm && \
 	 curl -fsSL $GRAAL_CE_URL | tar -xzC /opt/graalvm --strip-components=1
+    ###
+
+VOLUME /project
+WORKDIR /project
+
+ENTRYPOINT ["native-image"]
