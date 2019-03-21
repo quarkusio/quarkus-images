@@ -3,7 +3,7 @@
 # The version can be passed as argument.
 ###
 
-FROM centos:7
+FROM centos:7.6.1810
 
 ARG GRAAL_VERSION
 ENV GRAAL_VERSION=${GRAAL_VERSION:-1.0.0-rc13}
