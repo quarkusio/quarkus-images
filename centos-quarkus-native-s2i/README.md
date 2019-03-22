@@ -11,12 +11,23 @@
 
 ### OpenShift Build
 
+You can locally build this S2I Builder image inside your OpenShift cluster like this:
+
     oc new-build https://github.com/quarkusio/quarkus.git --context-dir=docker/centos-graal-maven-s2i --name quarkus-native-s2i
     oc logs -f bc/quarkus-native-s2i
 
+It is also available on https://quay.io/repository/quarkus/centos-quarkus-native-s2i.
+
 ### OpenShift Use
 
+    oc new-app quay.io/quarkus/centos-quarkus-native-s2i~https://github.com/quarkusio/quarkus-quickstarts --context-dir=getting-started --name=getting-started-native
+
+or, to use the image locally built above:
+
     oc new-app quarkus-native-s2i~https://github.com/quarkusio/quarkus-quickstarts --context-dir=getting-started --name=getting-started-native
+
+and then:
+
     oc logs -f bc/getting-started-native
     oc expose svc/getting-started-native
 
