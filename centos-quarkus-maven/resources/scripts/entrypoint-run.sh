@@ -35,7 +35,7 @@ copy_reference_files() {
 }
 
 function configure_proxy() {
-  echo "Checking and Setting  Maven Proxies"
+  echo "Checking and Setting Maven Proxies"
   if [ -n "$HTTP_PROXY_HOST" -a -n "$HTTP_PROXY_PORT" ]; then
     xml="<proxy>\
          <id>genproxy</id>\
@@ -60,7 +60,7 @@ function configure_proxy() {
 
 # insert settings for mirrors/repository managers into settings.xml if supplied
 function configure_mirrors() {
-  echo "Checking and Setting  Maven mirrors"
+  echo "Checking and Setting Maven mirrors "
   if [ -n "$MAVEN_MIRROR_URL" ]; then
     xml="    <mirror>\
       <id>mirror.default</id>\
