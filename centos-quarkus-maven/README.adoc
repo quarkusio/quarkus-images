@@ -1,0 +1,87 @@
+= Centos + GraalVM + Maven Image
+
+The container builder image that can be used to build  https://quarkus.io[QuarkusIO] applications. 
+
+The image is baked in with the following tools:
+
+ * [Apache Maven](https://maven.apache.org)
+ * [Graal VM](http://www.graalvm.org)
+ * [Buildah](https://buildah.io)
+ * [Podman](https://podman.io/)
+
+== Using the image 
+
+Docker pull `docker pull quay.io/quarkus/centos-quarkus-maven`
+
+== Configuration 
+
+[#en-vars]
+[cols="2,3,1",options="header"]
+.Environment Variables
+|===
+
+| Environment Variable | Use | Default
+
+| WORK_DIR
+| The directory that contains sources to build
+| /project 
+
+
+| MAVEN_MIRROR_URL
+| The maven mirror url, typically the repository manager URL to make builders faster
+| 
+
+| HTTP_PROXY_HOST
+| The HTTP proxy host to use with Maven
+| 
+
+| HTTP_PROXY_PORT
+| The HTTP proxy port to use with Maven
+| 
+
+| HTTP_PROXY_USERNAME
+| The HTTP proxy port to use with Maven
+| 
+
+| HTTP_PROXY_PASSWORD
+| The HTTP proxy password to use with Maven
+| 
+
+| HTTP_PROXY_NONPROXYHOSTS
+| The HTTP hosts to which proxy does not apply
+| 
+
+|===
+
+== Building your Quarkus Application
+
+To build your Quarkus application, create a Dockerfile like:
+
+[source,dockerfile]
+====
+# https://github.com/quarkusio/quarkus-images/tree/graalvm-1.0.0-rc14/centos-quarkus-maven allows to set 
+# various maven build arguments such as MAVEN_MIRROR_URL, HTTP_PROXY_HOST etc.,
+
+FROM quay.io/quarkus/centos-quarkus-maven:graalvm-1.0.0-rc13 as nativebuilder
+COPY . /work
+ 
+# uncomment this to set the MAVEN_MIRROR_URL of your choice, to make faster builds
+# ARG MAVEN_MIRROR_URL=<your-maven-mirror-url>
+# e.g. 
+# ARG MAVEN_MIRROR_URL=http://192.168.64.1:8081/nexus/content/groups/public
+
+RUN cd /work && /usr/local/bin/entrypoint-run.sh mvn -DskipTests clean package -Pnative 
+
+FROM registry.fedoraproject.org/fedora-minimal
+COPY --from=nativebuilder /work/target/helloworld-java-quarkus-runner /application
+EXPOSE 8080
+ENTRYPOINT ["/application"]
+CMD ["-Dquarkus.http.host=0.0.0.0"]
+====
+
+Run a docker build by running the following command by replacing `{username}` with your DockerHub or any other container registry user name
+
+[source,bash]
+====
+docker build -t docker.io/{username}/my-quarkus-app . 
+====
