@@ -9,36 +9,21 @@
     minishift config set memory 8192
     minishift start
 
-### OpenShift Build
+### OpenShift Build & Use
+
+This S2I Builder image is available on https://quay.io/repository/quarkus/centos-quarkus-native-s2i.
+
+The quarkus.git/docs/src/main/asciidoc/openshift-s2i-guide.adoc documents how to use it,
+including how to increase the `BuildConfig`'s `limits`.
+
+Alternatively, you can locally build it inside your OpenShift cluster like this:
 
     oc new-build https://github.com/quarkusio/quarkus.git --context-dir=docker/centos-graal-maven-s2i --name quarkus-native-s2i
     oc logs -f bc/quarkus-native-s2i
 
-### OpenShift Use
+To use the image locally built above instead of the one released to Quay.io, just use:
 
     oc new-app quarkus-native-s2i~https://github.com/quarkusio/quarkus-quickstarts --context-dir=getting-started --name=getting-started-native
-    oc logs -f bc/getting-started-native
-    oc expose svc/getting-started-native
-
-Note that GraalVM-based native build are more memory & CPU intensive than regular pure Java builds.
-[By default, builds are completed by pods using unbound resources, such as memory and CPU](https://docs.openshift.com/container-platform/3.11/dev_guide/builds/advanced_build_operations.html),
-but note that [your OpenShift Project may have limit ranges defined](https://docs.openshift.com/container-platform/3.11/admin_guide/limits.html#admin-guide-limits).
-
-Testing indicates that the "hello, world" getting-started demo application builds in around 2 minutes on typical hardware when the build is given 4 GB of RAM and 4 (virtual) CPUs for concurrency. You therefore may need to increase the respective limits for OpenShift's S2I build containers like so:
-
-    apiVersion: "v1"
-    kind: "BuildConfig"
-    metadata:
-      name: "getting-started-native"
-    spec:
-      resources:
-        limits:
-          cpu: '4'
-          memory: 4Gi
-
-The following `oc patch` command does this:
-
-    oc patch bc/getting-started-native -p '{"spec":{"resources":{"limits":{"cpu":"4", "memory":"4Gi"}}}}'
 
 ## Locally (only for testing)
 
