@@ -60,6 +60,8 @@ ENV PATH=$PATH:"/usr/local/s2i"
 
 USER 1001
 
+WORKDIR ${QUARKUS_HOME}
+
 EXPOSE 8080
 
 # Use the run script as default since we are working as an hybrid image which can be
