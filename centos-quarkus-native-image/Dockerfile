@@ -23,4 +23,6 @@ RUN  yum update -y && \
 VOLUME /project
 WORKDIR /project
 
+RUN chgrp -R 0 /project && chmod -R g=u /project
+
 ENTRYPOINT ["native-image"]
