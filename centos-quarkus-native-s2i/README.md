@@ -13,7 +13,7 @@
 
 This S2I Builder image is available on https://quay.io/repository/quarkus/centos-quarkus-native-s2i.
 
-The quarkus.git/docs/src/main/asciidoc/openshift-s2i-guide.adoc documents how to use it,
+The [OpenShift S2I Guide](https://quarkus.io/guides/openshift-s2i-guide) documents how to use it,
 including how to increase the `BuildConfig`'s `limits`.
 
 Alternatively, you can locally build it inside your OpenShift cluster like this:
