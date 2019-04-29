@@ -27,3 +27,6 @@ To update the GraalVM version:
 
 The images are built automatically and deployed to Quay. You can monirot the build from:
 https://quay.io/organization/quarkus
+
+Also, you need to update the default branch of the repository. This is done on:
+https://github.com/quarkusio/quarkus-images/settings/branches
