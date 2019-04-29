@@ -7,8 +7,23 @@
 set -ex
 
 cd /tmp/src/
-mvn package -Pnative -e -B \
+
+if [ -e ./build.gradle -a -z "$USE_MAVEN" ]; then
+    USE_GRADLE=true
+else
+    USE_GRADLE=false
+fi
+
+if "$USE_GRADLE"; then
+  BUILD_DIR=build
+  mkdir -p build/libs
+  gradle buildNative --docker-build=false
+else
+  BUILD_DIR=target
+  mvn package -Pnative -e -B \
     -DskipTests -Dmaven.javadoc.skip=true -Dmaven.site.skip=true -Dmaven.source.skip=true \
     -Djacoco.skip=true -Dcheckstyle.skip=true -Dfindbugs.skip=true -Dpmd.skip=true -Dfabric8.skip=true
-cp -v target/*-runner ${QUARKUS_HOME}/application
+fi
+
+cp -v ${BUILD_DIR}/*-runner ${QUARKUS_HOME}/application
 

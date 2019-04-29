@@ -5,9 +5,11 @@ FROM centos:7
 
 ARG GRAAL_VERSION=1.0.0-rc15
 ARG MAVEN_VERSION=3.6.0
+ARG GRADLE_VERSION=5.4.1
 
 ENV GRAAL_CE_URL=https://github.com/oracle/graal/releases/download/vm-${GRAAL_VERSION}/graalvm-ce-${GRAAL_VERSION}-linux-amd64.tar.gz
 ARG MAVEN_URL=https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz
+ARG GRADLE_URL=https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip
 ARG USER_HOME_DIR="/home/quarkus"
 ARG MAVEN_BASE_URL=https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries
 
@@ -17,21 +19,28 @@ ENV GRAALVM_HOME /opt/graalvm
 ENV JAVA_HOME /opt/graalvm
 ENV QUARKUS_HOME=/home/quarkus
 ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
+ENV GRADLE_DIR=/opt/gradle
+ENV GRADLE_HOME=${GRADLE_DIR}/gradle-${GRADLE_VERSION}
+ENV GRADLE_OPTS="-Dorg.gradle.daemon=false"
 
-ENV PATH=$PATH:$JAVA_HOME/bin
+ENV PATH=$PATH:$JAVA_HOME/bin:$GRADLE_HOME/bin
 
 RUN  yum update -y && \
-	 yum install -y --setopt=skip_missing_names_on_install=False tar gzip gcc glibc-devel zlib-devel curl && \
+     yum install -y --setopt=skip_missing_names_on_install=False tar gzip unzip gcc glibc-devel zlib-devel curl && \
      ### Installation of Maven
      mkdir -p ${MAVEN_HOME} ${MAVEN_HOME}/ref && \
      curl -fsSL -o /tmp/apache-maven.tar.gz ${MAVEN_URL}  && \
      tar -xzf /tmp/apache-maven.tar.gz -C ${MAVEN_HOME} --strip-components=1 && \
      ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn && \
      ###
+     ### Installation of Gradle
+     curl -fsSL -o /tmp/gradle.zip ${GRADLE_URL}  && \
+     unzip -q -d ${GRADLE_DIR} /tmp/gradle.zip && \
+     ###
      ### Installation of GraalVM
-	 mkdir -p ${GRAALVM_HOME} && \
-	 cd ${GRAALVM_HOME} && \
-	 curl -fsSL $GRAAL_CE_URL | tar -xzC ${GRAALVM_HOME} --strip-components=1  && \
+     mkdir -p ${GRAALVM_HOME} && \
+     cd ${GRAALVM_HOME} && \
+     curl -fsSL $GRAAL_CE_URL | tar -xzC ${GRAALVM_HOME} --strip-components=1  && \
      ### User management
      adduser -u 1001 -g 0 quarkus --home-dir ${QUARKUS_HOME} && \
      chown -R 1001:0 ${QUARKUS_HOME} && \
