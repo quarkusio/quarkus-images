@@ -29,13 +29,13 @@ To use the image locally built above instead of the one released to Quay.io, jus
 
 ### Local Build
 
-    docker build . -t quarkus-native-s2i
+     cekit --verbose build --overrides-file centos-quarkus-native-s2i.yaml docker
 
 ### Local use
 
     sudo dnf install source-to-image
 
-    s2i build --copy ../../../quarkus-quickstarts/getting-started quarkus-native-s2i getting-started-native
+    s2i build https://github.com/quarkusio/quarkus-quickstarts.git --context-dir=getting-started  quay.io/quarkus/centos-quarkus-native-s2i:latest getting-started-native
 
     docker run --rm -it -p 8080:8080 getting-started-native
 

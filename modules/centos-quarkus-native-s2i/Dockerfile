@@ -1,4 +1,4 @@
-###
+### Docker file kept only for reference, do not build the image during the migration process to CEKit.
 # Quakus *native* S2I builder
 ###
 FROM centos:7

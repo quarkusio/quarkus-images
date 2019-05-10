@@ -9,11 +9,18 @@ The image is baked in with the following tools:
  * [Buildah](https://buildah.io)
  * [Podman](https://podman.io/)
 
-== Using the image 
+## Using the image 
 
-Docker pull `docker pull quay.io/quarkus/centos-quarkus-maven`
+```bash
+docker pull `docker pull quay.io/quarkus/centos-quarkus-maven`
 
-== Configuration 
+docker run -it -p 8080:8080 -v some-java-project-dir:/project quay.io/quarkus/centos-quarkus-maven:1.0 mvn -Dquarkus.http.host=0.0.0.0 compile quarkus:dev
+```
+
+In case you get permission denied make sure to correctly configure the volume pointing to /project.
+https://docs.docker.com/storage/volumes/
+
+## Configuration 
 
 | Environment Variable | Use | Default |
 

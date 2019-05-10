@@ -1,32 +1,102 @@
 # Quarkus Images
 
-This repository contains the container (Docker) images used by Quarkus.
+This repository contains the container images used by Quarkus.
 
 
-## Delivered images
+## Quarkus images
 
-the images are deliered on [Quay.io](https://quay.io/repository/quarkus)
+The images are available on [Quay.io](https://quay.io/repository/quarkus)
 
-* [centos-quarkus-native-image](https://github.com/quarkusio/quarkus-images/tree/graalvm-1.0.0-rc15/centos-quarkus-native-image) - provides the `native-image` executable. Used by the Maven and Gradle plugin from Quarkus to build linux64 executables
-* [centos-quarkus-maven](https://github.com/quarkusio/quarkus-images/tree/graalvm-1.0.0-rc15/centos-quarkus-maven) - Image delivering GraalVM, Maven, Podman and Builah; this image can be used to build a native executable from source.
-* [GraalVM Native S2I](https://github.com/quarkusio/quarkus-images/tree/graalvm-1.0.0-rc15/centos-quarkus-native-s2i) - S2I builder image for OpenShift
+* **centos-quarkus-native-image** - provides the `native-image` executable. Used by the Maven and Gradle plugin from Quarkus to build linux64 executables
+* **centos-quarkus-maven** - Image delivering GraalVM, Maven, Podman and Builah; this image can be used to build a native executable from source.
+* **GraalVM Native S2I** - S2I builder image for OpenShift
 
-## Branching model
 
-The branch name is the GraalVM version delivered. 
-For instance, the branch `graalvm-1.0.0-rc16` provides graalvm 1.0.0-rc16.
+# Centos + GraalVM + native-image Image - centos-quarkus-native-image
+
+This image is based on CentOS and GraalVM. It provides the `native-image` executable.
+The jar to be used as input needs to be mounted into the `/project` directory.
+
+# Build
+
+```bash
+$ cekit -v build --overrides-file centos-quarkus-native-image-overrides.yaml docker
+```
+
+# Run
+
+```bash
+docker run -it -v /path/to/quarkus-app:/project \
+    --rm \
+    quarkus/centos-quarkus-native-image:$TAG \
+    -jar target/my-application-shaded.jar
+```
+
+The path given to the `jar` parameter is relative to the mounted path (`/project` volume).
+
+
+# [Quarkus.io](http://quarkus.io) GraalVM Native S2I
+For more information about this image, please refer its module README:
+[GraalVM Native S2I](modules/centos-quarkus-native-s2i/README.md)
+
+
+
+# Centos + GraalVM + Maven Image
+
+For more information about this image, please refer its module README:
+[centos-quarkus-maven](modules/centos-quarkus-maven)
+
+
+## GraalVM versioning model
+
+The GraalVM module version defines the version you will ship with your image. 
+For instance, the version  `1.0.0-rc16` provides GraalVM 1.0.0-rc16.
+
 
 ## Updating GraalVM version
 
-To update the GraalVM version:
+To change the version update its module in the image.yaml or in the overrides.yaml file that uses it, i.e.:
 
-1. clone the repository
-2. create a new branch with the right name (graalvm-1.0.0-rcXX)
-2. edit all Dockerfile and replace `ARG GRAAL_VERSION=1.0.0-rcX` with `ARG GRAAL_VERSION=1.0.0-rcXX`
-3. push your branch
 
-The images are built automatically and deployed to Quay. You can monirot the build from:
-https://quay.io/organization/quarkus
+centos-quarkus-native-s2i.yaml
+```yaml
+modules:
+  install:
+  ...
+  - name: graalvm
+    version: 1.0.0-rc15
+```
 
-Also, you need to update the default branch of the repository. This is done on:
-https://github.com/quarkusio/quarkus-images/settings/branches
+The same applies to configure the maven version.
+
+# Building, testing and pushing the images
+
+Before proceed make sure you have (CEKit)[https://cekit.io/] installed, to install on Fedora: 
+
+```bash
+$ sudo dnf install cekit
+```
+
+For other Systems, please refer the docs.
+
+
+###### Build:
+Build + squash
+
+```bash
+$ make
+```
+
+
+###### Testing:
+This step will build (squashing) and test the images
+```bash
+$ make test
+```
+
+###### Push the images:
+This step will build (squashing), test and push the images to quay.io/quarkus
+This step requires write permission under Quarkus organization on Quay.io.
+```bash
+make push
+```

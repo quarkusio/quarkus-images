@@ -6,9 +6,18 @@
 
 set -ex
 
+#############################################
+# Configure maven - for a complete list of
+# supported values, please refer the module.yaml
+# file.
+CONFIGURE_SCRIPTS=(
+  ${QUARKUS_HOME}/.m2/configure-maven.sh
+)
+source ${QUARKUS_HOME}/.m2/configure.sh
+#############################################
+
 cd /tmp/src/
 mvn package -Pnative -e -B \
     -DskipTests -Dmaven.javadoc.skip=true -Dmaven.site.skip=true -Dmaven.source.skip=true \
     -Djacoco.skip=true -Dcheckstyle.skip=true -Dfindbugs.skip=true -Dpmd.skip=true -Dfabric8.skip=true
 cp -v target/*-runner ${QUARKUS_HOME}/application
-

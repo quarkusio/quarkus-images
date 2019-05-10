@@ -1,0 +1,35 @@
+# Common configuration for all images
+schema_version: 1
+
+name: "quay.io/quarkus/image-name-from-overrides-file"
+version: "1.0"
+from: "centos:7"
+
+labels:
+- name: "maintainer"
+  value: "Quarkus <quarkus email?>"
+
+envs:
+# make graalvm binaries available on PATH
+- name: "PATH"
+  value: "$PATH:$JAVA_HOME/bin"
+
+modules:
+  repositories:
+  - path: modules
+
+packages:
+  repositories:
+  - name: scl
+    rpm: centos-release-scl
+  # common packages to install
+  install:
+  - gzip
+  - gcc
+  - glibc-devel
+  - zlib-devel
+
+run:
+  user: 1001
+  cmd:
+  - "/usr/local/s2i/run"
