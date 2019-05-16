@@ -1,0 +1,54 @@
+{
+    "apiVersion": "v1",
+    "kind": "ImageStream",
+    "metadata": {
+        "annotations": {
+            "openshift.io/display-name": "Quarkus"
+        },
+        "name": "quarkus"
+    },
+    "spec": {
+        "tags": [
+            {
+                "annotations": {
+                    "description": "Build and run Java (Quarkus) applications on CentOS 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/quarkus/quarkus-images.\n\nWARNING: By selecting this tag, your application will automatically update to use the latest version of Quarkus available on OpenShift, including major versions updates.",
+                    "iconClass": "icon-openjdk",
+                    "openshift.io/display-name": "Quarkus (Latest)",
+                    "openshift.io/provider-display-name": "Red Hat, Inc.",
+                    "sampleRepo": "https://github.com/quarkusio/quarkus-quickstarts.git",
+                    "sampleContextDir": "getting-started",
+                    "supports": "java",
+                    "tags": "builder,java,jee"
+                },
+                "from": {
+                    "kind": "ImageStreamTag",
+                    "name": "graalvm-1.0"
+                },
+                "name": "latest",
+                "referencePolicy": {
+                    "type": "Local"
+                }
+            },
+            {
+                "annotations": {
+                  "description": "Build and run Java (Quarkus) applications on CentOS 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/quarkus/quarkus-images.\n\nWARNING: By selecting this tag, your application will automatically update to use the latest version of Quarkus available on OpenShift, including major versions updates.",
+                  "iconClass": "icon-openjdk",
+                  "openshift.io/display-name": "Quarkus (GraalVM 1.0-RC)",
+                  "openshift.io/provider-display-name": "Red Hat, Inc.",
+                  "sampleRepo": "https://github.com/quarkusio/quarkus-quickstarts.git",
+                  "sampleContextDir": "getting-started",
+                "supports": "java",
+                  "tags": "builder,java,jee"
+                },
+                "from": {
+                    "kind": "DockerImage",
+                    "name": "quay.io/quarkus/centos-quarkus-native-s2i:latest"
+                },
+                "name": "graalvm-1.0",
+                "referencePolicy": {
+                    "type": "Local"
+                }
+            }
+        ]
+    }
+}
