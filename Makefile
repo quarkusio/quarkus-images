@@ -29,3 +29,7 @@ push: test
 	docker push quay.io/quarkus/centos-quarkus-maven:latest
 	docker push quay.io/quarkus/centos-quarkus-native-image:${IMAGE_VERSION}
 	docker push quay.io/quarkus/centos-quarkus-native-image:latest
+
+.PHONY: clean
+clean:
+	rm -Rf target	
