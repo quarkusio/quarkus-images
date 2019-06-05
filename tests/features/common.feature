@@ -1,4 +1,4 @@
-@quay.io/quarkus/centos-quarkus-native-s2i @quay.io/quarkus/centos-quarkus-maven @uay.io/quarkus/centos-quarkus-native-image
+@quay.io/quarkus/centos-quarkus-native-s2i @quay.io/quarkus/centos-quarkus-maven @quay.io/quarkus/centos-quarkus-native-image
 Feature: Quarkus common features
 
   Scenario: Check if quarkus user is correctly configured
