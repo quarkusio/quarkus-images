@@ -1,6 +1,7 @@
 schema_version: 1
 
 name: "quay.io/quarkus/centos-quarkus-maven"
+from: "centos:7"
 version: "1.0"
 
 labels:
@@ -18,6 +19,7 @@ ports:
 
 modules:
   install:
+  - name: common-packages
   - name: add-quarkus-user
   - name: maven-binary
     version: 3.6.1
@@ -26,7 +28,11 @@ modules:
     version: 1.0.0-rc16
   - name: centos-quarkus-maven
 
-packages:
+packages: 
+  repositories:
+  - name: scl
+    rpm: centos-release-scl
+  manager: yum
   install:
   - buildah
   - findutils
