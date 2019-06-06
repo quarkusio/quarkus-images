@@ -1,4 +1,4 @@
 schema_version: 1
-name: centos-quarkus-maven
+name: quarkus-native-s2i-scripts
 execute:
   - script: configure

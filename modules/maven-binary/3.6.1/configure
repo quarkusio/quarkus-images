@@ -2,7 +2,6 @@
 set -e
 
 SOURCES_DIR=/tmp/artifacts
-SCRIPT_DIR=$(dirname $0)
 
 tar xzf ${SOURCES_DIR}/apache-maven-${MAVEN_VERSION}-bin.tar.gz -C /usr/share
 mv /usr/share/apache-maven-${MAVEN_VERSION} /usr/share/maven

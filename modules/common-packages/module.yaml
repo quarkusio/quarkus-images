@@ -9,5 +9,6 @@ packages:
   - glibc-devel
   - zlib-devel
   - shadow-utils
+  - unzip
 
 
