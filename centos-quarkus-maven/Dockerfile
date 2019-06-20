@@ -3,10 +3,10 @@
 ###
 FROM centos:7
 
-ARG GRAAL_VERSION=1.0.0-rc16
+ARG GRAAL_VERSION=19.0.2
 ARG MAVEN_VERSION=3.6.1
 
-ENV GRAAL_CE_URL=https://github.com/oracle/graal/releases/download/vm-${GRAAL_VERSION}/graalvm-ce-${GRAAL_VERSION}-linux-amd64.tar.gz
+ENV GRAAL_CE_URL=https://github.com/oracle/graal/releases/download/vm-${GRAAL_VERSION}/graalvm-ce-linux-amd64-${GRAAL_VERSION}.tar.gz
 ARG MAVEN_URL=https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz
 ARG INSTALL_PKGS="buildah findutils podman bzip2-devel gcc-c++ libcurl-devel openssl-devel tar unzip bc which lsof gzip"
 
@@ -27,6 +27,8 @@ RUN  yum update -y && \
 	 mkdir -p ${GRAALVM_HOME} && \
 	 cd ${GRAALVM_HOME} && \
 	 curl -fsSL ${GRAAL_CE_URL} | tar -xzC ${GRAALVM_HOME} --strip-components=1  && \
+      # native-component was pulled out in 19.0.0, need to install it now
+      /${GRAALVM_HOME}/bin/gu install native-image \
      ### Cleanup     
      yum clean all && \
      rm -f /tmp/apache-maven.tar.gz  /tmp/graalvm-ce-amd64.tar.gz && \
