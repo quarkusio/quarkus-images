@@ -6,7 +6,7 @@ The jar to be used as input needs to be mounted into the `/project` directory.
 # Build
 
 ```bash
-export TAG=graalvm-1.0.0-rc14 # Update according to the GraalVM version required.
+export TAG=graalvm-19.0.2 # Update according to the GraalVM version required.
 docker build -t quarkus/centos-quarkus-native-image:$TAG .
 ```
 

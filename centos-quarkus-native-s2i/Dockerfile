@@ -3,10 +3,10 @@
 ###
 FROM centos:7
 
-ARG GRAAL_VERSION=1.0.0-rc16
+ARG GRAAL_VERSION=19.0.2
 ARG MAVEN_VERSION=3.6.1
 
-ENV GRAAL_CE_URL=https://github.com/oracle/graal/releases/download/vm-${GRAAL_VERSION}/graalvm-ce-${GRAAL_VERSION}-linux-amd64.tar.gz
+ENV GRAAL_CE_URL=https://github.com/oracle/graal/releases/download/vm-${GRAAL_VERSION}/graalvm-ce-linux-amd64-${GRAAL_VERSION}.tar.gz
 ARG MAVEN_URL=https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz
 ARG USER_HOME_DIR="/home/quarkus"
 ARG MAVEN_BASE_URL=https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries
@@ -32,6 +32,8 @@ RUN  yum update -y && \
 	 mkdir -p ${GRAALVM_HOME} && \
 	 cd ${GRAALVM_HOME} && \
 	 curl -fsSL $GRAAL_CE_URL | tar -xzC ${GRAALVM_HOME} --strip-components=1  && \
+      # native-image was pulled out in 19.0.0, need to install it now
+      /${GRAALVM_HOME}/bin/gu install native-image && \
      ### User management
      adduser -u 1001 -g 0 quarkus --home-dir ${QUARKUS_HOME} && \
      chown -R 1001:0 ${QUARKUS_HOME} && \
@@ -46,7 +48,6 @@ RUN  yum update -y && \
 # This part is firmly inspired by fabric8io-images/s2i
 LABEL io.openshift.s2i.scripts-url="image:///usr/local/s2i" \
       io.openshift.s2i.destination="/tmp" \
-
       io.k8s.description="Quarkus.io S2I image for building Kubernetes Native Java GraalVM applications and running its Native Executables" \
       io.k8s.display-name="Quarkus.io S2I (GraalVM Native)" \
       io.openshift.tags="builder,java,quarkus,native"

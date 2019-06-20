@@ -14,15 +14,15 @@ the images are deliered on [Quay.io](https://quay.io/repository/quarkus)
 ## Branching model
 
 The branch name is the GraalVM version delivered. 
-For instance, the branch `graalvm-1.0.0-rc16` provides graalvm 1.0.0-rc16.
+For instance, the branch `graalvm-19.0.2` provides graalvm 19.0.2.
 
 ## Updating GraalVM version
 
 To update the GraalVM version:
 
 1. clone the repository
-2. create a new branch with the right name (graalvm-1.0.0-rcXX)
-2. edit all Dockerfile and replace `ARG GRAAL_VERSION=1.0.0-rcX` with `ARG GRAAL_VERSION=1.0.0-rcXX`
+2. create a new branch with the right name (graalvm-X.X.X)
+2. edit all Dockerfile and replace `ARG GRAAL_VERSION=X.X.X` with `ARG GRAAL_VERSION=Y.Y.Y`
 3. push your branch
 
 The images are built automatically and deployed to Quay. You can monirot the build from:

@@ -5,8 +5,8 @@
 
 FROM centos:7
 
-ARG GRAAL_VERSION=1.0.0-rc16
-ENV GRAAL_CE_URL=https://github.com/oracle/graal/releases/download/vm-${GRAAL_VERSION}/graalvm-ce-${GRAAL_VERSION}-linux-amd64.tar.gz
+ARG GRAAL_VERSION=19.0.2
+ENV GRAAL_CE_URL=https://github.com/oracle/graal/releases/download/vm-${GRAAL_VERSION}/graalvm-ce-linux-amd64-${GRAAL_VERSION}.tar.gz
 
 ENV JAVA_HOME=/opt/graalvm
 ENV PATH=$PATH:$JAVA_HOME/bin
@@ -17,7 +17,9 @@ RUN  yum update -y && \
     ### Installation of GraalVM
 	 mkdir -p /opt/graalvm && \
 	 cd /opt/graalvm && \
-	 curl -fsSL $GRAAL_CE_URL | tar -xzC /opt/graalvm --strip-components=1
+	 curl -fsSL $GRAAL_CE_URL | tar -xzC /opt/graalvm --strip-components=1 && \
+	 # native-component was pulled out in 19.0.0, need to install it now
+     /${GRAALVM_HOME}/bin/gu install native-image 
     ###
 
 VOLUME /project
