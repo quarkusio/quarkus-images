@@ -17,7 +17,7 @@ RUN  yum update -y && \
     ### Installation of GraalVM
 	 mkdir -p /opt/graalvm && \
 	 cd /opt/graalvm && \
-	 curl -fsSL $GRAAL_CE_URL | tar -xzC /opt/graalvm --strip-components=1 \
+	 curl -fsSL $GRAAL_CE_URL | tar -xzC /opt/graalvm --strip-components=1 && \
 	 # native-component was pulled out in 19.0.0, need to install it now
      /${GRAALVM_HOME}/bin/gu install native-image 
     ###

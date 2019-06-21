@@ -32,8 +32,8 @@ RUN  yum update -y && \
 	 mkdir -p ${GRAALVM_HOME} && \
 	 cd ${GRAALVM_HOME} && \
 	 curl -fsSL $GRAAL_CE_URL | tar -xzC ${GRAALVM_HOME} --strip-components=1  && \
-      # native-component was pulled out in 19.0.0, need to install it now
-      /${GRAALVM_HOME}/bin/gu install native-image \
+      # native-image was pulled out in 19.0.0, need to install it now
+      /${GRAALVM_HOME}/bin/gu install native-image && \
      ### User management
      adduser -u 1001 -g 0 quarkus --home-dir ${QUARKUS_HOME} && \
      chown -R 1001:0 ${QUARKUS_HOME} && \

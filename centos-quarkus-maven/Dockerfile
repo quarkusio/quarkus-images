@@ -28,7 +28,7 @@ RUN  yum update -y && \
 	 cd ${GRAALVM_HOME} && \
 	 curl -fsSL ${GRAAL_CE_URL} | tar -xzC ${GRAALVM_HOME} --strip-components=1  && \
       # native-component was pulled out in 19.0.0, need to install it now
-      /${GRAALVM_HOME}/bin/gu install native-image \
+      /${GRAALVM_HOME}/bin/gu install native-image && \
      ### Cleanup     
      yum clean all && \
      rm -f /tmp/apache-maven.tar.gz  /tmp/graalvm-ce-amd64.tar.gz && \
