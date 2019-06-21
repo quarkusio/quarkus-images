@@ -33,7 +33,7 @@ RUN  yum update -y && \
 	 cd ${GRAALVM_HOME} && \
 	 curl -fsSL $GRAAL_CE_URL | tar -xzC ${GRAALVM_HOME} --strip-components=1  && \
       # native-component was pulled out in 19.0.0, need to install it now
-      /${GRAALVM_HOME}/bin/gu install native-image 
+      /${GRAALVM_HOME}/bin/gu install native-image \
      ### User management
      adduser -u 1001 -g 0 quarkus --home-dir ${QUARKUS_HOME} && \
      chown -R 1001:0 ${QUARKUS_HOME} && \
@@ -48,7 +48,6 @@ RUN  yum update -y && \
 # This part is firmly inspired by fabric8io-images/s2i
 LABEL io.openshift.s2i.scripts-url="image:///usr/local/s2i" \
       io.openshift.s2i.destination="/tmp" \
-
       io.k8s.description="Quarkus.io S2I image for building Kubernetes Native Java GraalVM applications and running its Native Executables" \
       io.k8s.display-name="Quarkus.io S2I (GraalVM Native)" \
       io.openshift.tags="builder,java,quarkus,native"
