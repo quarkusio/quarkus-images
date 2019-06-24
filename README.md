@@ -7,28 +7,36 @@ This repository contains the container images used by Quarkus.
 
 The images are available on [Quay.io](https://quay.io/repository/quarkus)
 
-* **centos-quarkus-native-image** - provides the `native-image` executable. Used by the Maven and Gradle plugin from Quarkus to build linux64 executables
+* **ubi-quarkus-native-image** - provides the `native-image` executable. Used by the Maven and Gradle plugin from Quarkus to build linux64 executables
 * **centos-quarkus-maven** - Image delivering GraalVM, Maven, Podman and Builah; this image can be used to build a native executable from source.
-* **GraalVM Native S2I** - S2I builder image for OpenShift
+* **ubi-quarkus-native-s2i** - S2I builder image for OpenShift
 
+To pull these images use:
 
-# Centos + GraalVM + native-image Image - centos-quarkus-native-image
+* `docker pull quay.io/quarkus/ubi-quarkus-native-image:VERSION`
+* `docker pull quay.io/quarkus/centos-quarkus-maven:VERSION`
+* `docker pull quay.io/quarkus/ubi-quarkus-native-s2:VERSION`
 
-This image is based on CentOS and GraalVM. It provides the `native-image` executable.
+with _VERSION_ the version. 
+The version matches the GraalVM version used in the image, for example: `19.0.2`.
+
+# Ubi minimal + GraalVM + native-image Image - ubi-quarkus-native-image
+
+This image is based on UBI (minimal) and GraalVM. It provides the `native-image` executable.
 The jar to be used as input needs to be mounted into the `/project` directory.
 
-# Build
+## Build
 
 ```bash
-$ cekit -v build --overrides-file centos-quarkus-native-image-overrides.yaml docker
+$ cekit -v build --overrides-file quarkus-native-image-overrides.yaml docker --no-squash
 ```
 
-# Run
+## Run
 
 ```bash
 docker run -it -v /path/to/quarkus-app:/project \
     --rm \
-    quarkus/centos-quarkus-native-image:$TAG \
+    quay.io/quarkus/ubi-quarkus-native-image:$TAG \
     -jar target/my-application-shaded.jar
 ```
 
@@ -39,24 +47,23 @@ The path given to the `jar` parameter is relative to the mounted path (`/project
 For more information about this image, please refer its module README:
 [GraalVM Native S2I](modules/centos-quarkus-native-s2i/README.md)
 
-
+This image is based on UBI.
 
 # Centos + GraalVM + Maven Image
 
 For more information about this image, please refer its module README:
 [centos-quarkus-maven](modules/centos-quarkus-maven)
 
-
 ## GraalVM versioning model
 
-The GraalVM module version defines the version you will ship with your image. 
+The GraalVM module version defines the version you ship with the image. 
 For instance, the version  `1.0.0-rc16` provides GraalVM 1.0.0-rc16.
 
+This version is also the version of the image.
 
 ## Updating GraalVM version
 
 To change the version update its module in the image.yaml or in the overrides.yaml file that uses it, i.e.:
-
 
 centos-quarkus-native-s2i.yaml
 ```yaml
@@ -67,6 +74,8 @@ modules:
     version: 1.0.0-rc15
 ```
 
+Also, edit the `images.yaml` file to make the `version` element matches the GraalVM version.
+
 The same applies to configure the maven version.
 
 # Building, testing and pushing the images
@@ -76,7 +85,6 @@ Before proceed make sure you have (CEKit)[https://cekit.io/] installed, to insta
 ```bash
 $ sudo dnf install cekit
 ```
-
 For other Systems, please refer the docs.
 
 
