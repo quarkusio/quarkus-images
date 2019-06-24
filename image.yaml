@@ -1,0 +1,27 @@
+# Common configuration for all images
+schema_version: 1
+
+name: "quay.io/quarkus/image-name-from-overrides-file"
+version: "19.0.2"
+from: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
+
+labels:
+- name: "maintainer"
+  value: "Quarkus Team <quarkus-dev@googlegroups.com>"
+
+envs:
+# make graalvm binaries available on PATH
+- name: "PATH"
+  value: "$PATH:$JAVA_HOME/bin"
+
+packages:
+  manager: microdnf
+
+modules:
+  repositories:
+  - path: modules
+
+run:
+  user: 1001
+  cmd:
+  - "/usr/local/s2i/run"

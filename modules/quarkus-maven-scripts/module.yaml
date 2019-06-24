@@ -1,0 +1,4 @@
+schema_version: 1
+name: quarkus-maven-scripts
+execute:
+  - script: configure

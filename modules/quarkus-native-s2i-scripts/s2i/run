@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# This POC script is (intentionally) overly trivial.
+# a TODO future PRODUCTION version of this would probably want to make it possible to
+# e.g. pass additional parameters to the executable, as does fabric8io-images/s2i's run script.
+${QUARKUS_HOME}/application -Dquarkus.http.host=0.0.0.0

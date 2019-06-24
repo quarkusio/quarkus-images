@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# This POC script is based on the openshift/source-to-image project documentation,
+# and loosely inspired by fabric8io-images/s2i's assemble script, but **MUCH** simplified;
+# a TODO future PRODUCTION version of this would probably want to re-use that script...
+
+set -ex
+
+#############################################
+# Configure maven - for a complete list of
+# supported values, please refer the module.yaml
+# file.
+CONFIGURE_SCRIPTS=(
+  ${QUARKUS_HOME}/.m2/configure-maven.sh
+)
+source ${QUARKUS_HOME}/.m2/configure.sh
+#############################################
+
+cd /tmp/src/
+
+if [ -e ./build.gradle -a -z "$USE_MAVEN" ]; then
+    USE_GRADLE=true
+else
+    USE_GRADLE=false
+fi
+
+ if "$USE_GRADLE"; then
+  BUILD_DIR=build
+  mkdir -p build/libs
+  gradle buildNative --docker-build=false
+else
+  BUILD_DIR=target
+  mvn package -Pnative -e -B \
+    -DskipTests -Dmaven.javadoc.skip=true -Dmaven.site.skip=true -Dmaven.source.skip=true \
+    -Djacoco.skip=true -Dcheckstyle.skip=true -Dfindbugs.skip=true -Dpmd.skip=true -Dfabric8.skip=true
+  
+fi  
+
+cp -v ${BUILD_DIR}/*-runner ${QUARKUS_HOME}/application

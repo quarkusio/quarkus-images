@@ -1,0 +1,59 @@
+schema_version: 1
+
+name: "quay.io/quarkus/centos-quarkus-maven"
+from: "centos:7"
+
+labels:
+- name: "io.openshift.expose-services"
+  value: "8080:http"
+- name: "io.k8s.description"
+  value: "Quarkus.io builder image for building Quarkus applications."
+- name: "io.k8s.display-name"
+  value: "Centos + GraalVM + Maven Image"
+- name: "io.openshift.tags"
+  value: "builder,java,quarkus"
+
+ports:
+- value: 8080
+
+modules:
+  install:
+  - name: common-packages
+  - name: add-quarkus-user
+  - name: maven-binary
+    version: 3.6.1
+  - name: maven-config
+  - name: graalvm
+    version: 19.0.2
+  - name: quarkus-maven-scripts
+
+packages: 
+  repositories:
+  - name: scl
+    rpm: centos-release-scl
+  manager: yum
+  install:
+  - buildah
+  - findutils
+  - podman
+  - bzip2-devel
+  - gcc-c++
+  - libcurl-devel
+  - openssl-devel
+  - bc
+  - which
+  - lsof
+  - unzip
+
+volumes:
+- name: "volume.project"
+  path: "/project"
+
+run:
+  user: 1001
+  workdir: "/project"
+  entrypoint:
+  - "/usr/local/bin/entrypoint-run.sh"
+  cmd:
+  - "mvn"
+  - "-v"
