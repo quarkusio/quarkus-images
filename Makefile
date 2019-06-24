@@ -26,11 +26,8 @@ test: build
 .PHONY: push
 push:
 	docker push quay.io/quarkus/ubi-quarkus-native-s2i:${IMAGE_VERSION}
-	docker push quay.io/quarkus/ubi-quarkus-native-s2i:latest
 	docker push quay.io/quarkus/centos-quarkus-maven:${IMAGE_VERSION}
-	docker push quay.io/quarkus/centos-quarkus-maven:latest
 	docker push quay.io/quarkus/ubi-quarkus-native-image:${IMAGE_VERSION}
-	docker push quay.io/quarkus/ubi-quarkus-native-image:latest
 
 .PHONY: clean
 clean:
