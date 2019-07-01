@@ -18,10 +18,10 @@ source ${QUARKUS_HOME}/.m2/configure.sh
 
 cd /tmp/src/
 
-if [ -e ./build.gradle -a -z "$USE_MAVEN" ]; then
-    USE_GRADLE=true
-else
+if [ -e ./pom.xml -a -z "$USE_GRADLE" ]; then
     USE_GRADLE=false
+else
+    USE_GRADLE=true
 fi
 
  if "$USE_GRADLE"; then
@@ -37,3 +37,5 @@ else
 fi  
 
 cp -v ${BUILD_DIR}/*-runner ${QUARKUS_HOME}/application
+chmod +x ${QUARKUS_HOME}
+chmod +x ${QUARKUS_HOME}/application

@@ -6,4 +6,4 @@ SCRIPT_DIR=$(dirname $0)
 
 unzip ${SOURCES_DIR}/gradle.zip 
 mv gradle-${GRADLE_VERSION} /usr/share/gradle
-ln -s ${GRADLE_VERSION}/bin/gradle /usr/bin/gradle
+ln -s /usr/share/gradle/bin/gradle /usr/bin/gradle
