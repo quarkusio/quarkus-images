@@ -17,8 +17,8 @@ To pull these images use:
 * `docker pull quay.io/quarkus/centos-quarkus-maven:VERSION`
 * `docker pull quay.io/quarkus/ubi-quarkus-native-s2:VERSION`
 
-with _VERSION_ the version. 
-The version matches the GraalVM version used in the image, for example: `19.0.2`.
+with _VERSION_ the version.
+The version matches the GraalVM version used in the image, for example: `19.1.0`.
 
 # Ubi minimal + GraalVM + native-image Image - ubi-quarkus-native-image
 
@@ -56,7 +56,7 @@ For more information about this image, please refer its module README:
 
 ## GraalVM versioning model
 
-The GraalVM module version defines the version you ship with the image. 
+The GraalVM module version defines the version you ship with the image.
 For instance, the version  `1.0.0-rc16` provides GraalVM 1.0.0-rc16.
 
 This version is also the version of the image.
@@ -80,7 +80,7 @@ The same applies to configure the maven version.
 
 # Building, testing and pushing the images
 
-Before proceed make sure you have (CEKit)[https://cekit.io/] installed, to install on Fedora: 
+Before proceed make sure you have (CEKit)[https://cekit.io/] installed, to install on Fedora:
 
 ```bash
 $ sudo dnf install cekit

@@ -24,10 +24,10 @@ modules:
     version: 3.6.1
   - name: maven-config
   - name: graalvm
-    version: 19.0.2
+    version: 19.1.0
   - name: quarkus-maven-scripts
 
-packages: 
+packages:
   repositories:
   - name: scl
     rpm: centos-release-scl
