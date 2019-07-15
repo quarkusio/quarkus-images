@@ -16,7 +16,9 @@ CONFIGURE_SCRIPTS=(
 source ${QUARKUS_HOME}/.m2/configure.sh
 #############################################
 
-cd /tmp/src/
+SRC_DIR=${SRC_DIR:-'/tmp/src/'}
+
+cd $SRC_DIR
 
 if [ -e ./pom.xml -a -z "$USE_GRADLE" ]; then
     USE_GRADLE=false
