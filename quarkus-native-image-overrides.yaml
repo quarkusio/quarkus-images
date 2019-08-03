@@ -15,7 +15,7 @@ modules:
   - name: common-packages
   - name: add-quarkus-user
   - name: graalvm
-    version: 19.1.0
+    version: 19.1.1
 
 volumes:
 - name: "volume.project"
