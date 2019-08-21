@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cat <<EOF
+This is an Quarkus UBI8 S2I image that can take an uploaded native binary and deploy it on top of a UBI7 minimal image. You can override the default parameters by setting the "QUARKUS_OPTS" environment variable. This image only support uploading a binary file or a directory with a binary file that ends with matches *-runner. It is not capable of build source to image. For that use the centos-quarkus-native-s2i image.
+EOF

@@ -1,0 +1,5 @@
+schema_version: 1
+version: 1.0.0
+name: quarkus-native-binary-s2i-scripts
+execute:
+  - script: configure
