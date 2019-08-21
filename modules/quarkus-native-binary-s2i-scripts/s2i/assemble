@@ -22,5 +22,5 @@ else
   exit 1
 fi
 
-chmod +x ${QUARKUS_HOME}
+chmod +rx ${QUARKUS_HOME}
 chmod +x ${QUARKUS_HOME}/application
