@@ -9,17 +9,22 @@ build:
 	cekit -v build --overrides-file quarkus-maven-overrides.yaml $(BUILD_ENGINE) --tag=quay.io/quarkus/centos-quarkus-maven:${IMAGE_VERSION}
 	cekit -v build --overrides-file quarkus-native-image-overrides.yaml $(BUILD_ENGINE) --tag=quay.io/quarkus/ubi-quarkus-native-image:${IMAGE_VERSION}
 
+	cekit -v build --overrides-file quarkus-native-binary-s2i-overrides.yaml $(BUILD_ENGINE) --no-squash
+	docker-squash quay.io/quarkus/ubi-quarkus-native-binary-s2i:${IMAGE_VERSION} --tag=quay.io/quarkus/ubi-quarkus-native-binary-s2i:${IMAGE_VERSION}
+
 .PHONY: test
 test: build
 	cekit -v test --overrides-file quarkus-maven-overrides.yaml behave
 	cekit -v test --overrides-file quarkus-native-image-overrides.yaml behave
 	cekit -v test --overrides-file quarkus-native-s2i-overrides.yaml behave
+	cekit -v test --overrides-file quarkus-native-binary-s2i-overrides.yaml behave
 
 .PHONY: push
 push:
 	docker push quay.io/quarkus/ubi-quarkus-native-s2i:${IMAGE_VERSION}
 	docker push quay.io/quarkus/centos-quarkus-maven:${IMAGE_VERSION}
 	docker push quay.io/quarkus/ubi-quarkus-native-image:${IMAGE_VERSION}
+	docker push quay.io/quarkus/ubi-quarkus-native-binary-s2i:${IMAGE_VERSION}
 
 .PHONY: clean
 clean:

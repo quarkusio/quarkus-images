@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# This POC script is based on the openshift/source-to-image project documentation,
+# and loosely inspired by fabric8io-images/s2i's assemble script, but **MUCH** simplified;
+# a TODO future PRODUCTION version of this would probably want to re-use that script...
+
+set -ex
+
+SRC_DIR=${SRC_DIR:-'/tmp/src/'}
+
+echo "Building with uploaded src from $SRC_DIR"
+#ls -al $SRC_DIR
+
+echo "Assemblying"
+
+if [ "$(ls ${SRC_DIR}/*-runner | wc -l)" -eq "1" ]; then
+  app_path=$(ls ${SRC_DIR}/*-runner)
+  cp -v ${app_path} ${QUARKUS_HOME}/application
+  chmod +x ${QUARKUS_HOME}/application
+else
+  >&2 echo "Could not locate a native image. Have you build a native image using mvn -Pnative before?"
+  exit 1
+fi
+
+chmod +rx ${QUARKUS_HOME}
+chmod +x ${QUARKUS_HOME}/application
