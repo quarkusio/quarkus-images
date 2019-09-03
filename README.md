@@ -11,16 +11,18 @@ The images are available on [Quay.io](https://quay.io/repository/quarkus)
 
 * **ubi-quarkus-native-image** - provides the `native-image` executable. Used by the Maven and Gradle plugin from Quarkus to build linux64 executables
 * **centos-quarkus-maven** - Image delivering GraalVM, Maven, Podman and Builah; this image can be used to build a native executable from source.
-* **ubi-quarkus-native-s2i** - S2I builder image for OpenShift
+* **ubi-quarkus-native-s2i** - S2I builder image for OpenShift building a native image from source code (using Gradle or Maven)
+* **ubi-quarkus-native-binary-s2i** - S2I builder  image for OpenShift taking a pre-built native executable as input
 
 To pull these images use:
 
 * `docker pull quay.io/quarkus/ubi-quarkus-native-image:VERSION`
 * `docker pull quay.io/quarkus/centos-quarkus-maven:VERSION`
-* `docker pull quay.io/quarkus/ubi-quarkus-native-s2:VERSION`
+* `docker pull quay.io/quarkus/ubi-quarkus-native-s2i:VERSION`
+* `docker pull quay.io/quarkus/ubi-quarkus-native-binary-s2i:VERSION`
 
 with _VERSION_ the version. 
-The version matches the GraalVM version used in the image, for example: `19.0.2`.
+The version matches the GraalVM version used in the image, for example: `19.2.0`.
 
 # Ubi minimal + GraalVM + native-image Image - ubi-quarkus-native-image
 
@@ -30,7 +32,7 @@ The jar to be used as input needs to be mounted into the `/project` directory.
 ## Build
 
 ```bash
-$ cekit -v build --overrides-file quarkus-native-image-overrides.yaml docker --no-squash
+$ cekit -v build --overrides-file quarkus-native-image-overrides.yaml docker
 ```
 
 ## Run

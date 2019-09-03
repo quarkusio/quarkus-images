@@ -47,6 +47,8 @@ You can also change the name of the build (`my-application`).
 Trigger the image creation with:
 
 ```
+oc start-build my-application --from-file target/*-runner
+# or 
 oc start-build my-application --from-dir target
 ```
 
@@ -56,7 +58,8 @@ Also, if the executable is in the current directory pass `.` as value.
 
 The `my-application` must match the name you used when creating the build.
 
-Note that this s2i expects to find a file ending with `--runner` in the uploaded directory. Be sure to have such a file in the directory. Otherwise, the build fails.
+Note that if you use the that this s2i expects to find a file ending with `--runner` in the uploaded directory. Be sure to have such a file in the directory. Otherwise, the build fails.
+So even if you use `--from-file` your binary image file name must end with `--runner`.
 
 The previous command uploads the native executable and creates the image with it.
 However, this image is not yet instantiated; you need to create an application:
@@ -91,4 +94,6 @@ In this file, add:
 ```
 QUARKUS_OPTS=-Xmx24M -Xms16M -Xmn24M
 ```
+
+This requires using `--from-dir` in the `start-build` command.
 
