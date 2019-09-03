@@ -82,7 +82,7 @@ The same applies to configure the maven version.
 
 # Building, testing and pushing the images
 
-Before proceed make sure you have (CEKit)[https://cekit.io/] installed, to install on Fedora: 
+Before proceed make sure you have [CEKit](https://cekit.io/) installed, to install on Fedora: 
 
 ```bash
 $ sudo dnf install cekit
