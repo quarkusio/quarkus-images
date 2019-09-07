@@ -12,9 +12,8 @@ The image is baked in with the following tools:
 ## Using the image 
 
 ```bash
-docker pull `docker pull quay.io/quarkus/centos-quarkus-maven`
-
-docker run -it -p 8080:8080 -v some-java-project-dir:/project quay.io/quarkus/centos-quarkus-maven:1.0 mvn -Dquarkus.http.host=0.0.0.0 compile quarkus:dev
+docker pull quay.io/quarkus/centos-quarkus-maven:VERSION`
+docker run -it -p 8080:8080 -v some-java-project-dir:/project quay.io/quarkus/centos-quarkus-maven:VERSION mvn -Dquarkus.http.host=0.0.0.0 compile quarkus:dev
 ```
 
 In case you get permission denied make sure to correctly configure the volume pointing to /project.

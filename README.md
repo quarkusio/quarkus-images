@@ -7,7 +7,7 @@ NOTE: Require cekit 3.3.x
 
 ## Quarkus images
 
-The images are available on [Quay.io](https://quay.io/repository/quarkus)
+The images are available on [Quay.io](https://quay.io/organization/quarkus)
 
 * **ubi-quarkus-native-image** - provides the `native-image` executable. Used by the Maven and Gradle plugin from Quarkus to build linux64 executables
 * **centos-quarkus-maven** - Image delivering GraalVM, Maven, Podman and Builah; this image can be used to build a native executable from source.
@@ -16,18 +16,16 @@ The images are available on [Quay.io](https://quay.io/repository/quarkus)
 
 To pull these images use:
 
-* `docker pull quay.io/quarkus/ubi-quarkus-native-image:VERSION`
+* `docker pull quay.io/quarkus/ubi-quarkus-native-s2i:VERSION`
 * `docker pull quay.io/quarkus/centos-quarkus-maven:VERSION`
 * `docker pull quay.io/quarkus/ubi-quarkus-native-s2i:VERSION`
-* `docker pull quay.io/quarkus/ubi-quarkus-native-binary-s2i:VERSION`
+* `docker pull quay.io/quarkus/ubi-quarkus-native-s2i:VERSION`
 
 with _VERSION_ the version. 
 The version matches the GraalVM version used in the image, for example: `19.2.0`.
 
-# Ubi minimal + GraalVM + native-image Image - ubi-quarkus-native-image
-
-This image is based on UBI (minimal) and GraalVM. It provides the `native-image` executable.
-The jar to be used as input needs to be mounted into the `/project` directory.
+NOTE: You may wonder why we don't use `latest`. It's because `latest` has introduced more problems than benefits especially when reproducing issues. 
+For this reason, we recommend using a stable version.
 
 ## Build
 
@@ -46,17 +44,26 @@ docker run -it -v /path/to/quarkus-app:/project \
 
 The path given to the `jar` parameter is relative to the mounted path (`/project` volume).
 
+## Images
 
-# [Quarkus.io](http://quarkus.io) GraalVM Native S2I
+### native-image
+
+This image provides _GRAALVM_ and the `native-image` executable. It is used by the Quarkus Maven plugin and Quarkus Gradle plugin to generate _linux 64_ executable.
+
+### S2I - Source to Image
+
+S2I (Source to Image) are builder image used by OpenShift to build _image streams_.
+Two S2I are available:
+
+* [GraalVM Native S2I](modules/quarkus-native-s2i-scripts/README.md) - build your source code using Maven or Gradle and create a new container image from the produced native executable.
+* [Binary S2I](modules/quarkus-native-binary-s2i-scripts/README.md) - build a new container image from a provided native executable. This executable is generally build on your machine, and uploaded.
+
+Both resulting containers are based on [UBI images](https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image).
+
+### Centos + GraalVM + Maven Image
+
 For more information about this image, please refer its module README:
-[GraalVM Native S2I](modules/centos-quarkus-native-s2i/README.md)
-
-This image is based on UBI.
-
-# Centos + GraalVM + Maven Image
-
-For more information about this image, please refer its module README:
-[centos-quarkus-maven](modules/centos-quarkus-maven)
+[centos-quarkus-maven](modules/quarkus-maven-scripts/README.md)
 
 ## GraalVM versioning model
 
