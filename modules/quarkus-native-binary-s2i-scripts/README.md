@@ -92,8 +92,10 @@ Creates a `.s2i/environment` file in the directory you upload (`target` in the p
 In this file, add:
 
 ```
-QUARKUS_OPTS=-Xmx24M -Xms16M -Xmn24M
+QUARKUS_OPTS=-Xmx12M -Xms8M -Xmn12M
 ```
 
 This requires using `--from-dir` in the `start-build` command.
+
+Default memory settings are: `-Xmx24M -Xms16M -Xmn24M`
 
