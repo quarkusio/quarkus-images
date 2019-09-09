@@ -33,6 +33,21 @@ For this reason, we recommend using a stable version.
 $ cekit -v build --overrides-file quarkus-native-image-overrides.yaml docker
 ```
 
+#### Note about cekit
+
+We recommend using `virtualenv` to run `cekit`.
+On MacOS X, you can run the build as follows:
+
+```bash
+virtualenv --python=python3 ~/cekit
+source ~/cekit/bin/activate
+pip install -U cekit
+pip install odcs
+pip install docker
+pip install docker_squash
+make
+```
+
 ## Run
 
 ```bash
