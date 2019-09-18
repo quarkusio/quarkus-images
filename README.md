@@ -22,7 +22,7 @@ To pull these images use:
 * `docker pull quay.io/quarkus/ubi-quarkus-native-s2i:VERSION`
 
 with _VERSION_ the version. 
-The version matches the GraalVM version used in the image, for example: `19.2.0`.
+The version matches the GraalVM version used in the image, for example: `19.2.0.1`.
 
 NOTE: You may wonder why we don't use `latest`. It's because `latest` has introduced more problems than benefits especially when reproducing issues. 
 For this reason, we recommend using a stable version.
