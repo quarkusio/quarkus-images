@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+SOURCES_DIR=/tmp/artifacts
+
+ls -l ${SOURCES_DIR}
+tar xzf ${SOURCES_DIR}/graalvm-ce-linux-amd64-${GRAALVM_VERSION}.tar.gz -C /opt
+mv /opt/graalvm-ce-${GRAALVM_VERSION} /opt/graalvm
+
+echo "Installing native-image"
+/opt/graalvm/bin/gu --auto-yes install native-image
