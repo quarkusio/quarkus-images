@@ -24,7 +24,7 @@ modules:
     version: 3.6.1
   - name: maven-config
   - name: graalvm
-    version: 19.2.1
+    version: 19.3.0-java8
   - name: quarkus-maven-scripts
 
 packages: 

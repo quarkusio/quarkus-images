@@ -27,7 +27,7 @@ modules:
     version: 3.6.1
   - name: maven-config
   - name: graalvm
-    version: 19.2.1
+    version: 19.3.0-java8
   - name: gradle-binary  
     version: 5.4.1
   - name: quarkus-native-s2i-scripts
