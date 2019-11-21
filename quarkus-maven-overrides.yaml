@@ -24,7 +24,7 @@ modules:
     version: 3.6.1
   - name: maven-config
   - name: graalvm
-    version: 19.2.0
+    version: 19.2.1
   - name: quarkus-maven-scripts
 
 packages: 
@@ -45,6 +45,9 @@ packages:
   - lsof
   - unzip
   - git
+  - libstdc++-static
+  - glibc-static
+  - zlib-static
 
 volumes:
 - name: "volume.project"

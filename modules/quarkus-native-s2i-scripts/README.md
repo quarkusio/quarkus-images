@@ -17,7 +17,7 @@ minishift start
 
 This S2I Builder image is available on https://quay.io/repository/quarkus/ubi-quarkus-native-s2i.
 
-The [Quarkus documentation](https://quarkus.io/guides/kubernetes-guide) explain how to use this s2i, including how to increase the `BuildConfig`'s `limits`.
+The [Quarkus documentation](https://quarkus.io/guides/deploying-to-openshift-s2i) explain how to use this s2i, including how to increase the `BuildConfig`'s `limits`.
 
 ## Locally (only for testing)
 
