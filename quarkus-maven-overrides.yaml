@@ -45,6 +45,9 @@ packages:
   - lsof
   - unzip
   - git
+  - libstdc++-static
+  - glibc-static
+  - zlib-static
 
 volumes:
 - name: "volume.project"
