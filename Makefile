@@ -5,23 +5,32 @@ BUILD_ENGINE := docker
 
 .PHONY: build
 build:
-	cekit -v build --overrides-file quarkus-native-s2i-overrides.yaml $(BUILD_ENGINE) --tag=quay.io/quarkus/ubi-quarkus-native-s2i:${IMAGE_VERSION}
-	cekit -v build --overrides-file quarkus-maven-overrides.yaml $(BUILD_ENGINE) --tag=quay.io/quarkus/centos-quarkus-maven:${IMAGE_VERSION}
-	cekit -v build --overrides-file quarkus-native-image-overrides.yaml $(BUILD_ENGINE) --tag=quay.io/quarkus/ubi-quarkus-native-image:${IMAGE_VERSION}
+	cekit -v build --overrides-file quarkus-native-s2i-overrides-java8.yaml $(BUILD_ENGINE) --tag=quay.io/quarkus/ubi-quarkus-native-s2i:${IMAGE_VERSION}-java8
+	cekit -v build --overrides-file quarkus-native-s2i-overrides-java11.yaml $(BUILD_ENGINE) --tag=quay.io/quarkus/ubi-quarkus-native-s2i:${IMAGE_VERSION}-java11
+	cekit -v build --overrides-file quarkus-maven-overrides-java8.yaml $(BUILD_ENGINE) --tag=quay.io/quarkus/centos-quarkus-maven:${IMAGE_VERSION}-java8
+	cekit -v build --overrides-file quarkus-maven-overrides-java11.yaml $(BUILD_ENGINE) --tag=quay.io/quarkus/centos-quarkus-maven:${IMAGE_VERSION}-java11
+	cekit -v build --overrides-file quarkus-native-image-overrides-java8.yaml $(BUILD_ENGINE) --tag=quay.io/quarkus/ubi-quarkus-native-image:${IMAGE_VERSION}-java8
+	cekit -v build --overrides-file quarkus-native-image-overrides-java11.yaml $(BUILD_ENGINE) --tag=quay.io/quarkus/ubi-quarkus-native-image:${IMAGE_VERSION}-java11
 	cekit -v build --overrides-file quarkus-native-binary-s2i-overrides.yaml $(BUILD_ENGINE) --tag=quay.io/quarkus/ubi-quarkus-native-binary-s2i:${IMAGE_VERSION}
 
 .PHONY: test
 test: build
-	cekit -v test --overrides-file quarkus-maven-overrides.yaml behave
-	cekit -v test --overrides-file quarkus-native-image-overrides.yaml behave
-	cekit -v test --overrides-file quarkus-native-s2i-overrides.yaml behave
+	cekit -v test --overrides-file quarkus-maven-overrides-java8.yaml behave
+	cekit -v test --overrides-file quarkus-maven-overrides-java11.yaml behave
+	cekit -v test --overrides-file quarkus-native-image-overrides-java8.yaml behave
+	cekit -v test --overrides-file quarkus-native-image-overrides-java11.yaml behave
+	cekit -v test --overrides-file quarkus-native-s2i-overrides-java8.yaml behave
+	cekit -v test --overrides-file quarkus-native-s2i-overrides-java11.yaml behave
 	cekit -v test --overrides-file quarkus-native-binary-s2i-overrides.yaml behave
 
 .PHONY: push
 push:
-	docker push quay.io/quarkus/ubi-quarkus-native-s2i:${IMAGE_VERSION}
-	docker push quay.io/quarkus/centos-quarkus-maven:${IMAGE_VERSION}
-	docker push quay.io/quarkus/ubi-quarkus-native-image:${IMAGE_VERSION}
+	docker push quay.io/quarkus/ubi-quarkus-native-s2i:${IMAGE_VERSION}-java8
+	docker push quay.io/quarkus/ubi-quarkus-native-s2i:${IMAGE_VERSION}-java11
+	docker push quay.io/quarkus/centos-quarkus-maven:${IMAGE_VERSION}-java8
+	docker push quay.io/quarkus/centos-quarkus-maven:${IMAGE_VERSION}-java11
+	docker push quay.io/quarkus/ubi-quarkus-native-image:${IMAGE_VERSION}-java8
+	docker push quay.io/quarkus/ubi-quarkus-native-image:${IMAGE_VERSION}-java11
 	docker push quay.io/quarkus/ubi-quarkus-native-binary-s2i:${IMAGE_VERSION}
 
 .PHONY: clean

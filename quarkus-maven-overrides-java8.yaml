@@ -12,6 +12,10 @@ labels:
   value: "Centos + GraalVM + Maven Image"
 - name: "io.openshift.tags"
   value: "builder,java,quarkus"
+- name: "graalvm.version"  
+  value: &graal_version 19.3.0-java8
+- name: "maven.version"  
+  value: &maven_version 3.6.2
 
 ports:
 - value: 8080
@@ -21,10 +25,10 @@ modules:
   - name: common-packages
   - name: add-quarkus-user
   - name: maven-binary
-    version: 3.6.2
+    version: *maven_version
   - name: maven-config
   - name: graalvm
-    version: 19.3.0-java8
+    version: *graal_version
   - name: quarkus-maven-scripts
 
 packages: 

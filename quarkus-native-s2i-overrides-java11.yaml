@@ -15,6 +15,12 @@ labels:
   value: "Quarkus.io S2I (GraalVM Native)"
 - name: "io.openshift.tags"
   value: "builder,java,quarkus,native"
+- name: "graalvm.version"  
+  value: &graal_version 19.3.0-java11  
+- name: "maven.version"  
+  value: &maven_version 3.6.2  
+- name: "gradle.version"  
+  value: &gradle_version 6.0.1
 
 ports:
 - value: 8080
@@ -24,12 +30,12 @@ modules:
   - name: common-packages
   - name: add-quarkus-user
   - name: maven-binary
-    version: 3.6.2
+    version: *maven_version
   - name: maven-config
   - name: graalvm
-    version: 19.3.0-java8
+    version: *graal_version
   - name: gradle-binary  
-    version: 5.4.1
+    version: *gradle_version
   - name: quarkus-native-s2i-scripts
 
 
