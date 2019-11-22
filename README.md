@@ -23,14 +23,23 @@ To pull these images use:
 
 with _VERSION_ being the version. 
 The version matches the GraalVM version used in the image, for example: `19.2.1`.
+For GraalVM 19.3.0+, the _VERSION_ is suffixed with `-java8` or `-java11` (except for `ubi-quarkus-native-binary-s2i`). For example:
+
+```
+quay.io/quarkus/ubi-quarkus-native-s2i:19.3.0-java8 <-- GraalVM 19.3.0 with java 8 support
+quay.io/quarkus/ubi-quarkus-native-s2i:19.3.0-java11 <-- GraalVM 19.3.0 with java 11 support
+quay.io/quarkus/ubi-quarkus-native-binary-s2i:19.3.0 <-- Native binary s2i
+```
 
 NOTE: You may wonder why we don't use `latest`. It's because `latest` has introduced more problems than benefits especially when reproducing issues. 
 For this reason, we recommend using a stable version.
 
 ## Build
 
+For each _overrides_ file, run the `cekit build` command. For example:
+
 ```bash
-$ cekit -v build --overrides-file quarkus-native-image-overrides.yaml docker
+$ cekit -v build --overrides-file quarkus-native-image-overrides-java8.yaml docker
 ```
 
 #### Note about CEKit
@@ -45,6 +54,8 @@ pip install -U cekit
 pip install odcs
 pip install docker
 pip install docker_squash
+pip install behave
+pip install lxml
 make
 ```
 
@@ -85,7 +96,7 @@ For more information about this image, please refer to its module README:
 The GraalVM module version defines the version you ship with the image. 
 For instance, the version  `19.2.0` provides GraalVM 19.2.0.
 
-This version is also the version of the image.
+This version is also the version of the image, followed when necessary with `java8` or `java11`.
 
 ## Updating GraalVM version
 
