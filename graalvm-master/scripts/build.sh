@@ -1,6 +1,7 @@
 #!/bin/bash
 
 JDK_VERSION=$1
+GRAALVM_BRANCH=${2:-master}
 
 jdk8() {
     echo "Building GraalVM for JDK 8"
@@ -29,7 +30,7 @@ mkdir graal
 cd graal || exit
 export PATH=$PWD/mx:$PATH
 
-git clone --depth=1 https://github.com/oracle/graal
+git clone --depth=1 --branch $GRAALVM_BRANCH --single-branch https://github.com/oracle/graal
 git clone --depth=1 https://github.com/graalvm/mx
 
 cd graal/vm  || exit
