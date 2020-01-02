@@ -13,7 +13,7 @@ labels:
 - name: "io.openshift.tags"
   value: "builder,java,quarkus"
 - name: "graalvm.version"  
-  value: &graal_version 19.3.0-java11
+  value: &graal_version 19.3.0.2-java11
 - name: "maven.version"  
   value: &maven_version 3.6.2
 
