@@ -1,0 +1,32 @@
+name: Continuous Integration Build
+
+on:
+  pull_request:
+      branches:
+        - master
+  push:
+      branches:
+        - master
+      paths-ignore:
+        - '.build/**'
+
+jobs:
+  make-images:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1    
+    - name: Make Images
+      run: |
+        sudo apt-get update -o Dir::Etc::sourcelist="sources.list" -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
+        sudo apt-get install -y python3.7 python3-pip gcc build-essential libkrb5-dev
+        sudo pip3 install virtualenv 
+
+        virtualenv --python=python3 ~/cekit
+        source ~/cekit/bin/activate
+        pip install -U cekit
+        pip install odcs
+        pip install docker
+        pip install docker_squash
+        pip install behave
+        pip install lxml
+        make
