@@ -145,3 +145,21 @@ This step requires the write permission for the Quarkus organization on Quay.io.
 ```bash
 make push
 ```
+
+# Continuous Integration and Automation
+
+This repository uses GitHub Actions to build the images.
+On each PR, the images are built. Check the `Actions` tab in the GitHub project.
+
+To push the images to Quay, you need to trigger a _deployment_.
+Once the images have been built from master successfully, issue the following cURL command:
+
+```
+curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+    -H "Accept: application/vnd.github.ant-man-preview+json"  \
+    -H "Content-Type: application/json" \
+    https://api.github.com/repos/quarkusio/quarkus-images/deployments \
+    --data '{"ref": "master", "environment": "quay"}'
+```    
+
+Note that you need a `GITHUB_TOKEN` (API token) to trigger the deployment.
