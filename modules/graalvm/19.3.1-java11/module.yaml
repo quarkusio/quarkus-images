@@ -1,0 +1,29 @@
+schema_version: 1
+name: graalvm
+version: &version "19.3.1-java11"
+
+labels:
+  - name: graalvm-archive-filename
+    value: &filename graalvm-ce-linux-amd64-19.3.1-java11.tar.gz
+  - name: graalvm-archive-url
+    value: &url https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-19.3.1/graalvm-ce-java11-linux-amd64-19.3.1.tar.gz
+  - name: graalvm-version
+    value:   &suffix java11-19.3.1
+
+envs:
+  - name: "JAVA_HOME"
+    value: "/opt/graalvm"
+  - name: "GRAALVM_HOME"
+    value: "/opt/graalvm"
+  - name: "GRAALVM_VERSION"
+    value: *suffix
+  - name: "FILENAME"  
+    value: *filename
+
+artifacts:
+- name: *filename
+  url: *url
+  md5: d2644fee760ff102866c705a7d6b6634
+
+execute:
+- script: configure
