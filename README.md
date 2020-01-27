@@ -16,7 +16,7 @@ The images are available on [Quay.io](https://quay.io/organization/quarkus)
 
 To pull these images use:
 
-* `docker pull quay.io/quarkus/ubi-quarkus-native-s2i:VERSION`
+* `docker pull quay.io/quarkus/ubi-quarkus-native-image:VERSION`
 * `docker pull quay.io/quarkus/centos-quarkus-maven:VERSION`
 * `docker pull quay.io/quarkus/ubi-quarkus-native-s2i:VERSION`
 * `docker pull quay.io/quarkus/ubi-quarkus-native-binary-s2i:VERSION`
