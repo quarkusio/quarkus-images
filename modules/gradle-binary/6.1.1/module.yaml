@@ -1,10 +1,10 @@
 schema_version: 1
 name: gradle-binary
-version: "5.4.1"
+version: "6.1.1"
 
 envs:
   - name: "GRADLE_VERSION"
-    value: "5.4.1"
+    value: "6.1.1"
   - name: "GRADLE_HOME"
     value: "/usr/share/gradle"
   - name : "GRADLE_OPTS" 
@@ -13,8 +13,8 @@ envs:
 # unfortunately by now the version needs to be hardcoded.
 artifacts:
   - name: gradle.zip
-    url: https://services.gradle.org/distributions/gradle-5.4.1-bin.zip
-    md5: 3c582aeb2cd7a829a1bd7174d12c1971
+    url: https://services.gradle.org/distributions/gradle-6.1.1-bin.zip
+    md5: 281966a39e5549afea7925385004cbab
 
 execute:
   - script: configure
