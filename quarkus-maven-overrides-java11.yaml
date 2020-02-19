@@ -13,11 +13,11 @@ labels:
 - name: "io.openshift.tags"
   value: "builder,java,quarkus"
 - name: "graalvm.version"  
-  value: &graal_version 19.3.1-java11
+  value: &graal_version 20.0.0-java11
 - name: "maven.version"  
   value: &maven_version 3.6.3
 - name: "gradle.version"  
-  value: &gradle_version 6.1.1  
+  value: &gradle_version "6.2"
 
 ports:
 - value: 8080

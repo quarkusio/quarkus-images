@@ -10,7 +10,7 @@ labels:
 - name: "io.openshift.tags"
   value: "executable,java,quarkus,native"
 - name: "graalvm.version"  
-  value: &graal_version 19.3.1-java8 
+  value: &graal_version 20.0.0-java8 
 
 modules:
   install:

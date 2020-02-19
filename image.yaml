@@ -2,7 +2,7 @@
 schema_version: 1
 
 name: "quay.io/quarkus/image-name-from-overrides-file"
-version: "19.3.1"
+version: "20.0.0"
 from: "registry.access.redhat.com/ubi8/ubi-minimal:8.0"
 
 labels:
