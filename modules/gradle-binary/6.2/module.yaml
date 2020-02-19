@@ -1,0 +1,20 @@
+schema_version: 1
+name: gradle-binary
+version: "6.2"
+
+envs:
+  - name: "GRADLE_VERSION"
+    value: "6.2"
+  - name: "GRADLE_HOME"
+    value: "/usr/share/gradle"
+  - name : "GRADLE_OPTS" 
+    value: "-Dorg.gradle.daemon=false"
+
+# unfortunately by now the version needs to be hardcoded.
+artifacts:
+  - name: gradle.zip
+    url: https://services.gradle.org/distributions/gradle-6.2-bin.zip
+    md5: 634cb784907704a18cefd435fbabf4d3
+
+execute:
+  - script: configure
