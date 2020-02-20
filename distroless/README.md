@@ -28,7 +28,7 @@ Then, create the following `Dockerfile`:
 
 ```dockerfile
 FROM cescoffier/native-base:latest
-COPY target/*-runner /application
+COPY build/*-runner /application
 EXPOSE 8080
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 ```
