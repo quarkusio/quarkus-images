@@ -100,20 +100,17 @@ This version is also the version of the image, followed when necessary with `jav
 
 ## Updating GraalVM version
 
-To change the version, update its module in the `image.yaml` or in the `overrides.yaml` file that uses it, i.e.:
+To update the GraalVM version:
 
-centos-quarkus-native-s2i.yaml
-```yaml
-modules:
-  install:
-  ...
-  - name: graalvm
-    version: 1.0.0-rc15
-```
+1. Create the cekit module
+2. Add a new _override_ file in the `images` directory for each image
+3. If you need both java8 and java11, create two files
+4. In the created file, update the version and the GraalVM module version.
 
-Also, edit the `images.yaml` file to make the `version` element match the GraalVM version.
+To update another tool:
 
-The same applies to configure the Maven version.
+1. Create the module
+2. Update the related _override_ files
 
 # Building, testing and pushing the images
 

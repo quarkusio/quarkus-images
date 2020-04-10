@@ -1,6 +1,8 @@
 schema_version: 1
 
 name: "quay.io/quarkus/ubi-quarkus-native-image"
+version: &graal_version 19.3.1-java11
+
 
 labels:
 - name: "io.k8s.description"
@@ -10,7 +12,7 @@ labels:
 - name: "io.openshift.tags"
   value: "executable,java,quarkus,native"
 - name: "graalvm.version"  
-  value: &graal_version 20.0.0-java11  
+  value: *graal_version
 
 modules:
   install:

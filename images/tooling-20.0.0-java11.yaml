@@ -2,6 +2,8 @@ schema_version: 1
 
 name: "quay.io/quarkus/centos-quarkus-maven"
 from: "centos:7"
+version: &graal_version 20.0.0-java11 
+
 
 labels:
 - name: "io.openshift.expose-services"
@@ -13,7 +15,7 @@ labels:
 - name: "io.openshift.tags"
   value: "builder,java,quarkus"
 - name: "graalvm.version"  
-  value: &graal_version 20.0.0-java11
+  value: *graal_version
 - name: "maven.version"  
   value: &maven_version 3.6.3
 - name: "gradle.version"  

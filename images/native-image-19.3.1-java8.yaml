@@ -1,0 +1,31 @@
+schema_version: 1
+
+name: "quay.io/quarkus/ubi-quarkus-native-image"
+version: &graal_version 19.3.1-java8 
+
+labels:
+- name: "io.k8s.description"
+  value: "Quarkus.io executable image providing the `native-image` executable."
+- name: "io.k8s.display-name"
+  value: "Quarkus.io executable (GraalVM Native)"
+- name: "io.openshift.tags"
+  value: "executable,java,quarkus,native"
+- name: "graalvm.version"  
+  value: *graal_version
+
+modules:
+  install:
+  - name: common-packages
+  - name: add-quarkus-user
+  - name: graalvm
+    version: *graal_version
+
+volumes:
+- name: "volume.project"
+  path: "/project"
+
+run:
+  user: 1001
+  workdir: "/project"
+  entrypoint:
+  - "native-image"

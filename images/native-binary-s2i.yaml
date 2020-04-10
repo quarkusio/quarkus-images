@@ -1,6 +1,7 @@
 schema_version: 1
 
 name: "quay.io/quarkus/ubi-quarkus-native-binary-s2i"
+version: &version 20.0.0
 
 labels:
 - name: "io.openshift.s2i.scripts-url"

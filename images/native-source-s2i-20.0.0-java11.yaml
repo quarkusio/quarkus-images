@@ -1,0 +1,50 @@
+schema_version: 1
+
+name: "quay.io/quarkus/ubi-quarkus-native-s2i"
+version: &graal_version 20.0.0-java11
+
+
+labels:
+- name: "io.openshift.s2i.scripts-url"
+  value: "image:///usr/local/s2i"
+- name: "io.openshift.s2i.destination"
+  value: "/tmp"
+- name: "io.openshift.expose-services"
+  value: "8080:http"
+- name: "io.k8s.description"
+  value: "Quarkus.io S2I image for building Kubernetes Native Java GraalVM applications and running its Native Executables"
+- name: "io.k8s.display-name"
+  value: "Quarkus.io S2I (GraalVM Native)"
+- name: "io.openshift.tags"
+  value: "builder,java,quarkus,native"
+- name: "graalvm.version"  
+  value: *graal_version
+- name: "maven.version"  
+  value: &maven_version 3.6.3  
+- name: "gradle.version"  
+  value: &gradle_version "6.2"
+
+ports:
+- value: 8080
+
+modules:
+  install:
+  - name: common-packages
+  - name: add-quarkus-user
+  - name: maven-binary
+    version: *maven_version
+  - name: maven-config
+  - name: graalvm
+    version: *graal_version
+  - name: gradle-binary  
+    version: *gradle_version
+  - name: quarkus-native-s2i-scripts
+
+
+# Use the run script as default since we are working as an hybrid image which can be
+# used directly to. (If we were a plain s2i image we would print the usage info here.)
+run:
+  user: 1001
+  workdir: "${QUARKUS_HOME}"
+  cmd:
+  - "/usr/local/s2i/run"
