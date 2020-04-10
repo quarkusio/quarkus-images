@@ -17,6 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1    
     - name: Make Images
+      timeout-minutes: 300
       run: |
         sudo apt-get update -o Dir::Etc::sourcelist="sources.list" -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
         sudo apt-get install -y python3.7 python3-pip gcc build-essential libkrb5-dev python3-setuptools
