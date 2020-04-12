@@ -26,9 +26,9 @@ jobs:
           pip install docker_squash
           pip install behave
           pip install lxml
+          make
 
           docker login -u="${QUAY_USER}" -p="${QUAY_TOKEN}" quay.io
-          make
           make push
 
       - name: update deploy status
