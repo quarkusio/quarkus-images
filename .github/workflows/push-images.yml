@@ -1,5 +1,8 @@
 name: Push Images to Quay
-on: [deployment]
+on:
+  deployment:
+  schedule:
+    - cron: '0 0 * * 0'
 
 jobs:
   deploy:
