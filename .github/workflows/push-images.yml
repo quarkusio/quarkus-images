@@ -1,5 +1,8 @@
 name: Push Images to Quay
-on: [deployment]
+on:
+  deployment:
+  schedule:
+    - cron: '0 0 * * 0'
 
 jobs:
   deploy:
@@ -8,11 +11,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: 'master'
-      - name: 'Push images'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          QUAY_USER: ${{ secrets.QUAY_USER }}
-          QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
+      - name: Prerequisites
         run: |
           sudo apt-get update -o Dir::Etc::sourcelist="sources.list" -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
           sudo apt-get install -y python3.7 python3-pip gcc build-essential libkrb5-dev python3-setuptools
@@ -25,12 +24,21 @@ jobs:
           pip install docker
           pip install docker_squash
           pip install behave
-          pip install lxml
-          make
-
-          docker login -u="${QUAY_USER}" -p="${QUAY_TOKEN}" quay.io
-          make push
-
+          pip install lxml        
+      - name: Build native-image images
+        run: .github/build-native-images.sh
+      - name: Build S2I (native) images
+        run: .github/build-s2i-native-images.sh  
+      - name: Build S2I (binary) images
+        run: .github/build-s2i-binary-images.sh        
+      - name: Build tooling images
+        run: .github/build-tooling-images.sh                
+      - name: 'Push images'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          QUAY_USER: ${{ secrets.QUAY_USER }}
+          QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
+        run: .github/push-images.sh                          
       - name: update deploy status
         if: always()
         uses: unacast/actions-github-deployment-status@0.2

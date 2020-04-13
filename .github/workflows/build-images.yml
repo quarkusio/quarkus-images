@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1    
-    - name: Make Images
+    - name: Prerequisites
       run: |
         sudo apt-get update -o Dir::Etc::sourcelist="sources.list" -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
         sudo apt-get install -y python3.7 python3-pip gcc build-essential libkrb5-dev python3-setuptools
@@ -28,5 +28,12 @@ jobs:
         pip install docker
         pip install docker_squash
         pip install behave
-        pip install lxml
-        make
+        pip install lxml        
+    - name: Build native-image images
+      run: .github/build-native-images.sh
+    - name: Build S2I (native) images
+      run: .github/build-s2i-native-images.sh  
+    - name: Build S2I (binary) images
+      run: .github/build-s2i-binary-images.sh        
+    - name: Build tooling images
+      run: .github/build-tooling-images.sh              
