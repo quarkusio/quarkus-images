@@ -26,7 +26,7 @@ function configure_proxy() {
   proxy=${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-$http_proxy}}}
   # if http_proxy_host/port is set, prefer that (oldest mechanism)
   # before looking at HTTP(S)_PROXY
-  proxyhost=${HTTP_PROXY_HOST:-$(echo $proxy | cut -d : -f 1,2)}
+  proxyhost=${HTTP_PROXY_HOST:-$(echo $proxy | cut -d / -f 3 | cut -d : -f 1)}
   proxyport=${HTTP_PROXY_PORT:-$(echo $proxy | cut -d : -f 3)}
 
    if [ -n "$proxyhost" ]; then
