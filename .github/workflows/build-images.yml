@@ -37,3 +37,6 @@ jobs:
       run: .github/build-s2i-binary-images.sh        
     - name: Build tooling images
       run: .github/build-tooling-images.sh              
+    - name: print images
+      run: docker images  
+      

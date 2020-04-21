@@ -7,3 +7,5 @@ virtualenv --python=python3 ~/cekit
 source ~/cekit/bin/activate
 
 cekit  build --overrides-file quarkus-native-binary-s2i-overrides.yaml ${BUILD_ENGINE} --tag="${NAME}"
+
+docker image prune -f
