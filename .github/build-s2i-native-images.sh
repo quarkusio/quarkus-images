@@ -11,3 +11,5 @@ source ~/cekit/bin/activate
 
 cekit  build --overrides-file quarkus-native-s2i-overrides-java8.yaml ${BUILD_ENGINE} --tag="${TAG_JAVA8}"
 cekit  build --overrides-file quarkus-native-s2i-overrides-java11.yaml ${BUILD_ENGINE} --tag="${TAG_JAVA11}"
+
+docker image prune -f
