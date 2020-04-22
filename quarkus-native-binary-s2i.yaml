@@ -1,6 +1,8 @@
 schema_version: 1
 
+from: "registry.access.redhat.com/ubi8/ubi-minimal:8.0"
 name: "quay.io/quarkus/ubi-quarkus-native-binary-s2i"
+version: "SNAPSHOT"
 
 labels:
 - name: "io.openshift.s2i.scripts-url"
@@ -15,15 +17,23 @@ labels:
   value: "Quarkus.io S2I (UBI8)"
 - name: "io.openshift.tags"
   value: "builder,quarkus,native"
+- name: "maintainer"
+  value: "Quarkus Team <quarkus-dev@googlegroups.com>"  
 
 ports:
 - value: 8080
 
 modules:
+  repositories:
+  - path: modules
   install:
   - name: common-packages
   - name: add-quarkus-user
   - name: quarkus-native-binary-s2i-scripts
+
+envs:
+- name: "PATH"
+  value: "$PATH:$JAVA_HOME/bin"
 
 run:
   user: 1001

@@ -1,11 +1,12 @@
 #!/bin/bash
-IMAGE_VERSION=$(cat image.yaml | egrep ^version  | cut -d"\"" -f2)
+PREFIX_NAME=quay.io/quarkus/ubi-quarkus-native-binary-s2i
+IMAGE=quarkus-native-binary-s2i.yaml
 BUILD_ENGINE=docker
-NAME=quay.io/quarkus/ubi-quarkus-native-binary-s2i:${IMAGE_VERSION}
+NAME=${PREFIX_NAME}:1.0
 
 virtualenv --python=python3 ~/cekit
 source ~/cekit/bin/activate
 
-cekit  build --overrides-file quarkus-native-binary-s2i-overrides.yaml ${BUILD_ENGINE} --tag="${NAME}"
+cekit --descriptor ${IMAGE} build ${BUILD_ENGINE} --tag="${NAME}"
 
 docker image prune -f

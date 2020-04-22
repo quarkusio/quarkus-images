@@ -1,15 +1,19 @@
 #!/bin/bash
-IMAGE_VERSION=$(cat image.yaml | egrep ^version  | cut -d"\"" -f2)
-BUILD_ENGINE=docker
 
-NAME=quay.io/quarkus/ubi-quarkus-native-s2i
-TAG_JAVA8=${NAME}:${IMAGE_VERSION}-java8
-TAG_JAVA11=${NAME}:${IMAGE_VERSION}-java11
+PREFIX_NAME=quay.io/quarkus/ubi-quarkus-native-s2i
+IMAGE=quarkus-native-s2i.yaml
+VERSIONS=('19.3.1-java8' '19.3.1-java11' '20.0.0-java8' '20.0.0-java11')
+BUILD_ENGINE=docker
 
 virtualenv --python=python3 ~/cekit
 source ~/cekit/bin/activate
 
-cekit  build --overrides-file quarkus-native-s2i-overrides-java8.yaml ${BUILD_ENGINE} --tag="${TAG_JAVA8}"
-cekit  build --overrides-file quarkus-native-s2i-overrides-java11.yaml ${BUILD_ENGINE} --tag="${TAG_JAVA11}"
+for version in "${VERSIONS[@]}"
+do
+	echo "Generating ${PREFIX_NAME}:${version}"
+    cekit --descriptor ${IMAGE} build \
+        --overrides "{'version': '${version}', 'modules': {'install': [{'name':'graalvm', 'version': '${version}'}]}}" \
+        ${BUILD_ENGINE} --tag="${PREFIX_NAME}:${version}"
+done
 
 docker image prune -f
