@@ -1,5 +1,5 @@
 schema_version: 1
-
+version: "SNAPSHOT"
 name: "quay.io/quarkus/centos-quarkus-maven"
 from: "centos:7"
 
@@ -12,30 +12,28 @@ labels:
   value: "Centos + GraalVM + Maven Image"
 - name: "io.openshift.tags"
   value: "builder,java,quarkus"
-- name: "graalvm.version"  
-  value: &graal_version 20.0.0-java8
-- name: "maven.version"  
-  value: &maven_version 3.6.3
-- name: "gradle.version"  
-  value: &gradle_version "6.2"
+- name: "maintainer"
+  value: "Quarkus Team <quarkus-dev@googlegroups.com>"  
 
 ports:
 - value: 8080
 
 modules:
+  repositories:
+  - path: modules
   install:
   - name: common-packages
   - name: add-quarkus-user
   - name: maven-binary
-    version: *maven_version
+    version: "3.6.3"
   - name: gradle-binary
-    version: *gradle_version    
+    version: "6.2"
   - name: maven-config
   - name: graalvm
-    version: *graal_version
+    version: "_version_"
   - name: quarkus-maven-scripts
 
-packages: 
+packages:   
   repositories:
   - name: scl
     rpm: centos-release-scl
@@ -56,6 +54,10 @@ packages:
   - libstdc++-static
   - glibc-static
   - zlib-static
+
+envs:
+- name: "PATH"
+  value: "$PATH:$JAVA_HOME/bin"  
 
 volumes:
 - name: "volume.project"
