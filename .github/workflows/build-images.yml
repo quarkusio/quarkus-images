@@ -28,7 +28,11 @@ jobs:
         pip install docker
         pip install docker_squash
         pip install behave
-        pip install lxml        
+        pip install lxml      
+
+        # Re-claim some disk space
+        sudo apt-get clean
+        docker rmi node:10 node:12 mcr.microsoft.com/azure-pipelines/node8-typescript:latest   
     - name: Build native-image images
       run: .github/build-native-images.sh
     - name: Build S2I (native) images
