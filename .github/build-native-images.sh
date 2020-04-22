@@ -17,3 +17,4 @@ do
 done
 
 docker image prune -f
+docker images  

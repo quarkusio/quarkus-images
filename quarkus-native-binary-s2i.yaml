@@ -23,6 +23,9 @@ labels:
 ports:
 - value: 8080
 
+packages:
+  manager: microdnf
+
 modules:
   repositories:
   - path: modules

@@ -10,3 +10,4 @@ source ~/cekit/bin/activate
 cekit --descriptor ${IMAGE} build ${BUILD_ENGINE} --tag="${NAME}"
 
 docker image prune -f
+docker images  
