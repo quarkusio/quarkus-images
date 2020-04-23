@@ -1,4 +1,7 @@
 schema_version: 1
+version: "SNAPSHOT"
+from: "registry.access.redhat.com/ubi8/ubi-minimal:8.0"
+
 
 name: "quay.io/quarkus/ubi-quarkus-native-image"
 
@@ -9,15 +12,23 @@ labels:
   value: "Quarkus.io executable (GraalVM Native)"
 - name: "io.openshift.tags"
   value: "executable,java,quarkus,native"
-- name: "graalvm.version"  
-  value: &graal_version 20.0.0-java8 
+- name: "maintainer"
+  value: "Quarkus Team <quarkus-dev@googlegroups.com>"  
+
+packages:
+  manager: microdnf
 
 modules:
+  repositories:
+  - path: modules
   install:
   - name: common-packages
   - name: add-quarkus-user
   - name: graalvm
-    version: *graal_version
+    version: "_version_"
+envs:
+- name: "PATH"
+  value: "$PATH:$JAVA_HOME/bin"
 
 volumes:
 - name: "volume.project"

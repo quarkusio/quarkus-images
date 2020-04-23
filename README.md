@@ -10,7 +10,7 @@ NOTE: Require CEKit 3.3.x
 The images are available on [Quay.io](https://quay.io/organization/quarkus)
 
 * **ubi-quarkus-native-image** - provides the `native-image` executable. Used by the Maven and Gradle plugin from Quarkus to build linux64 executables
-* **centos-quarkus-maven** - Image delivering GraalVM, Maven, Podman and Buildah; this image can be used to build a native executable from source.
+* **centos-quarkus-maven** - Image delivering GraalVM, Maven, Gradle, Podman and Buildah; this image can be used to build a native executable from source.
 * **ubi-quarkus-native-s2i** - S2I builder image for OpenShift building a native image from source code (using Gradle or Maven)
 * **ubi-quarkus-native-binary-s2i** - S2I builder image for OpenShift taking a pre-built native executable as input
 
@@ -19,28 +19,39 @@ To pull these images use:
 * `docker pull quay.io/quarkus/ubi-quarkus-native-image:VERSION`
 * `docker pull quay.io/quarkus/centos-quarkus-maven:VERSION`
 * `docker pull quay.io/quarkus/ubi-quarkus-native-s2i:VERSION`
-* `docker pull quay.io/quarkus/ubi-quarkus-native-binary-s2i:VERSION`
+* `docker pull quay.io/quarkus/ubi-quarkus-native-binary-s2i:1.0`
 
 with _VERSION_ being the version. 
-The version matches the GraalVM version used in the image, for example: `19.2.1`.
-For GraalVM 19.3.0+, the _VERSION_ is suffixed with `-java8` or `-java11` (except for `ubi-quarkus-native-binary-s2i`). For example:
+The version matches the GraalVM version used in the image, for example: `19.3.1-java8`, `19.3.1-java11`...
 
 ```
-quay.io/quarkus/ubi-quarkus-native-s2i:19.3.0-java8 <-- GraalVM 19.3.0 with java 8 support
-quay.io/quarkus/ubi-quarkus-native-s2i:19.3.0-java11 <-- GraalVM 19.3.0 with java 11 support
-quay.io/quarkus/ubi-quarkus-native-binary-s2i:19.3.0 <-- Native binary s2i
+quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java8 <-- GraalVM 19.3.1 with java 8 support
+quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java11 <-- GraalVM 19.3.1 with java 11 support
+quay.io/quarkus/ubi-quarkus-native-binary-s2i:1.0 <-- Native binary s2i
 ```
 
-NOTE: You may wonder why we don't use `latest`. It's because `latest` has introduced more problems than benefits especially when reproducing issues. 
+NOTE: You may wonder why we don't use `latest`. It's because `latest` has introduced more problems than benefits especially when reproducing issues.
 For this reason, we recommend using a stable version.
 
 ## Build
 
-For each _overrides_ file, run the `cekit build` command. For example:
+The build is controled by 4 _image_ files:
 
-```bash
-$ cekit -v build --overrides-file quarkus-native-image-overrides-java8.yaml docker
+* `quarkus-native-image.yaml` produces `ubi-quarkus-native-image` images
+* `quarkus-native-binary-s2i.yaml` produces the `ubi-quarkus-native-binary-s2i` image
+* `quarkus-native-s2i.yaml` produces the `ubi-quarkus-native-s2i` images
+* `quarkus-tooling.yaml` produces the `centos-quarkus-maven` images
+
+To build the images, you must pass the "GraalVM" version are parameter (except for `quarkus-native-binary-s2i.yaml`):
+
 ```
+cekit --descriptor ${IMAGE} build \
+        --overrides "{'version': '${version}', 'modules': {'install': [{'name':'graalvm', 'version': '${version}'}]}}" \
+        docker --tag="${IMAGE_NAME}:${version}"
+```        
+
+The `.github` directory contains the script to build the different images.
+
 
 #### Note about CEKit
 
@@ -56,19 +67,9 @@ pip install docker
 pip install docker_squash
 pip install behave
 pip install lxml
-make
+
+# Run the scripts from the .github directory
 ```
-
-## Run
-
-```bash
-docker run -it -v /path/to/quarkus-app:/project \
-    --rm \
-    quay.io/quarkus/ubi-quarkus-native-image:$TAG \
-    -jar target/my-application-shaded.jar
-```
-
-The path given to the `jar` parameter is relative to the mounted path (`/project` volume).
 
 ## Images
 
@@ -86,34 +87,29 @@ Two S2I are available:
 
 Both resulting containers are based on [UBI images](https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image).
 
-### Centos + GraalVM + Maven Image
+### Centos + GraalVM + Maven/Gradle Image
 
 For more information about this image, please refer to its module README:
 [centos-quarkus-maven](modules/quarkus-maven-scripts/README.md)
 
-## GraalVM versioning model
+## Maintenance
 
-The GraalVM module version defines the version you ship with the image. 
-For instance, the version  `19.2.0` provides GraalVM 19.2.0.
-
-This version is also the version of the image, followed when necessary with `java8` or `java11`.
+IMPORTANT: The images are produced both the last 2 versions of GraalVM. For most images, this version defines the image _tag_ (_i.e._ version)
 
 ## Updating GraalVM version
 
-To change the version, update its module in the `image.yaml` or in the `overrides.yaml` file that uses it, i.e.:
+1. Create new directories under `modules/graalvm` named after the new version. You need to create 2 directories to distinguish the `java8` from `java11` version
+2. In each directory, write the `configure` and `module.yaml` files. The `configure` file should not differ from the existing versions, so just copy it. In the `module.yaml`, change the versions, labels, md5 hash...
+3. In the `.github` directory, edit the `build-native-images.sh`, `build-s2i-native-images.sh` and `build-tooling-images.sh` to change the `VERSIONS` array. Add/Replace with your new versions.
 
-centos-quarkus-native-s2i.yaml
-```yaml
-modules:
-  install:
-  ...
-  - name: graalvm
-    version: 1.0.0-rc15
-```
+IMPORTANT: Always keep the last GraalVM LTS.
 
-Also, edit the `images.yaml` file to make the `version` element match the GraalVM version.
+## Updating the Maven/Gradle versions
 
-The same applies to configure the Maven version.
+1. Create a new directory under `modules/maven-binary` / `modules/gradle-binary` named after the new version
+2. In the new directory, create (or copy from an existing version) the `configure` and `module.yaml` file
+3. Edit the `module.yaml` file to target the new version
+4. Edit the `quarkus-native-s2i.yaml` and `quarkus-tooling.yaml` files to update the Maven/Gradle version
 
 # Building, testing and pushing the images
 

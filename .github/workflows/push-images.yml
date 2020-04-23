@@ -5,44 +5,64 @@ on:
     - cron: '0 0 * * 0'
 
 jobs:
-  deploy:
+  native-image-build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: 'master'
-      - name: Prerequisites
-        run: |
-          sudo apt-get update -o Dir::Etc::sourcelist="sources.list" -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
-          sudo apt-get install -y python3.7 python3-pip gcc build-essential libkrb5-dev python3-setuptools
-          sudo pip3 install virtualenv 
+    - uses: actions/checkout@v1    
+    - name: Prerequisites
+      run: .github/ci-prerequisites.sh
+    - name: Build native-image images
+      run: .github/build-native-images.sh
+    - name: Push images
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        QUAY_USER: ${{ secrets.QUAY_USER }}
+        QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
+      run: .github/push-images.sh                            
 
-          virtualenv --python=python3 ~/cekit
-          source ~/cekit/bin/activate
-          pip install -U cekit
-          pip install odcs
-          pip install docker
-          pip install docker_squash
-          pip install behave
-          pip install lxml        
-      - name: Build native-image images
-        run: .github/build-native-images.sh
-      - name: Build S2I (native) images
-        run: .github/build-s2i-native-images.sh  
-      - name: Build S2I (binary) images
-        run: .github/build-s2i-binary-images.sh        
-      - name: Build tooling images
-        run: .github/build-tooling-images.sh                
-      - name: 'Push images'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          QUAY_USER: ${{ secrets.QUAY_USER }}
-          QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
-        run: .github/push-images.sh                          
-      - name: update deploy status
-        if: always()
-        uses: unacast/actions-github-deployment-status@0.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          status: ${{ job.status }}         
+  native-s2i-build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1    
+    - name: Prerequisites
+      run: .github/ci-prerequisites.sh
+    - name: Build S2I (native) images
+      run: .github/build-s2i-native-images.sh  
+    - name: Push images
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        QUAY_USER: ${{ secrets.QUAY_USER }}
+        QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
+      run: .github/push-images.sh                            
+
+  binary-s2i-build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1    
+    - name: Prerequisites
+      run: .github/ci-prerequisites.sh
+    - name: Build S2I (binary) images
+      run: .github/build-s2i-binary-images.sh        
+    - name: Push images
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        QUAY_USER: ${{ secrets.QUAY_USER }}
+        QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
+      run: .github/push-images.sh                                
+
+  tooling-build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1    
+    - name: Prerequisites
+      run: .github/ci-prerequisites.sh
+    - name: Build tooling images
+      run: .github/build-tooling-images.sh              
+    - name: Push images
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        QUAY_USER: ${{ secrets.QUAY_USER }}
+        QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
+      run: .github/push-images.sh                          
+
   
