@@ -11,36 +11,39 @@ on:
         - '.build/**'
 
 jobs:
-  make-images:
+
+  native-image:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1    
     - name: Prerequisites
-      run: |
-        sudo apt-get update -o Dir::Etc::sourcelist="sources.list" -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
-        sudo apt-get install -y python3.7 python3-pip gcc build-essential libkrb5-dev python3-setuptools
-        sudo pip3 install virtualenv 
-
-        virtualenv --python=python3 ~/cekit
-        source ~/cekit/bin/activate
-        pip install -U cekit
-        pip install odcs
-        pip install docker
-        pip install docker_squash
-        pip install behave
-        pip install lxml      
-
-        # Re-claim some disk space
-        sudo apt-get clean
-        docker rmi node:10 node:12 mcr.microsoft.com/azure-pipelines/node8-typescript:latest   
+      run: .github/ci-prerequisites.sh
     - name: Build native-image images
       run: .github/build-native-images.sh
+
+  native-s2i:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1    
+    - name: Prerequisites
+      run: .github/ci-prerequisites.sh
     - name: Build S2I (native) images
       run: .github/build-s2i-native-images.sh  
+
+  binary-s2i:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1    
+    - name: Prerequisites
+      run: .github/ci-prerequisites.sh
     - name: Build S2I (binary) images
       run: .github/build-s2i-binary-images.sh        
+
+  tooling:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1    
+    - name: Prerequisites
+      run: .github/ci-prerequisites.sh
     - name: Build tooling images
       run: .github/build-tooling-images.sh              
-    - name: print images
-      run: docker images  
-      

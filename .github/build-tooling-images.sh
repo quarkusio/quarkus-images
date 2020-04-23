@@ -12,7 +12,8 @@ do
 	echo "Generating ${PREFIX_NAME}:${version}"
     cekit --descriptor ${IMAGE} build \
         --overrides "{'version': '${version}', 'modules': {'install': [{'name':'graalvm', 'version': '${version}'}]}}" \
-        ${BUILD_ENGINE} --tag="${PREFIX_NAME}:${version}" --no-squash
+        ${BUILD_ENGINE} --tag="${PREFIX_NAME}:${version}"
 done
 
 docker image prune -f
+docker images  
