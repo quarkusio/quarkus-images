@@ -59,10 +59,6 @@ envs:
 - name: "PATH"
   value: "$PATH:$JAVA_HOME/bin"  
 
-volumes:
-- name: "volume.project"
-  path: "/project"
-
 run:
   user: 1001
   workdir: "/project"
