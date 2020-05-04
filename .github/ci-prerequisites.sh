@@ -13,5 +13,8 @@ pip install behave
 pip install lxml      
 
 # Re-claim some disk space
+sudo swapoff -a
+sudo rm -f /swapfile
 sudo apt-get clean
-docker rmi node:10 node:12 mcr.microsoft.com/azure-pipelines/node8-typescript:latest
+docker rmi $(docker image ls -aq)
+df -h
