@@ -37,7 +37,7 @@ modules:
   - name: graalvm
     version: _version_
   - name: gradle-binary  
-    version: "6.2"
+    version: "6.3"
   - name: quarkus-native-s2i-scripts
 
 envs:
@@ -51,4 +51,4 @@ run:
   workdir: "${QUARKUS_HOME}"
   cmd:
   - "/usr/local/s2i/run"
-  
+
