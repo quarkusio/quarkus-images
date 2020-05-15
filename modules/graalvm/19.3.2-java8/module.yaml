@@ -1,0 +1,30 @@
+schema_version: 1
+name: graalvm
+version: &version "19.3.2-java8"
+
+labels:
+  - name: graalvm-archive-filename
+    value: &filename graalvm-ce-linux-amd64-19.3.2-java8.tar.gz
+  - name: graalvm-archive-url
+    value: &url https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-19.3.2/graalvm-ce-java8-linux-amd64-19.3.2.tar.gz
+  - name: graalvm-version
+    value: &suffix java8-19.3.2
+
+envs:
+  - name: "JAVA_HOME"
+    value: "/opt/graalvm"
+  - name: "GRAALVM_HOME"
+    value: "/opt/graalvm"
+    # version without prefix ce
+  - name: "GRAALVM_VERSION"
+    value: *suffix
+  - name: "FILENAME"
+    value: *filename
+
+artifacts:
+- name: *filename
+  url: *url
+  md5: dbd66c43fd7c1e13702ec72b3638f49b
+
+execute:
+- script: configure

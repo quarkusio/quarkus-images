@@ -2,7 +2,7 @@
 
 PREFIX_NAME=quay.io/quarkus/ubi-quarkus-native-image
 IMAGE=quarkus-native-image.yaml
-VERSIONS=('19.3.1-java8' '19.3.1-java11' '20.0.0-java8' '20.0.0-java11')
+VERSIONS=('19.3.2-java8' '19.3.2-java11' '20.0.0-java8' '20.0.0-java11')
 BUILD_ENGINE=docker
 
 virtualenv --python=python3 ~/cekit
