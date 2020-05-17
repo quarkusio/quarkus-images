@@ -29,7 +29,7 @@ fi
  if "$USE_GRADLE"; then
   BUILD_DIR=build
   mkdir -p build/libs
-  gradle buildNative --docker-build=false
+  gradle build -Dquarkus.package.type=native
 else
   BUILD_DIR=target
   mvn package -Pnative -e -B \
