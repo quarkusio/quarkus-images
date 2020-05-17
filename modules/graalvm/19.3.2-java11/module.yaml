@@ -23,7 +23,7 @@ envs:
 artifacts:
 - name: *filename
   url: *url
-  md5: d2644fee760ff102866c705a7d6b6634
+  md5: f1d978040f4393cfd65203049c45c773
 
 execute:
 - script: configure
