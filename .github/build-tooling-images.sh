@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 PREFIX_NAME=quay.io/quarkus/centos-quarkus-maven
 IMAGE=quarkus-tooling.yaml
 VERSIONS=('19.3.2-java8' '19.3.2-java11' '20.0.0-java8' '20.0.0-java11')

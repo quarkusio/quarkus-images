@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 PREFIX_NAME=quay.io/quarkus/ubi-quarkus-native-s2i
 IMAGE=quarkus-native-s2i.yaml

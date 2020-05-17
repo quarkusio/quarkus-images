@@ -1,4 +1,6 @@
 #!/bin/sh
+set -e
+
 docker login -u="${QUAY_USER}" -p="${QUAY_TOKEN}" quay.io
 
 # Retrieve the produces images and push them

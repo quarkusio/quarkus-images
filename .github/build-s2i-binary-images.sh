@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 PREFIX_NAME=quay.io/quarkus/ubi-quarkus-native-binary-s2i
 IMAGE=quarkus-native-binary-s2i.yaml
 BUILD_ENGINE=docker
