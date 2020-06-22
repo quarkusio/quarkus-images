@@ -20,6 +20,21 @@ jobs:
         QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
       run: .github/push-images.sh                            
 
+  mandrel-image-build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Prerequisites
+      run: .github/ci-prerequisites.sh
+    - name: Build mandrel images
+      run: .github/build-mandrel-images.sh
+    - name: Push images
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        QUAY_USER: ${{ secrets.QUAY_USER }}
+        QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
+      run: .github/push-images.sh
+
   native-s2i-build-and-deploy:
     runs-on: ubuntu-latest
     steps:
@@ -63,6 +78,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         QUAY_USER: ${{ secrets.QUAY_USER }}
         QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
-      run: .github/push-images.sh                          
-
-  
+      run: .github/push-images.sh

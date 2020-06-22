@@ -10,6 +10,7 @@ NOTE: Require CEKit 3.3.x
 The images are available on [Quay.io](https://quay.io/organization/quarkus)
 
 * **ubi-quarkus-native-image** - provides the `native-image` executable. Used by the Maven and Gradle plugin from Quarkus to build linux64 executables
+* **ubi-quarkus-mandrel** - provides the `native-image` executable from the Mandrel distribution of GraalVM. Used by the Maven and Gradle plugin from Quarkus to build linux64 executables
 * **centos-quarkus-maven** - Image delivering GraalVM, Maven, Gradle, Podman and Buildah; this image can be used to build a native executable from source.
 * **ubi-quarkus-native-s2i** - S2I builder image for OpenShift building a native image from source code (using Gradle or Maven)
 * **ubi-quarkus-native-binary-s2i** - S2I builder image for OpenShift taking a pre-built native executable as input
@@ -17,6 +18,7 @@ The images are available on [Quay.io](https://quay.io/organization/quarkus)
 To pull these images use:
 
 * `docker pull quay.io/quarkus/ubi-quarkus-native-image:VERSION`
+* `docker pull quay.io/quarkus/ubi-quarkus-mandrel:VERSION`
 * `docker pull quay.io/quarkus/centos-quarkus-maven:VERSION`
 * `docker pull quay.io/quarkus/ubi-quarkus-native-s2i:VERSION`
 * `docker pull quay.io/quarkus/ubi-quarkus-native-binary-s2i:1.0`
@@ -35,20 +37,29 @@ For this reason, we recommend using a stable version.
 
 ## Build
 
-The build is controled by 4 _image_ files:
+The build is controlled by 5 _image_ files:
 
 * `quarkus-native-image.yaml` produces `ubi-quarkus-native-image` images
+* `quarkus-mandrel.yaml` produces `ubi-quarkus-mandrel` images
 * `quarkus-native-binary-s2i.yaml` produces the `ubi-quarkus-native-binary-s2i` image
 * `quarkus-native-s2i.yaml` produces the `ubi-quarkus-native-s2i` images
 * `quarkus-tooling.yaml` produces the `centos-quarkus-maven` images
 
-To build the images, you must pass the "GraalVM" version are parameter (except for `quarkus-native-binary-s2i.yaml`):
+To build the images, you must pass the "GraalVM" version as parameter (except for `quarkus-mandrel.yaml` and `quarkus-native-binary-s2i.yaml`):
 
 ```
 cekit --descriptor ${IMAGE} build \
         --overrides "{'version': '${version}', 'modules': {'install': [{'name':'graalvm', 'version': '${version}'}]}}" \
         docker --tag="${IMAGE_NAME}:${version}"
 ```        
+
+For `quarkus-mandrel.yaml` you must pass the "Mandrel" version instead:
+
+```
+cekit --descriptor ${IMAGE} build \
+        --overrides "{'version': '${version}', 'modules': {'install': [{'name':'mandrel', 'version': '${version}'}]}}" \
+        docker --tag="${IMAGE_NAME}:${version}"
+```
 
 The `.github` directory contains the script to build the different images.
 

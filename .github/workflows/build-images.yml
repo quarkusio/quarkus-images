@@ -21,6 +21,15 @@ jobs:
     - name: Build native-image images
       run: .github/build-native-images.sh
 
+  mandrel-image:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Prerequisites
+      run: .github/ci-prerequisites.sh
+    - name: Build mandrel images
+      run: .github/build-mandrel-images.sh
+
   native-s2i:
     runs-on: ubuntu-latest
     steps:
