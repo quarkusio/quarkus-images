@@ -3,8 +3,8 @@ set -e
 
 PREFIX_NAME=quay.io/quarkus/ubi-quarkus-mandrel
 IMAGE=quarkus-mandrel.yaml
-VERSIONS=('20.1.0.0.Alpha1-java11')
-BUILD_ENGINE=docker
+VERSIONS=('20.1.0.0.Alpha1-java11' '20.1.0.1.Alpha2-java11')
+BUILD_ENGINE=${BUILD_ENGINE:-docker}
 
 virtualenv --python=python3 ~/cekit
 source ~/cekit/bin/activate
