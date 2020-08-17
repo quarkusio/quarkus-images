@@ -70,8 +70,8 @@ We recommend using `virtualenv` to run `cekit`.
 On MacOS X, you can run the build as follows:
 
 ```bash
-virtualenv --python=python3 ~/cekit
-source ~/cekit/bin/activate
+virtualenv --python=python3 .cekit
+source .cekit/bin/activate
 pip install -U cekit
 pip install odcs
 pip install docker
@@ -133,25 +133,14 @@ For other Systems, please refer to the docs.
 
 
 ###### Build:
-Build + squash
 
-```bash
-$ make
-```
+The build scripts are located in the `.github` directory:
 
-
-###### Testing:
-This step will build (squashing) and test the images
-```bash
-$ make test
-```
-
-###### Push the images:
-This step will build (squashing), test and push the images to quay.io/quarkus
-This step requires the write permission for the Quarkus organization on Quay.io.
-```bash
-make push
-```
+* `build-mandrel-images.sh` - build the mandrel images
+* `build-native-images.sh` - build the images providing the `native-image` executable
+* `build-s2i-binary-images.sh` - build the s2i builder images taking a pre-built native executable
+* `build-s2i-native-images.sh` - build the s2i builder images taking Java sources as input and building the native exectuable and the container
+* `build-tooling-images.sh` - build the tooling image
 
 # Continuous Integration and Automation
 
