@@ -23,6 +23,7 @@ modules:
   - path: modules
   install:
   - name: common-packages
+  - name: encoding
   - name: add-quarkus-user
   - name: mandrel
     version: "_version_"
