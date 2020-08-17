@@ -5,7 +5,7 @@ version: "SNAPSHOT"
 
 labels:
 - name: "io.openshift.s2i.scripts-url"
-  value: "image:///usr/local/s2i"
+  value: "image:///usr/libexec/s2i"
 - name: "io.openshift.s2i.destination"
   value: "/tmp"
 - name: "io.openshift.expose-services"
@@ -51,5 +51,5 @@ run:
   user: 1001
   workdir: "${QUARKUS_HOME}"
   cmd:
-  - "/usr/local/s2i/run"
+  - "/usr/libexec/s2i/run"
 
