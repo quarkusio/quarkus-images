@@ -18,10 +18,13 @@ do
 done
 
 # Get all the final versions, reverse sort them, and keep only the first for each major.minor (e.g. 20.1)
-LATEST_FINAL_VERSIONS=$(sed 's/ /\n/g' <<< ${VERSIONS[@]} | grep Final | sort -r | sort -k1,1 -k2,2 -k5,5 -t'.' --unique)
+LATEST_FINAL_VERSIONS=$(tr ' ' '\n'  <<< "${VERSIONS[@]}" | grep Final | sort -r | sort -k1,1 -k2,2 -k5,5 -t'.' --unique)
 for latest in ${LATEST_FINAL_VERSIONS[@]}
 do
-    ${BUILD_ENGINE} tag ${PREFIX_NAME}:${latest} ${PREFIX_NAME}:${latest/.[^.].[^.].Final/}
+    major=`echo $latest | cut -d. -f1`
+    minor=`echo $latest | cut -d. -f2`
+    tag=${major}.${minor}-java11
+    ${BUILD_ENGINE} tag ${PREFIX_NAME}:${latest} ${PREFIX_NAME}:${tag}
 done
 
 ${BUILD_ENGINE} image prune -f
