@@ -19,7 +19,7 @@ jobs:
     - name: Prerequisites
       run: .github/ci-prerequisites.sh
     - name: Build native-image images
-      run: .github/build-native-images.sh
+      run: jbang/bin/jbang .github/build-native-images.java      
 
   mandrel-image:
     runs-on: ubuntu-latest
@@ -28,7 +28,7 @@ jobs:
     - name: Prerequisites
       run: .github/ci-prerequisites.sh
     - name: Build mandrel images
-      run: .github/build-mandrel-images.sh
+      run: jbang/bin/jbang .github/build-mandrel-images.java
 
   native-s2i:
     runs-on: ubuntu-latest
@@ -37,7 +37,7 @@ jobs:
     - name: Prerequisites
       run: .github/ci-prerequisites.sh
     - name: Build S2I (native) images
-      run: .github/build-s2i-native-images.sh  
+      run: jbang/bin/jbang .github/build-s2i-native-images.java    
 
   binary-s2i:
     runs-on: ubuntu-latest
@@ -55,4 +55,5 @@ jobs:
     - name: Prerequisites
       run: .github/ci-prerequisites.sh
     - name: Build tooling images
-      run: .github/build-tooling-images.sh              
+      run: jbang/bin/jbang .github/build-tooling-images.java    
+
