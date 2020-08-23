@@ -3,7 +3,7 @@ set -e
 
 PREFIX_NAME=quay.io/quarkus/centos-quarkus-maven
 IMAGE=quarkus-tooling.yaml
-VERSIONS=('20.0.0-java8' '20.0.0-java11' '20.1.0-java8' '20.1.0-java11' '20.2.0-java8' '20.2.0-java11')
+VERSIONS=('20.1.0-java8' '20.1.0-java11' '20.2.0-java8' '20.2.0-java11')
 BUILD_ENGINE=docker
 
 virtualenv --python=python3 ~/cekit
