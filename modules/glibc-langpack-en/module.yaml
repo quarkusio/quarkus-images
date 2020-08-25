@@ -1,0 +1,8 @@
+schema_version: 1
+version: 1.0.0
+
+name: glibc-langpack-en
+
+packages:
+  install:
+  - glibc-langpack-en
