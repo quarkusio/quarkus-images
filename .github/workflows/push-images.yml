@@ -12,7 +12,7 @@ jobs:
     - name: Prerequisites
       run: .github/ci-prerequisites.sh
     - name: Build native-image images
-      run: .github/build-native-images.sh
+      run: jbang/bin/jbang .github/build-native-images.java  
     - name: Push images
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -27,7 +27,7 @@ jobs:
     - name: Prerequisites
       run: .github/ci-prerequisites.sh
     - name: Build mandrel images
-      run: .github/build-mandrel-images.sh
+      run: jbang/bin/jbang .github/build-mandrel-images.java
     - name: Push images
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -42,7 +42,7 @@ jobs:
     - name: Prerequisites
       run: .github/ci-prerequisites.sh
     - name: Build S2I (native) images
-      run: .github/build-s2i-native-images.sh  
+      run: jbang/bin/jbang .github/build-s2i-native-images.java  
     - name: Push images
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -72,7 +72,7 @@ jobs:
     - name: Prerequisites
       run: .github/ci-prerequisites.sh
     - name: Build tooling images
-      run: .github/build-tooling-images.sh              
+      run: jbang/bin/jbang .github/build-tooling-images.java              
     - name: Push images
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
