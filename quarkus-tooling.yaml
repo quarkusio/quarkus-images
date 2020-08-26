@@ -23,6 +23,7 @@ modules:
   - path: modules
   install:
   - name: common-packages
+  - name: glibc-langpack-en
   - name: encoding
   - name: add-quarkus-user
   - name: centos8-powertools
