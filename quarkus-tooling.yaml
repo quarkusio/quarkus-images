@@ -1,7 +1,7 @@
 schema_version: 1
 version: "SNAPSHOT"
 name: "quay.io/quarkus/centos-quarkus-maven"
-from: "centos:7"
+from: "centos:8"
 
 labels:
 - name: "io.openshift.expose-services"
@@ -25,6 +25,7 @@ modules:
   - name: common-packages
   - name: encoding
   - name: add-quarkus-user
+  - name: centos8-powertools
   - name: maven-binary
     version: "3.6.3"
   - name: gradle-binary
@@ -36,8 +37,8 @@ modules:
 
 packages:   
   repositories:
-  - name: scl
-    rpm: centos-release-scl
+  - name: epl
+    rpm: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm  
   manager: yum
   install:
   - buildah
