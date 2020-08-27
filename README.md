@@ -111,7 +111,7 @@ IMPORTANT: The images are produced both the last 2 versions of GraalVM. For most
 
 1. Create new directories under `modules/graalvm` named after the new version. You need to create 2 directories to distinguish the `java8` from `java11` version
 2. In each directory, write the `configure` and `module.yaml` files. The `configure` file should not differ from the existing versions, so just copy it. In the `module.yaml`, change the versions, labels, md5 hash...
-3. In the `.github` directory, edit the `build-native-images.java`, `build-s2i-native-images.java` and `build-tooling-images.java` to change the `VERSIONS` array. Add/Replace with your new versions. If needed, also update tha `TAGS` map (tag -> version)
+3. In the `.github` directory, edit the `native-images.yaml`, `mandrel-images.yaml`, `s2i-native-images.yaml` and `tooling-images.yaml` to add/replace versions in the `versions` list. If needed, also update tha `tags` list.
 
 IMPORTANT: Always keep the last GraalVM LTS.
 
