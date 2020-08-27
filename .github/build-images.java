@@ -42,10 +42,7 @@ class BuildImages implements Callable<Integer> {
     @Override
     public Integer call() throws IOException {
 
-        if (!config.isFile()) {
-            System.out.println("The configuration file " + config.getAbsolutePath() + " does not exist - exiting");
-            return -1;
-        }
+        exitIfFalse(config.isFile(), "The configuration file " + config.getAbsolutePath() + " does not exist");
 
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         mapper.findAndRegisterModules();
@@ -63,19 +60,13 @@ class BuildImages implements Callable<Integer> {
                 build(version, configuration);
             } catch (Exception e) {
                 String name = configuration.imageName + ":" + version;
-                System.out.println("Build of image  " + name + " has failed: " + e.getMessage() + " - exiting");
-                return -1;
+                exitIfFalse(false, "Build of image  " + name + " has failed: " + e.getMessage());
             }
         }
 
         // Post-Validation
-        if (!docker.validateCreatedImages(configuration)) {
-            return -1;
-        }
-
-        if (!docker.createTags(configuration)) {
-            return -1;
-        }
+        docker.validateCreatedImages(configuration);
+        docker.createTags(configuration);
 
         // Cleanup
         docker.prune();
@@ -98,6 +89,13 @@ class BuildImages implements Callable<Integer> {
         }
     }
 
+    private static void exitIfFalse(boolean condition, String message) {
+        if (!condition) {
+            System.out.println(message + " - exiting");
+            System.exit(-1);
+        }
+    }
+
     class Docker {
         DockerClient client;
 
@@ -116,14 +114,9 @@ class BuildImages implements Callable<Integer> {
                 // Look for image id
                 String target = configuration.imageName + ":" + tag.target;
                 List<Image> images = client.listImagesCmd().withImageNameFilter(target).exec();
-                if (images.isEmpty()) {
-                    System.out.println("Unable to tag " + tagID + " - target cannot be found " + target + " - exiting");
-                    return false;
-                } else if (images.size() > 1) {
-                    System.out.println("Unable to tag " + tagID + " - multiple target matches " + images + "  - exiting");
-                    return false;
-                }
-    
+                exitIfFalse(!images.isEmpty(), "Unable to tag " + tagID + " - target cannot be found " + target);
+                exitIfFalse(images.size() == 1, "Unable to tag " + tagID + " - multiple target matches " + images);
+
                 Image image = images.get(0);
                 client.tagImageCmd(image.getId(), target, tagID).exec();
                 System.out.println("Tag " + tagID + " created, pointing to " + target);
@@ -131,7 +124,7 @@ class BuildImages implements Callable<Integer> {
             return true;
         }
     
-        boolean validateCreatedImages(Configuration configuration) {
+        void validateCreatedImages(Configuration configuration) {
             List<Image> images = client.listImagesCmd()
                     .withImageNameFilter(configuration.imageName)
                     .exec();
@@ -139,14 +132,9 @@ class BuildImages implements Callable<Integer> {
                 String expectedImageName = configuration.imageName + ":" + version;
                 Optional<Image> found = images.stream()
                         .filter(i -> Arrays.asList(i.getRepoTags()).contains(expectedImageName)).findFirst();
-                if (found.isPresent()) {
-                    System.out.println("Image " + expectedImageName + " created!");
-                } else {
-                    System.out.println("Expected " + expectedImageName + " to be created, but cannot find it - exiting");
-                    return false;
-                }
+                exitIfFalse(found.isPresent(), "Expected " + expectedImageName + " to be created, but cannot find it");
+                System.out.println("Image " + expectedImageName + " created!");
             }
-            return true;
         }
     
         void deleteExistingImageIfExists(String imageName, String version) {
@@ -184,24 +172,12 @@ class BuildImages implements Callable<Integer> {
         void validateConfiguration() {
             // Validation
             File image = new File(this.image);
-            if (!image.isFile()) {
-                System.out.println("The image descriptor " + image.getAbsolutePath() + " does not exist - exiting");
-                System.exit(-1);
-            }
+            exitIfFalse(image.isFile(), "The image descriptor " + image.getAbsolutePath() + " does not exist");
             File buildScript = new File(this.buildScript);
-            if (!image.isFile()) {
-                System.out.println("The build script " + buildScript + " does not exist - exiting");
-                System.exit(-1);
-            }
+            exitIfFalse(buildScript.isFile(), "The build script " + this.buildScript + " does not exist");
             for (Tag tag : tags) {
-                if (!versions.contains(tag.target)) {
-                    System.out.println("A tag target on unknown version: " + tag.target + " - exiting");
-                    System.exit(-1);
-                }
-                if (tag.id.equalsIgnoreCase(tag.target)) {
-                    System.out.println("A tag name is the same as the target: " + tag.id + " - exiting");
-                    System.exit(-1);
-                }
+                exitIfFalse(versions.contains(tag.target), "A tag target on unknown version: " + tag.target);
+                exitIfFalse(!tag.id.equalsIgnoreCase(tag.target), "A tag name is the same as the target: " + tag.id);
             }
             for (String version : versions) {
                 verifyVersion(version);
@@ -209,11 +185,14 @@ class BuildImages implements Callable<Integer> {
         }
 
         private void verifyVersion(String version) {
-            File module = new File("modules/mandrel/" + version);
-            assert module.isDirectory();
+            File module = new File("modules/graalvm/" + version);
+            if (!module.isDirectory()) {
+                module = new File("modules/mandrel/" + version);
+                exitIfFalse(module.isDirectory(), "Unable to find cekit module for version " + version);
+            }
         }
     }
-    
+
     static class Tag {
         @JsonProperty
         String id;
