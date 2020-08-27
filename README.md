@@ -142,7 +142,7 @@ The build scripts are located in the `.github` directory:
 * `build-s2i-native-images.sh` - build the s2i builder images taking Java sources as input and building the native exectuable and the container
 * `build-tooling-images.sh` - build the tooling image
 
-Except `build-s2i-binary-images.sh`, the other strcipt expect the GraalVM/Mandrel version as unique parameter:
+Except `build-s2i-binary-images.sh`, the other scripts expect the GraalVM/Mandrel version as unique parameter:
 
 ```bash
 > .github/build-native-images.sh 20.2.0-java11
