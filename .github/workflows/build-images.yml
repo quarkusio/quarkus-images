@@ -12,32 +12,22 @@ on:
 
 jobs:
 
-  native-image:
+  build-images:
+    name: Build images for ${{ matrix.configuration }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        configuration:
+          - .github/native-images.yaml
+          - .github/mandrel-images.yaml
+          - .github/s2i-native-images.yaml
+          - .github/tooling-images.yaml
     steps:
     - uses: actions/checkout@v1    
     - name: Prerequisites
       run: .github/ci-prerequisites.sh
-    - name: Build native-image images
-      run: .github/build-native-images.sh
-
-  mandrel-image:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: Prerequisites
-      run: .github/ci-prerequisites.sh
-    - name: Build mandrel images
-      run: .github/build-mandrel-images.sh
-
-  native-s2i:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1    
-    - name: Prerequisites
-      run: .github/ci-prerequisites.sh
-    - name: Build S2I (native) images
-      run: .github/build-s2i-native-images.sh  
+    - name: Build images
+      run: jbang/bin/jbang .github/build-images.java ${{ matrix.configuration }}
 
   binary-s2i:
     runs-on: ubuntu-latest
@@ -47,12 +37,3 @@ jobs:
       run: .github/ci-prerequisites.sh
     - name: Build S2I (binary) images
       run: .github/build-s2i-binary-images.sh        
-
-  tooling:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1    
-    - name: Prerequisites
-      run: .github/ci-prerequisites.sh
-    - name: Build tooling images
-      run: .github/build-tooling-images.sh              

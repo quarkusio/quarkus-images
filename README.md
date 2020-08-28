@@ -111,7 +111,7 @@ IMPORTANT: The images are produced both the last 2 versions of GraalVM. For most
 
 1. Create new directories under `modules/graalvm` named after the new version. You need to create 2 directories to distinguish the `java8` from `java11` version
 2. In each directory, write the `configure` and `module.yaml` files. The `configure` file should not differ from the existing versions, so just copy it. In the `module.yaml`, change the versions, labels, md5 hash...
-3. In the `.github` directory, edit the `build-native-images.sh`, `build-s2i-native-images.sh` and `build-tooling-images.sh` to change the `VERSIONS` array. Add/Replace with your new versions.
+3. In the `.github` directory, edit the `native-images.yaml`, `mandrel-images.yaml`, `s2i-native-images.yaml` and `tooling-images.yaml` to add/replace versions in the `versions` list. If needed, also update tha `tags` list.
 
 IMPORTANT: Always keep the last GraalVM LTS.
 
@@ -141,6 +141,12 @@ The build scripts are located in the `.github` directory:
 * `build-s2i-binary-images.sh` - build the s2i builder images taking a pre-built native executable
 * `build-s2i-native-images.sh` - build the s2i builder images taking Java sources as input and building the native exectuable and the container
 * `build-tooling-images.sh` - build the tooling image
+
+Except `build-s2i-binary-images.sh`, the other scripts expect the GraalVM/Mandrel version as unique parameter:
+
+```bash
+> .github/build-native-images.sh 20.2.0-java11
+```
 
 # Continuous Integration and Automation
 
