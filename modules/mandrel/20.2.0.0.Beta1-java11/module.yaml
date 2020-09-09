@@ -1,0 +1,29 @@
+schema_version: 1
+name: mandrel
+version: &version "20.2.0.0.Beta1-java11"
+
+labels:
+  - name: mandrel-archive-filename
+    value: &filename mandrel-java11-linux-amd64-20.2.0.0.Beta1.tar.gz
+  - name: mandrel-archive-url
+    value: &url https://github.com/graalvm/mandrel/releases/download/mandrel-20.2.0.0.Beta1/mandrel-java11-linux-amd64-20.2.0.0.Beta1.tar.gz
+
+envs:
+  - name: "JAVA_HOME"
+    value: "/opt/mandrel"
+  - name: "GRAALVM_HOME"
+    value: "/opt/mandrel"
+  - name: "FILENAME"
+    value: *filename
+
+artifacts:
+- name: *filename
+  url: *url
+  md5: 68909ef266b9e3d6c1fc14f387ef8a9a
+
+packages:
+  install:
+  - libffi-devel
+
+execute:
+- script: configure
