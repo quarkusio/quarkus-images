@@ -12,3 +12,4 @@ tags:
     target: 20.1.0.2.Final-java11
   - id: 20.2-java11
     target: 20.2.0.0.Beta1-java11
+versionCheck: true
