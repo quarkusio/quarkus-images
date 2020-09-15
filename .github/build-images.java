@@ -11,11 +11,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.async.ResultCallbackTemplate;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.PruneType;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
+import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.github.dockerjava.okhttp.OkDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
 import org.zeroturnaround.exec.ProcessExecutor;
@@ -26,6 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 @Command(name = "build-images", mixinStandardHelpOptions = true,
         description = "build container images providing the `native-image` executable for Quarkus")
@@ -134,9 +141,37 @@ class BuildImages implements Callable<Integer> {
                         .filter(i -> Arrays.asList(i.getRepoTags()).contains(expectedImageName)).findFirst();
                 exitIfFalse(found.isPresent(), "Expected " + expectedImageName + " to be created, but cannot find it");
                 System.out.println("Image " + expectedImageName + " created!");
+                if (configuration.versionCheck) {
+                    nativeImageVersion(expectedImageName);
+                }
             }
         }
-    
+
+        private void nativeImageVersion(String expectedImageName) {
+            final CreateContainerResponse container = client.createContainerCmd(expectedImageName)
+                    .withCmd("--version")
+                    .withTty(true)
+                    .exec();
+            client.startContainerCmd(container.getId()).exec();
+            final Integer exitCode = client.waitContainerCmd(container.getId()).start().awaitStatusCode();
+            assert exitCode == 0 : exitCode;
+            ResultCallback<Frame> loggingCallback = new Adapter<>();
+            client.logContainerCmd(container.getId()).withStdErr(true).withStdOut(true).withFollowStream(true).withTailAll().exec(loggingCallback);
+            try {
+                loggingCallback.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            client.removeContainerCmd(container.getId()).exec();
+        }
+
+        class Adapter<A_RES_T> extends ResultCallbackTemplate<Adapter<A_RES_T>, A_RES_T> {
+            @Override
+            public void onNext(A_RES_T object) {
+                System.out.print(new String(((Frame)object).getPayload()));
+            }
+        }
+
         void deleteExistingImageIfExists(String imageName, String version) {
             List<Image> images = client.listImagesCmd()
                     .withImageNameFilter(imageName)
@@ -168,6 +203,8 @@ class BuildImages implements Callable<Integer> {
         List<String> versions;
         @JsonProperty
         List<Tag> tags;
+        @JsonProperty
+        boolean versionCheck;
 
         void validateConfiguration() {
             // Validation
