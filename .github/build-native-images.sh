@@ -11,14 +11,22 @@ PREFIX_NAME=quay.io/quarkus/ubi-quarkus-native-image
 IMAGE=quarkus-native-image.yaml
 BUILD_ENGINE=docker
 VERSION=$1
+OVERRIDES="{'version': '${VERSION}', 'modules': {'install': [{'name':'graalvm', 'version': '${VERSION}'}]}}"
 
 echo "Building version ${VERSION}"
 
-virtualenv --python=python3 .cekit
+# virtualenv --python=python3 .cekit
 source .cekit/bin/activate
 
 echo "Generating ${PREFIX_NAME}:${VERSION}"
 cekit --descriptor ${IMAGE} build \
-    --overrides "{'version': '${VERSION}', 'modules': {'install': [{'name':'graalvm', 'version': '${VERSION}'}]}}" \
+    --overrides "${OVERRIDES}" \
     ${BUILD_ENGINE} --tag="${PREFIX_NAME}:${VERSION}"
 
+echo "Verifying ${PREFIX_NAME}:${VERSION}"
+cekit test \
+   --image ${PREFIX_NAME}:${VERSION} \
+   --overrides-file ${IMAGE} \
+   --overrides "${OVERRIDES}" \
+    behave \
+   --steps-url https://github.com/cescoffier/behave-test-steps
