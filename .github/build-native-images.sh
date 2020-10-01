@@ -15,6 +15,11 @@ OVERRIDES="{'version': '${VERSION}', 'modules': {'install': [{'name':'graalvm', 
 
 echo "Building version ${VERSION}"
 
+# Add s2i in the PATH - required for testing
+export PATH=$PATH:$PWD/s2i
+echo "Path is $PATH"
+s2i version
+
 # virtualenv --python=python3 .cekit
 source .cekit/bin/activate
 

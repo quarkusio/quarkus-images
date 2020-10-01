@@ -19,6 +19,18 @@ sudo apt-get clean
 docker rmi $(docker image ls -aq)
 df -h
 
+# Install s2i (needed for tests)
+echo "Installing s2i"
+mkdir s2i && cd s2i 
+curl -s https://api.github.com/repos/openshift/source-to-image/releases/latest \
+  | grep browser_download_url \
+  | grep linux-amd64 \
+  | cut -d '"' -f 4 \
+  | wget -qi -
+tar xvf source-to-image*.gz
+chmod +s ./s2i
+cd ..
+
 # Install jbang
 export JBANG_VERSION=0.39.0
 wget https://github.com/jbangdev/jbang/releases/download/v${JBANG_VERSION}/jbang-${JBANG_VERSION}.tar
