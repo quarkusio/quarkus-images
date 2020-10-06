@@ -2,20 +2,19 @@
 Feature: Verification of the GraalVM module
 
     Scenario: Check that native-image exists
-        Given container is started with entrypoint sh
-        Then run sh -c 'ls /opt/graalvm/bin/' in container and immediately check its output contains native-image
+        Given container is started with entrypoint ls /opt/graalvm/bin/
+        Then container log should contain native-image
 
     Scenario: Check that native-image is in system path
-        Given container is started with entrypoint sh
-        Then run sh -c 'echo $PATH' in container and immediately check its output contains /opt/graalvm/bin
+        Given container is started with entrypoint printenv PATH
+        Then container log should contain /opt/graalvm/bin
 
     Scenario: Check that JAVA_HOME is defined
-        Given container is started with entrypoint sh
-        Then run sh -c 'echo $JAVA_HOME' in container and immediately check its output contains /opt/graalvm
+        Given container is started with entrypoint sh -c env
+        Then container log should contain JAVA_HOME=/opt/graalvm
 
     Scenario: Check that java is GraalVM
-        Given container is started with entrypoint sh
-        Then run sh -c 'java --version' in container and immediately check its output contains GraalVM
+        Given container is started with entrypoint java --version
+        Then container log should contain GraalVM
 
-    # TODO Can we test the entrypoint with --version?
     

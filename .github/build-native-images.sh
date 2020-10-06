@@ -20,7 +20,7 @@ export PATH=$PATH:$PWD/s2i
 echo "Path is $PATH"
 s2i version
 
-# virtualenv --python=python3 .cekit
+virtualenv --python=python3 .cekit
 source .cekit/bin/activate
 
 echo "Generating ${PREFIX_NAME}:${VERSION}"
