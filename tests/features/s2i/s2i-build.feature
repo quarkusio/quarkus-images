@@ -1,4 +1,4 @@
-@quay.io/quarkus/centos-quarkus-native-s2i
+@quay.io/quarkus/ubi-quarkus-native-s2i
 Feature: Perform s2i build
 
   Scenario: Verify if a Quarkus app is successfully built

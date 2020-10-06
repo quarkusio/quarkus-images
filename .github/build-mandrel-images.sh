@@ -14,13 +14,18 @@ BUILD_ENGINE=${BUILD_ENGINE:-docker}
 VERSION=$1
 OVERRIDES="{'version': '${VERSION}', 'modules': {'install': [{'name':'mandrel', 'version': '${VERSION}'}]}}"
 
-# virtualenv --python=python3 .cekit
+virtualenv --python=python3 .cekit
 source .cekit/bin/activate
 
-# echo "Generating ${PREFIX_NAME}:${VERSION}"
-# cekit --descriptor ${IMAGE} build \
-#     --overrides "${OVERRIDES}" \
-#     ${BUILD_ENGINE} --tag="${PREFIX_NAME}:${VERSION}"
+# Add s2i in the PATH - required for testing
+export PATH=$PATH:$PWD/s2i
+echo "Path is $PATH"
+s2i version
+
+echo "Generating ${PREFIX_NAME}:${VERSION}"
+cekit --descriptor ${IMAGE} build \
+    --overrides "${OVERRIDES}" \
+    ${BUILD_ENGINE} --tag="${PREFIX_NAME}:${VERSION}"
 
 echo "Verifying ${PREFIX_NAME}:${VERSION}"
 cekit test \
