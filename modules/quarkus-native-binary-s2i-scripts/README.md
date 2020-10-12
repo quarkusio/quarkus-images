@@ -1,6 +1,6 @@
 # [Quarkus.io](http://quarkus.io) GraalVM Native Binary S2i
 
-This s2i takes as input the executable image you want to deploy and build a minimal image to execute it. Unlike the `ubi-quarkus-native-s2i` it does not compile your application and build the native executable in OpenShift, rather expect the native executable as input.
+This s2i takes as input the executable binary you want to deploy into a minimal container. Unlike the `ubi-quarkus-native-s2i` it does not compile your application and build the native executable in OpenShift, rather it expects the native executable as input.
 
 ## Instructions
 
