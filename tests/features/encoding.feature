@@ -1,4 +1,4 @@
-@quay.io/quarkus/ubi-quarkus-native-image @quay.io/quarkus/ubi-quarkus-mandrel
+@quay.io/quarkus/ubi-quarkus-native-image @quay.io/quarkus/ubi-quarkus-mandrel @quay.io/quarkus/centos-quarkus-maven
 Feature: Verification of the encoding module
 
     Scenario: Check that encoding environment variables are defined

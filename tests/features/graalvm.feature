@@ -1,4 +1,4 @@
-@quay.io/quarkus/ubi-quarkus-native-image
+@quay.io/quarkus/ubi-quarkus-native-image @quay.io/quarkus/centos-quarkus-maven
 Feature: Verification of the GraalVM module
 
     Scenario: Check that native-image exists
