@@ -13,4 +13,12 @@ Feature: Verification of the Mandrel module
         Given container is started with entrypoint sh -c env
         Then container log should contain JAVA_HOME=/opt/mandrel
 
+    Scenario: Check that native-image is Mandrel
+        Given container is started with entrypoint native-image --version
+        Then container log should contain Mandrel
+
+    Scenario: Check that native-image still mentions GraalVM
+        Given container is started with entrypoint native-image --version
+        Then container log should contain GraalVM
+
     

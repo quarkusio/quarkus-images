@@ -17,4 +17,12 @@ Feature: Verification of the GraalVM module
         Given container is started with entrypoint java --version
         Then container log should contain GraalVM
 
+    Scenario: Check that native-image is GraalVM
+        Given container is started with entrypoint native-image --version
+        Then container log should contain GraalVM
+
+    Scenario: Check that native-image is not Mandrel
+        Given container is started with entrypoint native-image --version
+        Then container log should not contain Mandrel
+
     
