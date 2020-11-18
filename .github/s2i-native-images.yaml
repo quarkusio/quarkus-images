@@ -4,9 +4,12 @@ buildScript: .github/build-s2i-native-images.sh
 versions:
   - 20.1.0-java11
   - 20.2.0-java11
+  - 20.3.0-java11
 tags:
   - id: 20.1-java11
     target: 20.1.0-java11
   - id: 20.2-java11
     target: 20.2.0-java11
+  - id: 20.3-java11
+    target: 20.3.0-java11    
 versionCheck: false
