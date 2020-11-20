@@ -21,5 +21,9 @@ artifacts:
   url: *url
   md5: 0f1cda82312940d7973aaefb5fdb59df
 
+packages:
+  install:
+  - fontconfig
+
 execute:
 - script: configure
