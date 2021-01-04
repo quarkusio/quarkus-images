@@ -2,4 +2,4 @@
 set -e
 
 dnf -y install dnf-plugins-core
-dnf config-manager --set-enabled PowerTools
+dnf config-manager --set-enabled powertools
