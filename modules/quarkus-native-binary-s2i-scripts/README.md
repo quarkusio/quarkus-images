@@ -1,6 +1,9 @@
 # [Quarkus.io](http://quarkus.io) GraalVM Native Binary S2i
 
-This s2i takes as input the executable binary you want to deploy into a minimal container. Unlike the `ubi-quarkus-native-s2i` it does not compile your application and build the native executable in OpenShift, rather it expects the native executable as input.
+This s2i takes as input the native executable you want to deploy into a minimal container. Unlike the `ubi-quarkus-native-s2i` it does not compile your application and build the native executable in OpenShift, rather it expects the native executable as input.
+
+Refer to [building native executable](https://quarkus.io/guides/building-native-image#producing-a-native-executable) to create the native executable used as input.
+
 
 ## Instructions
 
@@ -98,4 +101,3 @@ QUARKUS_OPTS=-Xmx12M -Xms8M -Xmn12M
 This requires using `--from-dir` in the `start-build` command.
 
 Default memory settings are: `-Xmx24M -Xms16M -Xmn24M`
-
