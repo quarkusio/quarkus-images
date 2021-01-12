@@ -18,6 +18,7 @@ jobs:
     strategy:
       matrix:
         configuration:
+          - .github/distroless-images.yaml
           - .github/native-images.yaml
           - .github/mandrel-images.yaml
           - .github/s2i-native-images.yaml
