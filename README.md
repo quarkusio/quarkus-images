@@ -136,6 +136,7 @@ For other Systems, please refer to the docs.
 
 The build scripts are located in the `.github` directory:
 
+* `build-distroless-images.sh` - build the distroless images suitable for packaging native applications
 * `build-mandrel-images.sh` - build the mandrel images
 * `build-native-images.sh` - build the images providing the `native-image` executable
 * `build-s2i-binary-images.sh` - build the s2i builder images taking a pre-built native executable
