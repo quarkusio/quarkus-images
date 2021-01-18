@@ -21,5 +21,9 @@ artifacts:
   url: *url
   sha1: 06fb03992e55b63f4fcde81a9707be7a6bbf8e61
 
+packages:
+  install:
+  - fontconfig
+
 execute:
 - script: configure
