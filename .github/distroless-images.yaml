@@ -1,9 +1,0 @@
-image: quarkus-distroless-image.yaml
-imageName: quay.io/quarkus/quarkus-distroless-image
-buildScript: .github/build-distroless-images.sh
-versions:
-  - 20.3.0-java11
-tags:
-  - id: 20.3-java11
-    target: 20.3.0-java11
-versionCheck: false
