@@ -11,7 +11,6 @@ jobs:
     strategy:
       matrix:
         configuration:
-          - .github/distroless-images.yaml
           - .github/native-images.yaml
           - .github/mandrel-images.yaml
           - .github/s2i-native-images.yaml
@@ -43,3 +42,18 @@ jobs:
         QUAY_USER: ${{ secrets.QUAY_USER }}
         QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
       run: .github/push-images.sh                                
+
+  distroless-build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1    
+    - name: Prerequisites
+      run: .github/ci-prerequisites.sh
+    - name: Build S2I (binary) images
+      run: .github/build-distroless-images.sh        
+    - name: Push images
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        QUAY_USER: ${{ secrets.QUAY_USER }}
+        QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
+      run: .github/push-images.sh          

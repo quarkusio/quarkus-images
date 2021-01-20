@@ -18,7 +18,6 @@ jobs:
     strategy:
       matrix:
         configuration:
-          - .github/distroless-images.yaml
           - .github/native-images.yaml
           - .github/mandrel-images.yaml
           - .github/s2i-native-images.yaml
@@ -38,3 +37,12 @@ jobs:
       run: .github/ci-prerequisites.sh
     - name: Build S2I (binary) images
       run: .github/build-s2i-binary-images.sh        
+
+  distroless:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1    
+    - name: Prerequisites
+      run: .github/ci-prerequisites.sh
+    - name: Build Distroless images
+      run: .github/build-distroless-images.sh

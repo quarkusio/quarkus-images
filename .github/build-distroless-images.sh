@@ -10,15 +10,15 @@ set -e
 PREFIX_NAME=quay.io/quarkus/quarkus-distroless-image
 IMAGE=quarkus-distroless-image.yaml
 BUILD_ENGINE=docker
-VERSION=$1
-OVERRIDES="{'version': '${VERSION}'}"
+NAME=${PREFIX_NAME}:1.0
 
-echo "Building version ${VERSION}"
+echo "Building version 1.0"
 
 virtualenv --python=python3 .cekit
 source .cekit/bin/activate
 
-echo "Generating ${PREFIX_NAME}:${VERSION}"
-cekit --descriptor ${IMAGE} build \
-    --overrides "${OVERRIDES}" \
-    ${BUILD_ENGINE} --tag="${PREFIX_NAME}:${VERSION}" --no-squash
+echo "Generating ${PREFIX_NAME}:1.0"
+cekit --descriptor ${IMAGE} build ${BUILD_ENGINE} --tag="${NAME}" --no-squash
+
+docker image prune -f
+docker images | grep quay.io/quarkus/quarkus-distroless-image
