@@ -1,8 +1,0 @@
-#!/bin/sh
-set -e
-
-SOURCES_DIR=/tmp/artifacts
-
-ls -l ${SOURCES_DIR}
-mkdir -p ${GRAALVM_HOME}
-tar xzf ${SOURCES_DIR}/${FILENAME} -C ${GRAALVM_HOME} --strip-components=1
