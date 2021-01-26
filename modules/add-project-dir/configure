@@ -1,0 +1,4 @@
+#!/bin/sh
+
+mkdir /project
+chown quarkus:quarkus /project
