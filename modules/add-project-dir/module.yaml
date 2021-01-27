@@ -1,0 +1,7 @@
+schema_version: 1
+version: 1.0.0
+
+name: add-project-dir
+execute:
+  - script: configure
+

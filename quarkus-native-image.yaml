@@ -26,6 +26,7 @@ modules:
   - name: glibc-langpack-en
   - name: encoding
   - name: add-quarkus-user
+  - name: add-project-dir
   - name: graalvm
     version: "_version_"
 envs:
