@@ -1,0 +1,29 @@
+schema_version: 1
+name: mandrel
+version: &version "20.3.1.1.Final-java11"
+
+labels:
+  - name: mandrel-archive-filename
+    value: &filename mandrel-java11-linux-amd64-20.3.1.1.Final.tar.gz
+  - name: mandrel-archive-url
+    value: &url https://github.com/graalvm/mandrel/releases/download/mandrel-20.3.1.1.Final/mandrel-java11-linux-amd64-20.3.1.1.Final.tar.gz
+
+envs:
+  - name: "JAVA_HOME"
+    value: "/opt/mandrel"
+  - name: "GRAALVM_HOME"
+    value: "/opt/mandrel"
+  - name: "FILENAME"
+    value: *filename
+
+artifacts:
+- name: *filename
+  url: *url
+  sha1: 0ba10919c64843730e8ed4757af8f5a4fad4479b
+
+packages:
+  install:
+  - fontconfig
+
+execute:
+- script: configure
