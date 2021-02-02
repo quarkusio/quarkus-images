@@ -28,6 +28,7 @@ cekit --descriptor ${IMAGE} build \
     ${BUILD_ENGINE} --tag="${PREFIX_NAME}:${VERSION}"
 
 echo "Verifying ${PREFIX_NAME}:${VERSION}"
+export CTF_WAIT_TIME=120
 cekit test \
    --image ${PREFIX_NAME}:${VERSION} \
    --overrides-file ${IMAGE} \
