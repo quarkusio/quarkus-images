@@ -25,4 +25,6 @@ Feature: Verification of the GraalVM module
         Given container is started with entrypoint native-image --version
         Then container log should not contain Mandrel
 
-    
+    Scenario: Check that GraalVM native-image compiles HelloWorld
+        Given container is started with entrypoint sh -c "echo 'public class Test {public static void main(String[] args) {System.out.println(\"Hello World!\");}}' > Test.java && javac Test.java && native-image Test && ./test" in container
+        Then container log should contain Hello World!
