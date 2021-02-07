@@ -116,12 +116,10 @@ class BuildImages implements Callable<Integer> {
                 String tagID = tag.id;
                 // Look for image id
                 String target = configuration.imageName + ":" + tag.target;
-                List<Image> images = client.listImagesCmd().withImageNameFilter(target).exec();
-                exitIfFalse(!images.isEmpty(), "Unable to tag " + tagID + " - target cannot be found " + target);
-                exitIfFalse(images.size() == 1, "Unable to tag " + tagID + " - multiple target matches " + images);
-
-                Image image = images.get(0);
-                client.tagImageCmd(image.getId(), target, tagID).exec();
+                List<Image> images = client.listImagesCmd().exec();
+                Optional<Image> optional = images.stream().filter(img -> contains(img.getRepoTags(), target)).findFirst();
+                exitIfFalse(optional.isPresent(), "Unable to tag " + tagID + " - target cannot be found " + target);
+                client.tagImageCmd(optional.get().getId(), target, tagID).exec();
                 System.out.println("Tag " + tagID + " created, pointing to " + target);
             }
             return true;
@@ -152,7 +150,7 @@ class BuildImages implements Callable<Integer> {
             final Integer exitCode = client.waitContainerCmd(container.getId()).start().awaitStatusCode();
             assert exitCode == 0 : exitCode;
             try {
-                Adapter<Frame> loggingCallback = new Adapter<>();
+                Adapter<Frame> loggingCallback = new Adapter<Frame>();
                 client.logContainerCmd(container.getId())
                     .withStdErr(true)
                     .withStdOut(true)
@@ -197,7 +195,16 @@ class BuildImages implements Callable<Integer> {
         }
     
     }
-    
+
+    private boolean contains(String[] repoTags, String target) {
+        for (String tag : repoTags) {
+            if (tag.equals(target)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     static class Configuration {
         @JsonProperty
         String image;
