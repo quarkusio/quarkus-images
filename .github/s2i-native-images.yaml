@@ -3,14 +3,13 @@ imageName: quay.io/quarkus/ubi-quarkus-native-s2i
 buildScript: .github/build-s2i-native-images.sh
 versions:
   - 20.2.0-java11
-  - 20.3.0-java11
-  - 20.3.1-java11
-  - 21.0.0-java11
+  - 20.3.1.2-java11
+  - 21.0.0.2-java11
 tags:
   - id: 20.2-java11
     target: 20.2.0-java11
   - id: 20.3-java11
-    target: 20.3.1-java11    
+    target: 20.3.1.2-java11    
   - id: 21.0-java11
-    target: 21.0.0-java11    
+    target: 21.0.0.2-java11    
 versionCheck: false
