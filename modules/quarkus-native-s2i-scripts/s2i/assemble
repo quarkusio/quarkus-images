@@ -31,7 +31,11 @@ fi
   mkdir -p build/libs
   gradle build -Dquarkus.package.type=native
 else
-  BUILD_DIR=target
+  if [ -z "$ARTIFACT_DIR" ]; then
+    BUILD_DIR=target
+  else
+    BUILD_DIR=$ARTIFACT_DIR
+  fi
   mvn package -Pnative -e -B \
     -DskipTests -Dmaven.javadoc.skip=true -Dmaven.site.skip=true -Dmaven.source.skip=true \
     -Djacoco.skip=true -Dcheckstyle.skip=true -Dfindbugs.skip=true -Dpmd.skip=true \
