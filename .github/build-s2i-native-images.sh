@@ -20,11 +20,11 @@ cekit --descriptor ${IMAGE} build \
     --overrides "${OVERRIDES}" \
     ${BUILD_ENGINE} --tag="${PREFIX_NAME}:${VERSION}"
 
-echo "Verifying ${PREFIX_NAME}:${VERSION}"
-export CTF_WAIT_TIME=120
-cekit test \
-   --image ${PREFIX_NAME}:${VERSION} \
-   --overrides-file ${IMAGE} \
-   --overrides "${OVERRIDES}" \
-    behave \
-   --steps-url https://github.com/cescoffier/behave-test-steps
+# echo "Verifying ${PREFIX_NAME}:${VERSION}"
+# export CTF_WAIT_TIME=120
+# cekit test \
+#    --image ${PREFIX_NAME}:${VERSION} \
+#    --overrides-file ${IMAGE} \
+#    --overrides "${OVERRIDES}" \
+#     behave \
+#    --steps-url https://github.com/cescoffier/behave-test-steps
