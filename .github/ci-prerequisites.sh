@@ -5,7 +5,7 @@ sudo pip3 install virtualenv
 
 virtualenv --python=python3 .cekit
 source .cekit/bin/activate
-pip install -U cekit
+pip install cekit==3.8
 pip install odcs
 pip install docker
 pip install docker_squash
