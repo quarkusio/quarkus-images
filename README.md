@@ -47,18 +47,19 @@ source .cekit/bin/activate
 pip install -r requirements.txt
 
 # Run the scripts from the .github directory
+# i.e. .github/build-native-images.sh
 ```
 
 For other Systems, please refer to the CEKit docs.
 
 ### s2i 
 
-s2i are needed for tests, download your OS version from https://github.com/openshift/source-to-image/releases/latest and put it in `.github/s2i` folder. 
+s2i are needed for tests, download your OS version from https://github.com/openshift/source-to-image/releases/latest and put it in `s2i` folder. 
 
 Something like the following:
 ```
-mkdir -p .github/s2i
-cd .github/s2i
+mkdir s2i
+cd s2i
 tar -zxvf source-to-image-*.tar.gz
 ```
 ## Build
