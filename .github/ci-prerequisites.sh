@@ -5,12 +5,7 @@ sudo pip3 install virtualenv
 
 virtualenv --python=python3 .cekit
 source .cekit/bin/activate
-pip install cekit==3.8
-pip install odcs
-pip install docker
-pip install docker_squash
-pip install behave
-pip install lxml      
+pip install -r requirements.txt      
 
 # Re-claim some disk space
 sudo swapoff -a
