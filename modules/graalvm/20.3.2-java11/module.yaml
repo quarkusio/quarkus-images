@@ -1,14 +1,14 @@
 schema_version: 1
 name: graalvm
-version: &version "20.2.0-java11"
+version: &version "20.3.2-java11"
 
 labels:
   - name: graalvm-archive-filename
-    value: &filename graalvm-ce-linux-amd64-20.2.0-java11.tar.gz
+    value: &filename graalvm-ce-linux-amd64-20.3.2-java11.tar.gz
   - name: graalvm-archive-url
-    value: &url https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.2.0/graalvm-ce-java11-linux-amd64-20.2.0.tar.gz
+    value: &url https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.3.2/graalvm-ce-java11-linux-amd64-20.3.2.tar.gz
   - name: graalvm-version
-    value:   &suffix java11-20.2.0
+    value:   &suffix java11-20.3.2
 
 envs:
   - name: "JAVA_HOME"
@@ -23,7 +23,7 @@ envs:
 artifacts:
 - name: *filename
   url: *url
-  md5: 17669cb10b439c0522b4d56a6b277e85
+  sha256: f1a6d14ad56277e09cf8888ec4843cac8702e165d90ce9b7ae48ccf183d954b2
 
 packages:
   install:

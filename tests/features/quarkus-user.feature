@@ -17,6 +17,6 @@ Feature: Verification of the Quarkus user module
         Given container is started with entrypoint env
         Then container log should contain QUARKUS_HOME=/home/quarkus
 
-    Scenario: Check that the container start with the Quarkus user
+    Scenario: Check that the --version command works
         Given container is started with command --version
-        Then container log should contain GraalVM Version
+        Then container log should contain GraalVM
