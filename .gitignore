@@ -12,4 +12,5 @@ buildNumber.properties
 !/.mvn/wrapper/maven-wrapper.jar
 .cekit
 
-*~
+*~s2i
+s2i

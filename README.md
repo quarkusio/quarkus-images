@@ -35,15 +35,42 @@ quay.io/quarkus/ubi-quarkus-native-binary-s2i:1.0 <-- Native binary s2i
 NOTE: You may wonder why we don't use `latest`. It's because `latest` has introduced more problems than benefits especially when reproducing issues.
 For this reason, we recommend using a stable version.
 
+## Build Prerequisites
+### CEKit
+
+To build you need CEKit. We recommend using `virtualenv` to run `cekit`.
+On MacOS X and Linux, you can run the build as follows:
+
+```bash
+virtualenv --python=python3 .cekit
+source .cekit/bin/activate
+pip install -r requirements.txt
+
+# Run the scripts from the .github directory
+# i.e. .github/build-native-images.sh
+```
+
+For other Systems, please refer to the CEKit docs.
+
+### s2i 
+
+s2i are needed for tests, download your OS version from https://github.com/openshift/source-to-image/releases/latest and put it in `s2i` folder. 
+
+Something like the following:
+```
+mkdir s2i
+cd s2i
+tar -zxvf source-to-image-*.tar.gz
+```
 ## Build
 
 The build is controlled by 5 _image_ files:
 
-* `quarkus-native-image.yaml` produces `ubi-quarkus-native-image` images
-* `quarkus-mandrel.yaml` produces `ubi-quarkus-mandrel` images
-* `quarkus-native-binary-s2i.yaml` produces the `ubi-quarkus-native-binary-s2i` image
-* `quarkus-native-s2i.yaml` produces the `ubi-quarkus-native-s2i` images
-* `quarkus-tooling.yaml` produces the `centos-quarkus-maven` images
+* `quarkus-native-image.yaml` produces [`ubi-quarkus-native-image`](https://quay.io/repository/quarkus/ubi-quarkus-native-image) images
+* `quarkus-mandrel.yaml` produces [`ubi-quarkus-mandrel`](https://quay.io/repository/quarkus/ubi-quarkus-mandrel) images
+* `quarkus-native-binary-s2i.yaml` produces the [`ubi-quarkus-native-binary-s2i`](https://quay.io/repository/quarkus/ubi-quarkus-native-binary-s2i) image
+* `quarkus-native-s2i.yaml` produces the [`ubi-quarkus-native-s2i`](https://quay.io/repository/quarkus/ubi-quarkus-native-s2u) images
+* `quarkus-tooling.yaml` produces the [`centos-quarkus-maven`](https://quay.io/repository/quarkus/ubi-quarkus-native-s2u) images
 
 To build the images, you must pass the "GraalVM" version as parameter (except for `quarkus-mandrel.yaml` and `quarkus-native-binary-s2i.yaml`):
 
@@ -66,21 +93,7 @@ The `.github` directory contains the script to build the different images.
 
 #### Note about CEKit
 
-We recommend using `virtualenv` to run `cekit`.
-On MacOS X, you can run the build as follows:
-
-```bash
-virtualenv --python=python3 .cekit
-source .cekit/bin/activate
-pip install -U cekit
-pip install odcs
-pip install docker
-pip install docker_squash
-pip install behave
-pip install lxml
-
-# Run the scripts from the .github directory
-```
+Run the scripts from the .github directory
 
 ## Images
 
@@ -124,13 +137,7 @@ IMPORTANT: Always keep the last GraalVM LTS.
 
 # Building, testing and pushing the images
 
-Before proceed make sure you have [CEKit](https://cekit.io/) installed, to install on Fedora: 
-
-```bash
-$ sudo dnf install cekit
-```
-For other Systems, please refer to the docs.
-
+Before proceeding make sure you have [CEKit](https://cekit.io/) installed, see [build](#build).
 
 ###### Build:
 
@@ -140,7 +147,7 @@ The build scripts are located in the `.github` directory:
 * `build-mandrel-images.sh` - build the mandrel images
 * `build-native-images.sh` - build the images providing the `native-image` executable
 * `build-s2i-binary-images.sh` - build the s2i builder images taking a pre-built native executable
-* `build-s2i-native-images.sh` - build the s2i builder images taking Java sources as input and building the native exectuable and the container
+* `build-s2i-native-images.sh` - build the s2i builder images taking Java sources as input and building the native executable and the container
 * `build-tooling-images.sh` - build the tooling image
 
 Except `build-s2i-binary-images.sh`, the other scripts expect the GraalVM/Mandrel version as unique parameter:
@@ -163,6 +170,6 @@ curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
     -H "Content-Type: application/json" \
     https://api.github.com/repos/quarkusio/quarkus-images/deployments \
     --data '{"ref": "master", "environment": "quay"}'
-```    
+```
 
 Note that you need a `GITHUB_TOKEN` (API token) to trigger the deployment.

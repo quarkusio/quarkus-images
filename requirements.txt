@@ -1,0 +1,6 @@
+cekit==3.10
+odcs
+docker
+docker_squash
+behave
+lxml
