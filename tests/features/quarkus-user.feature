@@ -19,4 +19,4 @@ Feature: Verification of the Quarkus user module
 
     Scenario: Check that the --version command works
         Given container is started with command --version
-        Then container log should contain GraalVM
+        Then container log should contain Version
