@@ -2,14 +2,14 @@ image: quarkus-mandrel.yaml
 imageName: quay.io/quarkus/ubi-quarkus-mandrel
 buildScript: .github/build-mandrel-images.sh
 versions:
-  - 20.1.0.4.Final-java11
-  - 20.3.1.2-Final-java11
+  - 20.3.2.0-Final-java11
   - 21.0.0.0-Final-java11
+  - 21.1.0.0-Final-java11
 tags:
-  - id: 20.1-java11
-    target: 20.1.0.4.Final-java11
   - id: 20.3-java11
-    target: 20.3.1.2-Final-java11
+    target: 20.3.2.0-Final-java11
   - id: 21.0-java11
     target: 21.0.0.0-Final-java11
+  - id: 21.1-java11
+    target: 21.1.0.0-Final-java11
 versionCheck: true
