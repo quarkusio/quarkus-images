@@ -24,6 +24,7 @@ artifacts:
 packages:
   install:
   - fontconfig
+  - freetype-devel
 
 execute:
 - script: configure
