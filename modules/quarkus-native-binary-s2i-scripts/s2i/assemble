@@ -15,12 +15,12 @@ echo "Assemblying"
 
 if [ "$(ls ${SRC_DIR}/*-runner | wc -l)" -eq "1" ]; then
   app_path=$(ls ${SRC_DIR}/*-runner)
-  cp -v ${app_path} ${QUARKUS_HOME}/application
-  chmod +x ${QUARKUS_HOME}/application
+  cp -v ${app_path} ${APP_HOME}/application
+  chmod +x ${APP_HOME}/application
 else
   >&2 echo "Could not locate a native image. Have you build a native image using mvn -Pnative before?"
   exit 1
 fi
 
-chmod +rx ${QUARKUS_HOME}
-chmod +x ${QUARKUS_HOME}/application
+chmod +rx ${APP_HOME}
+chmod +x ${APP_HOME}/application

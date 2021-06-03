@@ -13,9 +13,9 @@ Feature: Verification of the Quarkus user module
         Given container is started with entrypoint cat /etc/passwd
         Then container log should contain quarkus:x:1001:1001:Quarkus user:/home/quarkus:/sbin/nologin
 
-    Scenario: Check QUARKUS_HOME env variable
+    Scenario: Check APP_HOME env variable
         Given container is started with entrypoint env
-        Then container log should contain QUARKUS_HOME=/home/quarkus
+        Then container log should contain APP_HOME=/home/quarkus
 
     Scenario: Check that the --version command works
         Given container is started with command --version

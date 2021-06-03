@@ -42,6 +42,6 @@ envs:
 
 run:
   user: 1001
-  workdir: "${QUARKUS_HOME}"
+  workdir: "${APP_HOME}"
   cmd:
   - "/usr/libexec/s2i/usage"

@@ -11,9 +11,9 @@ set -ex
 # supported values, please refer the module.yaml
 # file.
 CONFIGURE_SCRIPTS=(
-  ${QUARKUS_HOME}/.m2/configure-maven.sh
+  ${APP_HOME}/.m2/configure-maven.sh
 )
-source ${QUARKUS_HOME}/.m2/configure.sh
+source ${APP_HOME}/.m2/configure.sh
 #############################################
 
 SRC_DIR=${SRC_DIR:-'/tmp/src/'}
@@ -43,6 +43,6 @@ else
   
 fi  
 
-cp -v ${BUILD_DIR}/*-runner ${QUARKUS_HOME}/application
-chmod +x ${QUARKUS_HOME}
-chmod +x ${QUARKUS_HOME}/application
+cp -v ${BUILD_DIR}/*-runner ${APP_HOME}/application
+chmod +x ${APP_HOME}
+chmod +x ${APP_HOME}/application
