@@ -50,7 +50,7 @@ envs:
 # used directly to. (If we were a plain s2i image we would print the usage info here.)
 run:
   user: 1001
-  workdir: "${QUARKUS_HOME}"
+  workdir: "${APP_HOME}"
   cmd:
   - "/usr/libexec/s2i/run"
 

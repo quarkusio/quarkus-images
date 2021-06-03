@@ -6,5 +6,5 @@ execute:
   - script: add-user
 
 envs:
-  - name: "QUARKUS_HOME"
+  - name: "APP_HOME"
     value: "/home/quarkus"
