@@ -24,11 +24,11 @@ To pull these images use:
 * `docker pull quay.io/quarkus/ubi-quarkus-native-binary-s2i:1.0`
 
 with _VERSION_ being the version. 
-The version matches the GraalVM version used in the image, for example: `19.3.1-java8`, `19.3.1-java11`...
+The version matches the GraalVM version used in the image, for example: `21.1.0-java11`, `21.1.0-java16`...
 
 ```
-quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java8 <-- GraalVM 19.3.1 with java 8 support
-quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java11 <-- GraalVM 19.3.1 with java 11 support
+quay.io/quarkus/ubi-quarkus-native-s2i:21.1.0-java11 <-- GraalVM 21.1.0 with java 11 support
+quay.io/quarkus/ubi-quarkus-native-s2i:21.1.0-java16 <-- GraalVM 21.1.0 with java 16 support
 quay.io/quarkus/ubi-quarkus-native-binary-s2i:1.0 <-- Native binary s2i
 ```
 
@@ -122,8 +122,8 @@ IMPORTANT: The images are produced both the last 2 versions of GraalVM. For most
 
 ## Updating GraalVM version
 
-1. Create new directories under `modules/graalvm` named after the new version. You need to create 2 directories to distinguish the `java8` from `java11` version
-2. In each directory, write the `configure` and `module.yaml` files. The `configure` file should not differ from the existing versions, so just copy it. In the `module.yaml`, change the versions, labels, md5 hash...
+1. Create new directories under `modules/graalvm` named after the new version. You need to create 2 directories to distinguish the java versions, e.g. `java11` and `java16`.
+2. In each directory, write the `configure` and `module.yaml` files. The `configure` file should not differ from the existing versions, so just copy it. In the `module.yaml`, change the versions, labels, sha256 hash...
 3. In the `.github` directory, edit the `native-images.yaml`, `mandrel-images.yaml`, `s2i-native-images.yaml` and `tooling-images.yaml` to add/replace versions in the `versions` list. If needed, also update tha `tags` list.
 
 IMPORTANT: Always keep the last GraalVM LTS.
