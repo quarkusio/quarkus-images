@@ -34,7 +34,7 @@ modules:
   - name: encoding
   - name: add-quarkus-user
   - name: maven-binary
-    version: "3.6.3"
+    version: "3.8.1"
   - name: maven-config
   - name: graalvm
     version: _version_
