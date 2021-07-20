@@ -3,13 +3,13 @@ imageName: quay.io/quarkus/centos-quarkus-maven
 buildScript: .github/build-tooling-images.sh
 versions:
   - 20.3.2-java11
-  - 21.0.0.2-java11
   - 21.1.0-java11
+  - 21.2.0-java11
 tags:
   - id: 20.3-java11
     target: 20.3.2-java11
-  - id: 21.0-java11
-    target: 21.0.0.2-java11    
   - id: 21.1-java11
     target: 21.1.0-java11
+  - id: 21.2-java11
+    target: 21.2.0-java11  
 versionCheck: false

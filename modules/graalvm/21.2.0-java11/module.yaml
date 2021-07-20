@@ -1,14 +1,14 @@
 schema_version: 1
 name: graalvm
-version: &version "21.0.0.2-java11"
+version: &version "21.2.0-java11"
 
 labels:
   - name: graalvm-archive-filename
-    value: &filename graalvm-ce-linux-amd64-21.0.0.2-java11.tar.gz
+    value: &filename graalvm-ce-linux-amd64-21.2.0-java11.tar.gz
   - name: graalvm-archive-url
-    value: &url https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.0.0.2/graalvm-ce-java11-linux-amd64-21.0.0.2.tar.gz
+    value: &url https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.2.0/graalvm-ce-java11-linux-amd64-21.2.0.tar.gz
   - name: graalvm-version
-    value:   &suffix java11-21.0.0.2
+    value:   &suffix java11-21.2.0
 
 envs:
   - name: "JAVA_HOME"
@@ -23,11 +23,12 @@ envs:
 artifacts:
 - name: *filename
   url: *url
-  md5: 85752b644030bcf2d31f5f1cd1cf8c83
+  sha256: bbd3e03025168172a76c2a29e6a14c1c37e3476b30774259c3ef5952fb86f470
 
 packages:
   install:
   - fontconfig
+  - freetype-devel
 
 execute:
 - script: configure
