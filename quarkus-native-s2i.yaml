@@ -39,7 +39,7 @@ modules:
   - name: graalvm
     version: _version_
   - name: gradle-binary  
-    version: "6.3"
+    version: "6.9"
   - name: quarkus-native-s2i-scripts
 
 envs:

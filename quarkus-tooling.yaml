@@ -30,7 +30,7 @@ modules:
   - name: maven-binary
     version: "3.8.1"
   - name: gradle-binary
-    version: "6.3"
+    version: "6.9"
   - name: maven-config
   - name: graalvm
     version: "_version_"
