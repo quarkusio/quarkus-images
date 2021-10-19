@@ -3,14 +3,10 @@ imageName: quay.io/quarkus/ubi-quarkus-mandrel
 buildScript: .github/build-mandrel-images.sh
 versions:
   - 20.3.3.0-Final-java11
-  - 21.1.0.0-Final-java11
-  - 21.2.0.0-Final-java11
   - 21.2.0.1-Final-java11
 tags:
   - id: 20.3-java11
     target: 20.3.3.0-Final-java11
-  - id: 21.1-java11
-    target: 21.1.0.0-Final-java11
   - id: 21.2-java11
     target: 21.2.0.1-Final-java11
 versionCheck: true

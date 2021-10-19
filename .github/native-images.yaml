@@ -4,17 +4,11 @@ buildScript: .github/build-native-images.sh
 versions:
   - 20.3.3-java11
   - 20.3.2-java11
-  - 21.1.0-java11
-  - 21.1.0-java16
   - 21.2.0-java11
   - 21.2.0-java16
 tags:
   - id: 20.3-java11
     target: 20.3.3-java11
-  - id: 21.1-java11
-    target: 21.1.0-java11
-  - id: 21.1-java16
-    target: 21.1.0-java16
   - id: 21.2-java11
     target: 21.2.0-java11
   - id: 21.2-java16
