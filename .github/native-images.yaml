@@ -8,6 +8,8 @@ versions:
   - 21.1.0-java16
   - 21.2.0-java11
   - 21.2.0-java16
+  - 21.3.0-java11
+  - 21.3.0-java17
 tags:
   - id: 20.3-java11
     target: 20.3.3-java11
@@ -19,4 +21,8 @@ tags:
     target: 21.2.0-java11
   - id: 21.2-java16
     target: 21.2.0-java16
+  - id: 21.3-java11
+    target: 21.3.0-java11
+  - id: 21.3-java17
+    target: 21.3.0-java17
 versionCheck: true
