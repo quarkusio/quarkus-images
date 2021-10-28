@@ -145,6 +145,7 @@ The build scripts are located in the `.github` directory:
 
 * `build-distroless-images.sh` - build the distroless images suitable for packaging native applications
 * `build-mandrel-images.sh` - build the mandrel images
+* `build-micro-images.sh` - build the micro images suitable for packaging native applications on an UBI based image
 * `build-native-images.sh` - build the images providing the `native-image` executable
 * `build-s2i-binary-images.sh` - build the s2i builder images taking a pre-built native executable
 * `build-s2i-native-images.sh` - build the s2i builder images taking Java sources as input and building the native executable and the container
