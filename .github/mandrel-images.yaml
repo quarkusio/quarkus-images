@@ -5,6 +5,7 @@ versions:
   - 20.3.3.0-Final-java11
   - 21.2.0.2-Final-java11
   - 21.3.0.0-Final-java11
+  - 21.3.0.0-Final-java17
 tags:
   - id: 20.3-java11
     target: 20.3.3.0-Final-java11
@@ -12,4 +13,6 @@ tags:
     target: 21.2.0.2-Final-java11
   - id: 21.3-java11
     target: 21.3.0.0-Final-java11
+  - id: 21.3-java17
+    target: 21.3.0.0-Final-java17
 versionCheck: true
