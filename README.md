@@ -172,7 +172,7 @@ curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
     -H "Accept: application/vnd.github.ant-man-preview+json"  \
     -H "Content-Type: application/json" \
     https://api.github.com/repos/quarkusio/quarkus-images/deployments \
-    --data '{"ref": "master", "environment": "quay"}'
+    --data '{"ref": "main", "environment": "quay"}'
 ```
 
 Note that you need a `GITHUB_TOKEN` (API token) to trigger the deployment.
