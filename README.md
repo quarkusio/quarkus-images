@@ -4,7 +4,6 @@ This repository contains the container images used by Quarkus.
 
 NOTE: Require CEKit 3.10.x
 
-
 ## Quarkus images
 
 The images are available on [Quay.io](https://quay.io/organization/quarkus)
@@ -26,7 +25,7 @@ To pull these images use:
 with _VERSION_ being the version. 
 The version matches the GraalVM version used in the image, for example: `21.1.0-java11`, `21.1.0-java16`...
 
-```
+```shell
 quay.io/quarkus/ubi-quarkus-native-s2i:21.1.0-java11 <-- GraalVM 21.1.0 with java 11 support
 quay.io/quarkus/ubi-quarkus-native-s2i:21.1.0-java16 <-- GraalVM 21.1.0 with java 16 support
 quay.io/quarkus/ubi-quarkus-native-binary-s2i:1.0 <-- Native binary s2i
@@ -36,6 +35,7 @@ NOTE: You may wonder why we don't use `latest`. It's because `latest` has introd
 For this reason, we recommend using a stable version.
 
 ## Build Prerequisites
+
 ### CEKit
 
 To build you need CEKit. We recommend using `virtualenv` to run `cekit`.
@@ -52,44 +52,46 @@ pip install -r requirements.txt
 
 For other Systems, please refer to the CEKit docs.
 
-### s2i 
+### s2i
 
 s2i are needed for tests, download your OS version from https://github.com/openshift/source-to-image/releases/latest and put it in `s2i` folder. 
 
 Something like the following:
-```
+
+```shell
 mkdir s2i
 cd s2i
 tar -zxvf source-to-image-*.tar.gz
 ```
+
 ## Build
 
 The build is controlled by 5 _image_ files:
 
 * `quarkus-native-image.yaml` produces [`ubi-quarkus-native-image`](https://quay.io/repository/quarkus/ubi-quarkus-native-image) images
 * `quarkus-mandrel.yaml` produces [`ubi-quarkus-mandrel`](https://quay.io/repository/quarkus/ubi-quarkus-mandrel) images
+* `quarkus-micro-image.yaml` produces the [`quarkus-micro-image`](https://quay.io/quarkus/quarkus-micro-image) image, a runtime image to execute your native executable
 * `quarkus-native-binary-s2i.yaml` produces the [`ubi-quarkus-native-binary-s2i`](https://quay.io/repository/quarkus/ubi-quarkus-native-binary-s2i) image
-* `quarkus-native-s2i.yaml` produces the [`ubi-quarkus-native-s2i`](https://quay.io/repository/quarkus/ubi-quarkus-native-s2u) images
-* `quarkus-tooling.yaml` produces the [`centos-quarkus-maven`](https://quay.io/repository/quarkus/ubi-quarkus-native-s2u) images
+* `quarkus-native-s2i.yaml` produces the [`ubi-quarkus-native-s2i`](https://quay.io/repository/quarkus/ubi-quarkus-native-s2i) images
+* `quarkus-tooling.yaml` produces the [`centos-quarkus-maven`](https://quay.io/repository/quarkus/ubi-quarkus-native-s2u) images (deprecated)
 
-To build the images, you must pass the "GraalVM" version as parameter (except for `quarkus-mandrel.yaml` and `quarkus-native-binary-s2i.yaml`):
+To build the images, you must pass the "GraalVM" version as parameter (except for `quarkus-mandrel.yaml`, `quarkus-native-binary-s2i.yaml` and `quarkus-micro-image.yaml`):
 
-```
+```shell
 cekit --descriptor ${IMAGE} build \
         --overrides "{'version': '${version}', 'modules': {'install': [{'name':'graalvm', 'version': '${version}'}]}}" \
         docker --tag="${IMAGE_NAME}:${version}"
-```        
+```
 
 For `quarkus-mandrel.yaml` you must pass the "Mandrel" version instead:
 
-```
+```shell
 cekit --descriptor ${IMAGE} build \
         --overrides "{'version': '${version}', 'modules': {'install': [{'name':'mandrel', 'version': '${version}'}]}}" \
         docker --tag="${IMAGE_NAME}:${version}"
 ```
 
 The `.github` directory contains the script to build the different images.
-
 
 #### Note about CEKit
 
@@ -135,21 +137,21 @@ IMPORTANT: Always keep the last GraalVM LTS.
 3. Edit the `module.yaml` file to target the new version
 4. Edit the `quarkus-native-s2i.yaml` and `quarkus-tooling.yaml` files to update the Maven/Gradle version
 
-# Building, testing and pushing the images
+## Building, testing and pushing the images
 
 Before proceeding make sure you have [CEKit](https://cekit.io/) installed, see [build](#build).
 
-###### Build:
+### Build:
 
 The build scripts are located in the `.github` directory:
 
-* `build-distroless-images.sh` - build the distroless images suitable for packaging native applications
+* `build-distroless-images.sh` - build the distroless images suitable for packaging native applications (experimental)
 * `build-mandrel-images.sh` - build the mandrel images
 * `build-micro-images.sh` - build the micro images suitable for packaging native applications on an UBI based image
 * `build-native-images.sh` - build the images providing the `native-image` executable
 * `build-s2i-binary-images.sh` - build the s2i builder images taking a pre-built native executable
 * `build-s2i-native-images.sh` - build the s2i builder images taking Java sources as input and building the native executable and the container
-* `build-tooling-images.sh` - build the tooling image
+* `build-tooling-images.sh` - build the tooling image (deprecated)
 
 Except `build-s2i-binary-images.sh`, the other scripts expect the GraalVM/Mandrel version as unique parameter:
 
@@ -157,7 +159,7 @@ Except `build-s2i-binary-images.sh`, the other scripts expect the GraalVM/Mandre
 > .github/build-native-images.sh 20.2.0-java11
 ```
 
-# Continuous Integration and Automation
+## Continuous Integration and Automation
 
 This repository uses GitHub Actions to build the images.
 On each PR, the images are built. Check the `Actions` tab in the GitHub project.
@@ -165,7 +167,7 @@ On each PR, the images are built. Check the `Actions` tab in the GitHub project.
 To push the images to Quay, you need to trigger a _deployment_.
 Once the images have been built from master successfully, issue the following cURL command:
 
-```
+```shell
 curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
     -H "Accept: application/vnd.github.ant-man-preview+json"  \
     -H "Content-Type: application/json" \

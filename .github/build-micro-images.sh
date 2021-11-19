@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Create the container image providing the GraalVM specific micro image
+# Create the container image providing a runtime image containing the GraalVM requirements.
 # Usage: build-micro-images.sh
 # Example:
 #    build-micro-images.sh
