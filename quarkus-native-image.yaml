@@ -27,6 +27,8 @@ modules:
   - name: encoding
   - name: add-quarkus-user
   - name: add-project-dir
+  - name: upx
+    version: "3.96"
   - name: graalvm
     version: "_version_"
 envs:

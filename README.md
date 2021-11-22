@@ -93,7 +93,7 @@ cekit --descriptor ${IMAGE} build \
 
 The `.github` directory contains the script to build the different images.
 
-#### Note about CEKit
+### Note about CEKit
 
 Run the scripts from the .github directory
 
