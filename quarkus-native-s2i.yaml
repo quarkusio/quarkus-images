@@ -34,12 +34,12 @@ modules:
   - name: encoding
   - name: add-quarkus-user
   - name: maven-binary
-    version: "3.8.1"
+    version: "3.8.4"
   - name: maven-config
   - name: graalvm
     version: _version_
   - name: gradle-binary  
-    version: "7.2"
+    version: "7.3"
   - name: quarkus-native-s2i-scripts
 
 envs:
