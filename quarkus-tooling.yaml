@@ -1,7 +1,7 @@
 schema_version: 1
 version: "SNAPSHOT"
 name: "quay.io/quarkus/centos-quarkus-maven"
-from: "centos:8"
+from: "quay.io/centos/centos:stream8"
 
 labels:
 - name: "io.openshift.expose-services"
