@@ -10,15 +10,18 @@ versions:
   - 22.0.0.2-Final-java11
   - 21.3.1.0-Final-java17
   - 22.0.0.2-Final-java17
+  - 21.3.1.1-Final-java17
+  - 21.3.1.1-Final-java11
+
 tags:
   - id: 20.3-java11
     target: 20.3.3.0-Final-java11
   - id: 21.2-java11
     target: 21.2.0.2-Final-java11
   - id: 21.3-java11
-    target: 21.3.1.0-Final-java11
+    target: 21.3.1.1-Final-java11
   - id: 21.3-java17
-    target: 21.3.1.0-Final-java17
+    target: 21.3.1.1-Final-java17
   - id: 22.0-java11
     target: 22.0.0.2-Final-java11
   - id: 22.0-java17
