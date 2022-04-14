@@ -22,7 +22,7 @@ modules:
   repositories:
   - path: modules
   install:
-  - name: common-packages
+  - name: tooling-packages
   - name: glibc-langpack-en
   - name: encoding
   - name: add-quarkus-user

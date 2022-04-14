@@ -14,3 +14,6 @@ buildNumber.properties
 
 *~s2i
 s2i
+
+.idea
+*.iml
