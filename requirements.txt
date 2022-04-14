@@ -1,4 +1,4 @@
-cekit==3.10
+cekit==4.1.0
 odcs
 docker
 docker_squash
