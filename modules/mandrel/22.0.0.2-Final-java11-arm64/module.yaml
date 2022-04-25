@@ -1,0 +1,30 @@
+schema_version: 1
+name: mandrel
+version: &version "22.0.0.2-Final-java11-arm64"
+
+labels:
+  - name: mandrel-archive-filename
+    value: &filename mandrel-java11-linux-aarch64-22.0.0.2-Final.tar.gz
+  - name: mandrel-archive-url
+    value: &url https://github.com/graalvm/mandrel/releases/download/mandrel-22.0.0.2-Final/mandrel-java11-linux-aarch64-22.0.0.2-Final.tar.gz
+
+envs:
+  - name: "JAVA_HOME"
+    value: "/opt/mandrel"
+  - name: "GRAALVM_HOME"
+    value: "/opt/mandrel"
+  - name: "FILENAME"
+    value: *filename
+
+artifacts:
+- name: *filename
+  url: *url
+  sha256: 8a382563f85282193a47b6d873d3b647c82098150f88c26a934144d2465a5f81
+
+packages:
+  install:
+  - fontconfig
+  - freetype-devel
+
+execute:
+- script: configure

@@ -1,12 +1,12 @@
 schema_version: 1
 name: mandrel
-version: &version "22.0.0.2-Final-java11"
+version: &version "22.1.0.0-Final-java11-arm64"
 
 labels:
   - name: mandrel-archive-filename
-    value: &filename mandrel-java11-linux-amd64-22.0.0.2-Final.tar.gz
+    value: &filename mandrel-java11-linux-aarch64-22.1.0.0-Final.tar.gz
   - name: mandrel-archive-url
-    value: &url https://github.com/graalvm/mandrel/releases/download/mandrel-22.0.0.2-Final/mandrel-java11-linux-amd64-22.0.0.2-Final.tar.gz
+    value: &url https://github.com/graalvm/mandrel/releases/download/mandrel-22.1.0.0-Final/mandrel-java11-linux-aarch64-22.1.0.0-Final.tar.gz
 
 envs:
   - name: "JAVA_HOME"
@@ -19,7 +19,7 @@ envs:
 artifacts:
 - name: *filename
   url: *url
-  sha256: 57d8cc4777e513db492d8bf51521201bad0600ef95bf0afd687bf44f9bda8a87
+  sha256: 932e167e0571c7eda37f20b3c2605563666e0fed79de2dcac2ad6f48cdf91d7b
 
 packages:
   install:
