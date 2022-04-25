@@ -15,10 +15,24 @@ export PATH=$PATH:$PWD/s2i
 echo "Path is $PATH"
 s2i version
 
-echo "Generating ${PREFIX_NAME}:${VERSION}"
+ARCH=$(echo "${VERSION}" | cut -d "-" -f 3)
+if [ -z "$ARCH" ]
+then
+    ARCH="amd64"
+fi
+
+PLATFORM="linux/${ARCH}"
+echo "Generating ${PREFIX_NAME}:${VERSION} for platform ${PLATFORM}"
 cekit --descriptor ${IMAGE} build \
     --overrides "${OVERRIDES}" \
+    --dry-run \
     ${BUILD_ENGINE} --tag="${PREFIX_NAME}:${VERSION}"
+
+docker build \
+    --platform "${PLATFORM}" \
+    --tag "${PREFIX_NAME}:${VERSION}" \
+    --load \
+    target/image
 
 # echo "Verifying ${PREFIX_NAME}:${VERSION}"
 # export CTF_WAIT_TIME=120

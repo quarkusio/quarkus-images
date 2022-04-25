@@ -7,15 +7,19 @@ versions:
   - 21.3.0.0-Final-java11
   - 21.3.0.0-Final-java17
   - 21.3.1.0-Final-java11
-  - 22.0.0.2-Final-java11
   - 21.3.1.0-Final-java17
-  - 22.0.0.2-Final-java17
   - 21.3.1.1-Final-java17
   - 21.3.1.1-Final-java11
   - 21.3.2.0-Final-java11
   - 21.3.2.0-Final-java17
-  - 22.1.0.0-Final-java11
-  - 22.1.0.0-Final-java17
+  - 22.0.0.2-Final-java11-amd64
+  - 22.0.0.2-Final-java11-arm64
+  - 22.0.0.2-Final-java17-amd64
+  - 22.0.0.2-Final-java17-arm64
+  - 22.1.0.0-Final-java11-amd64
+  - 22.1.0.0-Final-java11-arm64
+  - 22.1.0.0-Final-java17-amd64
+  - 22.1.0.0-Final-java17-arm64
 
 tags:
   - id: 20.3-java11
@@ -24,8 +28,20 @@ tags:
     target: 21.3.2.0-Final-java11
   - id: 21.3-java17
     target: 21.3.2.0-Final-java17
-  - id: 22.1-java11
-    target: 22.1.0.0-Final-java11
-  - id: 22.1-java17
-    target: 22.1.0.0-Final-java17
+  - id: 22.0-java11-amd64
+    target: 22.0.0.2-Final-java11-amd64
+  - id: 22.0-java11-arm64
+    target: 22.0.0.2-Final-java11-arm64
+  - id: 22.0-java17-amd64
+    target: 22.0.0.2-Final-java17-amd64
+  - id: 22.0-java17-arm64
+    target: 22.0.0.2-Final-java17-arm64
+  - id: 22.1-java11-amd64
+    target: 22.1.0.0-Final-java11-amd64
+  - id: 22.1-java11-arm64
+    target: 22.1.0.0-Final-java11-arm64
+  - id: 22.1-java17-amd64
+    target: 22.1.0.0-Final-java17-amd64
+  - id: 22.1-java17-arm64
+    target: 22.1.0.0-Final-java17-arm64
 versionCheck: true
