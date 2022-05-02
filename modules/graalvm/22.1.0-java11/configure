@@ -5,7 +5,8 @@ SOURCES_DIR=/tmp/artifacts
 
 ls -l ${SOURCES_DIR}
 tar xzf ${SOURCES_DIR}/${FILENAME} -C /opt
-mv /opt/graalvm-ce-${GRAALVM_VERSION} /opt/graalvm
+ls -l /opt
+mv /opt/graalvm-ce-${GRAALVM_VERSION}* /opt/graalvm
 
 echo "Installing native-image"
 /opt/graalvm/bin/gu --auto-yes install native-image
