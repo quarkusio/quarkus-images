@@ -39,7 +39,6 @@ cekit --descriptor ${IMAGE} build \
 docker build \
     --platform "${PLATFORM}" \
     --tag "${PREFIX_NAME}:${VERSION}" \
-    --load \
     target/image
 
 # Testing only possible for amd64 images

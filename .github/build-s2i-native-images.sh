@@ -31,7 +31,6 @@ cekit --descriptor ${IMAGE} build \
 docker build \
     --platform "${PLATFORM}" \
     --tag "${PREFIX_NAME}:${VERSION}" \
-    --load \
     target/image
 
 # echo "Verifying ${PREFIX_NAME}:${VERSION}"
