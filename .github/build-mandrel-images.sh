@@ -35,10 +35,10 @@ cekit --descriptor ${IMAGE} build \
     --dry-run \
     ${BUILD_ENGINE} --tag="${PREFIX_NAME}:${VERSION}"
 
-docker build \
+docker buildx build \
+    --output=type=docker
     --platform "${PLATFORM}" \
     --tag "${PREFIX_NAME}:${VERSION}" \
-    --load
     target/image
 
 # # Testing only possible for amd64 images
