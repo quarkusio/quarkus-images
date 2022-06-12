@@ -41,16 +41,16 @@ docker build \
     --tag "${PREFIX_NAME}:${VERSION}" \
     target/image
 
-# Testing only possible for amd64 images
-if [ "$ARCH" = "amd64" ]; then
-    echo "Verifying ${PREFIX_NAME}:${VERSION}"
-    export CTF_WAIT_TIME=120
-    cekit test \
-        --image ${PREFIX_NAME}:${VERSION} \
-        --overrides-file ${IMAGE} \
-        --overrides "${OVERRIDES}" \
-        behave \
-       --steps-url https://github.com/cescoffier/behave-test-steps
-else
-    echo "Verification skipped because architectures $ARCH is not amd64"
-fi
+# # Testing only possible for amd64 images
+# if [ "$ARCH" = "amd64" ]; then
+#     echo "Verifying ${PREFIX_NAME}:${VERSION}"
+#     export CTF_WAIT_TIME=120
+#     cekit test \
+#         --image ${PREFIX_NAME}:${VERSION} \
+#         --overrides-file ${IMAGE} \
+#         --overrides "${OVERRIDES}" \
+#         behave \
+#        --steps-url https://github.com/cescoffier/behave-test-steps
+# else
+#     echo "Verification skipped because architectures $ARCH is not amd64"
+# fi

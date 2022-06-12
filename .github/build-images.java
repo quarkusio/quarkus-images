@@ -129,6 +129,7 @@ class BuildImages implements Callable<Integer> {
             List<Image> images = client.listImagesCmd()
                     .withImageNameFilter(configuration.imageName)
                     .exec();
+            System.out.println("Images: " + images);
             for (String version : configuration.versions) {
                 String expectedImageName = configuration.imageName + ":" + version;
                 Optional<Image> found = images.stream()
@@ -182,12 +183,18 @@ class BuildImages implements Callable<Integer> {
                     .exec();
     
             String expectedImageName = imageName + ":" + version;
-            images.stream().filter(i -> Arrays.asList(i.getRepoTags()).contains(expectedImageName))
-                    .forEach(i -> {
-                        System.out.println("Existing image found: " + expectedImageName + " : " + i.getId());
-                        System.out.println("Deleting the existing image...");
-                        client.removeImageCmd(i.getId()).withForce(true).withNoPrune(false).exec();
-                    });
+            images.stream().filter(i -> {
+                if (i.getRepoTags() == null)  {
+                    return false;
+                } else {
+                    return Arrays.asList(i.getRepoTags()).contains(expectedImageName);
+                }
+                })
+                .forEach(i -> {
+                    System.out.println("Existing image found: " + expectedImageName + " : " + i.getId());
+                    System.out.println("Deleting the existing image...");
+                    client.removeImageCmd(i.getId()).withForce(true).withNoPrune(false).exec();
+                });
         }
     
         void prune() {
