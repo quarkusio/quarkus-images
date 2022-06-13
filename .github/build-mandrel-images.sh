@@ -35,8 +35,7 @@ cekit --descriptor ${IMAGE} build \
     --dry-run \
     ${BUILD_ENGINE} --tag="${PREFIX_NAME}:${VERSION}"
 
-docker buildx build \
-    --output=type=docker
+docker build \
     --platform "${PLATFORM}" \
     --tag "${PREFIX_NAME}:${VERSION}" \
     target/image
