@@ -17,3 +17,5 @@ s2i
 
 .idea
 *.iml
+
+.jbang/

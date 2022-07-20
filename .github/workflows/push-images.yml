@@ -3,72 +3,52 @@ on:
   deployment:
   schedule:
     - cron: '0 0 * * 0'
+  workflow_dispatch:
 
 jobs:
+
   build-images:
-    name: Build and push images for ${{ matrix.configuration }}
+    name: Build and Push images
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        configuration:
-          - .github/native-images.yaml
-          - .github/mandrel-images.yaml
-          - .github/s2i-native-images.yaml
-          - .github/tooling-images.yaml
-    steps:
-    - uses: actions/checkout@v1
-    - name: Prerequisites
-      run: .github/ci-prerequisites.sh
-    - name: Build images
-      run: jbang/bin/jbang .github/build-images.java ${{ matrix.configuration }}
-    - name: Push images
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        QUAY_USER: ${{ secrets.QUAY_USER }}
-        QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
-      run: .github/push-images.sh                            
+        include:
+          - name: "base images"
+            modules: "quarkus-distroless-base-image,quarkus-micro-base-image"
+          - name: "s2i images"
+            modules: "quarkus-binary-s2i,quarkus-native-s2i"
+          - name: "mandrel builder images"
+            modules: "quarkus-mandrel-builder-image"
+          - name: "graalvm ce builder images"
+            modules: "quarkus-graalvm-builder-image"
 
-  binary-s2i-build-and-deploy:
-    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1    
-    - name: Prerequisites
-      run: .github/ci-prerequisites.sh
-    - name: Build S2I (binary) images
-      run: .github/build-s2i-binary-images.sh        
-    - name: Push images
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        QUAY_USER: ${{ secrets.QUAY_USER }}
-        QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
-      run: .github/push-images.sh                                
-
-  distroless-build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1    
-    - name: Prerequisites
-      run: .github/ci-prerequisites.sh
-    - name: Build S2I (binary) images
-      run: .github/build-distroless-images.sh        
-    - name: Push images
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        QUAY_USER: ${{ secrets.QUAY_USER }}
-        QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
-      run: .github/push-images.sh          
-
-  micro-build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1    
-    - name: Prerequisites
-      run: .github/ci-prerequisites.sh
-    - name: Build S2I (binary) images
-      run: .github/build-micro-images.sh        
-    - name: Push images
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        QUAY_USER: ${{ secrets.QUAY_USER }}
-        QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
-      run: .github/push-images.sh          
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          install: true
+      - name: Inspect builder
+        run: |
+          echo "Name:      ${{ steps.buildx.outputs.name }}"
+          echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
+          echo "Status:    ${{ steps.buildx.outputs.status }}"
+          echo "Flags:     ${{ steps.buildx.outputs.flags }}"
+          echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: quay.io
+          username: ${{ secrets.QUAY_USER }}
+          password: ${{ secrets.QUAY_TOKEN }}
+      - name: Build images
+        run: mvn install --projects ${{ matrix.modules }} --also-make -DskipTests -Ppush
+      - name: Print ${{ matrix.name}}
+        run: docker images

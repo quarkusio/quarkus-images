@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.quarkus.images</groupId>
+        <artifactId>quarkus-images-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>quarkus-distroless-base-image</artifactId>
+
+    <properties>
+        <jbang.script>${project.build.sourceDirectory}/io/quarkus/images/Build.java</jbang.script>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>dev.jbang</groupId>
+                <artifactId>jbang-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <args>
+                        <argument>--dockerfile-dir=${project.basedir}/src/docker</argument>
+                        <argument>--out=quay.io/cescoffi/quarkus-distroless-image:2.0</argument>
+                    </args>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.quarkus.images</groupId>
+            <artifactId>jdock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>info.picocli</groupId>
+            <artifactId>picocli</artifactId>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>push</id>
+            <properties>
+                <jbang.script>${project.build.sourceDirectory}/io/quarkus/images/Push.java</jbang.script>
+            </properties>
+        </profile>
+    </profiles>
+
+</project>
