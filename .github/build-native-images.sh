@@ -23,35 +23,16 @@ s2i version
 virtualenv --python=python3 .cekit
 source .cekit/bin/activate
 
-ARCH=$(echo "${VERSION}" | cut -d "-" -f 3)
-if [ -z "$ARCH" ]
-then
-    ARCH="amd64"
-fi
-
-PLATFORM="linux/${ARCH}"
-echo "Generating ${PREFIX_NAME}:${VERSION} for platform ${PLATFORM}"
+echo "Generating ${PREFIX_NAME}:${VERSION}"
 cekit --descriptor ${IMAGE} build \
     --overrides "${OVERRIDES}" \
-    --dry-run \
     ${BUILD_ENGINE} --tag="${PREFIX_NAME}:${VERSION}"
 
-docker build \
-    --platform "${PLATFORM}" \
-    --tag "${PREFIX_NAME}:${VERSION}" \
-    --load \
-    target/image
-
-# Testing only possible for amd64 images
-if [ "$ARCH" = "amd64" ]; then
-    echo "Verifying ${PREFIX_NAME}:${VERSION}"
-    export CTF_WAIT_TIME=120
-    cekit test \
-        --image ${PREFIX_NAME}:${VERSION} \
-        --overrides-file ${IMAGE} \
-        --overrides "${OVERRIDES}" \
-        behave \
-       --steps-url https://github.com/cescoffier/behave-test-steps
-else
-    echo "Verification skipped because architectures $ARCH is not amd64"
-fi
+echo "Verifying ${PREFIX_NAME}:${VERSION}"
+export CTF_WAIT_TIME=120
+cekit test \
+   --image ${PREFIX_NAME}:${VERSION} \
+   --overrides-file ${IMAGE} \
+   --overrides "${OVERRIDES}" \
+    behave \
+   --steps-url https://github.com/cescoffier/behave-test-steps
