@@ -1,0 +1,60 @@
+name: Continuous Integration Build
+
+on:
+  pull_request:
+      branches:
+        - main
+  push:
+      branches:
+        - main
+      paths-ignore:
+        - '.build/**'
+
+jobs:
+
+  build-images:
+    name: Build images
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: "base images"
+            modules: "quarkus-distroless-base-image,quarkus-micro-base-image"
+          - name: "s2i images"
+            modules: "quarkus-binary-s2i,quarkus-native-s2i"
+          - name: "mandrel builder images"
+            modules: "quarkus-mandrel-builder-image"
+          - name: "graalvm ce builder images"
+            modules: "quarkus-graalvm-builder-image"
+
+    steps:
+    - run: |
+        # Re-claim some disk space
+        sudo swapoff -a
+        sudo rm -f /swapfile
+        sudo apt-get clean
+        docker rmi $(docker image ls -aq)
+        df -h
+    - uses: actions/checkout@v1
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v1
+      with:
+        install: true
+    - name: Inspect builder
+      run: |
+        echo "Name:      ${{ steps.buildx.outputs.name }}"
+        echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
+        echo "Status:    ${{ steps.buildx.outputs.status }}"
+        echo "Flags:     ${{ steps.buildx.outputs.flags }}"
+        echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
+    - name: Build ${{ matrix.name }}
+      run: mvn install --projects ${{ matrix.modules }} --also-make -DskipTests
+    - name: Print ${{ matrix.name}}
+      run: docker images
