@@ -1,5 +1,6 @@
 package io.quarkus.images;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -7,6 +8,11 @@ import java.io.File;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SimpleTest {
+
+    @BeforeAll
+    static void init() {
+        JDock.setDockerFileDir(new File("target/test"));
+    }
 
     @Test
     public void testMandrelAmd64() {
@@ -18,7 +24,7 @@ class SimpleTest {
         String filename = "mandrel-java%s-%s-%s.Dockerfile".formatted(
                 java_version, mandrel_version, arch);
         Dockerfile dockerFile = Builders.getMandrelDockerFile(mandrel_version, java_version, arch, sha);
-        dockerFile.build(new File(filename));
+        dockerFile.build(new File("target/test/" + filename));
 
     }
 
@@ -33,7 +39,7 @@ class SimpleTest {
                 java_version, mandrel_version, arch);
 
         Dockerfile dockerFile = Builders.getMandrelDockerFile(mandrel_version, java_version, arch, sha);
-        dockerFile.build(new File(filename));
+        dockerFile.build(new File("target/test/" + filename));
     }
 
     @Test
@@ -47,7 +53,7 @@ class SimpleTest {
                 java_version, graalvm_version, arch);
 
         Dockerfile dockerFile = Builders.getGraalVmDockerFile(graalvm_version, java_version, arch, sha);
-        dockerFile.build(new File(filename));
+        dockerFile.build(new File("target/test/" + filename));
     }
 
     @Test

@@ -1,12 +1,19 @@
 package io.quarkus.images;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.Map;
 
 @Disabled
 public class MandrelMultiArchTest {
+
+    @BeforeAll
+    static void init() {
+        JDock.setDockerFileDir(new File("target/test"));
+    }
 
     @Test
     void test() {

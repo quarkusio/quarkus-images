@@ -31,7 +31,7 @@
                 </executions>
                 <configuration>
                     <args>
-                        <argument>--dockerfile-dir=${pom.basedir}/src/docker</argument>
+                        <argument>--dockerfile-dir=${pom.basedir}/target/docker</argument>
                         <argument>--ubi-minimal=${ubi-min.base}</argument>
                         <argument>--ubi-micro=${ubi-micro.base}</argument>
                         <argument>--out=quay.io/cescoffi/quarkus-micro-image:2.0</argument>

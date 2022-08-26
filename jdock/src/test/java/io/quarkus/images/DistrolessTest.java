@@ -1,8 +1,16 @@
 package io.quarkus.images;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
 public class DistrolessTest {
+
+    @BeforeAll
+    static void init() {
+        JDock.setDockerFileDir(new File("target/test"));
+    }
 
     @Test
     void testBuildingDistrolessImage() {

@@ -31,7 +31,7 @@
                 </executions>
                 <configuration>
                     <args>
-                        <argument>--dockerfile-dir=${project.basedir}/src/docker</argument>
+                        <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
                         <argument>--ubi-minimal=${ubi-min.base}</argument>
                         <argument>--out=quay.io/cescoffi/ubi-quarkus-native-image</argument>
                         <argument>--in=${project.basedir}/graalvm.yaml</argument>

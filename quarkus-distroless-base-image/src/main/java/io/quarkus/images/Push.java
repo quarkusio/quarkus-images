@@ -6,6 +6,7 @@ package io.quarkus.images;
 
 import picocli.CommandLine;
 
+import java.io.File;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "build")
@@ -15,12 +16,12 @@ public class Push implements Callable<Integer> {
     private String output;
 
     @CommandLine.Option(names = {
-            "--dockerfile-dir" }, description = "The location where the docker file should be created", defaultValue = "src/docker")
-    private String dockerFileDir;
+            "--dockerfile-dir" }, description = "The location where the docker file should be created", defaultValue = "target/docker")
+    private File dockerFileDir;
 
     @Override
     public Integer call() throws Exception {
-        JDock.dockerFileDir = dockerFileDir;
+        JDock.setDockerFileDir(dockerFileDir);
         QuarkusDistroless.define(output)
                 .buildAndPush();
         return 0;

@@ -31,7 +31,7 @@
                 </executions>
                 <configuration>
                     <args>
-                        <argument>--dockerfile-dir=${project.basedir}/src/docker</argument>
+                        <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
                         <argument>--out=quay.io/cescoffi/quarkus-distroless-image:2.0</argument>
                     </args>
                 </configuration>
