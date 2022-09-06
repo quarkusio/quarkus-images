@@ -6,31 +6,31 @@ This repository contains the container images used by Quarkus.
 
 The images are available on [Quay.io](https://quay.io/organization/quarkus)
 
-* **ubi-quarkus-native-image** - provides the `native-image` executable. Used by the Maven and Gradle plugin from Quarkus to build linux64 executables
-* **ubi-quarkus-mandrel** - provides the `native-image` executable from the Mandrel distribution of GraalVM. Used by the Maven and Gradle plugin from Quarkus to build linux64 executables
-* **ubi-quarkus-native-s2i** - S2I builder image for OpenShift building a native image from source code (using Gradle or Maven)
-* **ubi-quarkus-native-binary-s2i** - S2I builder image for OpenShift taking a pre-built native executable as input
-* **quarkus-micro-image** - a base image to run Quarkus native application using UBI Micro
-* **quarkus-distroless-image** - a base image to run Quarkus native application following the distroless approach
+* [ubi-quarkus-graalvmce-builder-image](https://quay.io/repository/cescoffi/ubi-quarkus-graalvmce-builder-image) - provides the `native-image` executable. Used by the Maven and Gradle plugin from Quarkus to build linux64 executables
+* [ubi-quarkus-mandrel-builder-image](https://quay.io/repository/cescoffi/ubi-quarkus-mandrel-builder-image) - provides the `native-image` executable from the Mandrel distribution of GraalVM. Used by the Maven and Gradle plugin from Quarkus to build linux64 executables
+* [ubi-quarkus-graalvmce-s2i](https://quay.io/repository/cescoffi/ubi-quarkus-graalvmce-s2i) - S2I builder image for OpenShift building a native image from source code (using Gradle or Maven)
+* [ubi-quarkus-native-binary-s2i](https://quay.io/repository/cescoffi/ubi-quarkus-native-binary-s2i) - S2I builder image for OpenShift taking a pre-built native executable as input
+* [quarkus-micro-image](https://quay.io/repository/cescoffi/quarkus-micro-image) - a base image to run Quarkus native application using UBI Micro
+* [quarkus-distroless-image](https://quay.io/repository/cescoffi/quarkus-distroless-image) - a base image to run Quarkus native application following the distroless approach
 
 To pull these images use:
 
-* `docker pull quay.io/quarkus/ubi-quarkus-native-image:VERSION`
-* `docker pull quay.io/quarkus/ubi-quarkus-mandrel:VERSION`
-* `docker pull quay.io/quarkus/centos-quarkus-maven:VERSION`
-* `docker pull quay.io/quarkus/ubi-quarkus-native-s2i:VERSION`
-* `docker pull quay.io/quarkus/ubi-quarkus-native-binary-s2i:2.0`
-* `docker pull quay.io/quarkus/quarkus-micro-image:2.0` 
-* `docker pull quay.io/quarkus/quarkus-distroless-image:2.0`
+* `docker pull quay.io/cescoffi/ubi-quarkus-graalvmce-builder-image:VERSION` 
+* `docker pull quay.io/cescoffi/ubi-quarkus-mandrel-builder-image:VERSION`
+* `docker pull quay.io/cescoffi/ubi-quarkus-graalvmce-s2i:VERSION`
+* `docker pull quay.io/cescoffi/ubi-quarkus-native-binary-s2i:2.0`
+* `docker pull quay.io/cescoffi/quarkus-micro-image:2.0` 
+* `docker pull quay.io/cescoffi/quarkus-distroless-image:2.0`
 
 with _VERSION_ being the version. 
 The version matches the GraalVM version used in the image, for example: `21.1.0-java11`, `21.1.0-java16`...
 
-```shell
-quay.io/quarkus/ubi-quarkus-native-s2i:21.1.0-java11 <-- GraalVM 21.1.0 with java 11 support
-quay.io/quarkus/ubi-quarkus-native-s2i:21.1.0-java16 <-- GraalVM 21.1.0 with java 16 support
-quay.io/quarkus/ubi-quarkus-native-binary-s2i:2.0 <-- Native binary s2i
+```text
+docker pull quay.io/cescoffi/ubi-quarkus-native-image:22.1-java17 <-- GraalVM 22.1 with Java 17 (ARM64 / AMD64) 
+docker pull quay.io/cescoffi/ubi-quarkus-native-image:22.1.0-java17-amd64 <-- GraalVM 22.1 with Java 17 (AMD 64 only)
 ```
+
+Navigate to the _tag_ tab on _quay.io_ to see the list of available tabs.  
 
 NOTE: You may wonder why we don't use `latest`. It's because `latest` has introduced more problems than benefits especially when reproducing issues.
 For this reason, we recommend using a stable version.
@@ -95,3 +95,7 @@ curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
 ```
 
 Note that you need a `GITHUB_TOKEN` (API token) to trigger the deployment.
+
+## Discontinued images
+
+* The [centos-quarkus-maven](https://quay.io/repository/quarkus/centos-quarkus-maven) image is not maintained anymore.

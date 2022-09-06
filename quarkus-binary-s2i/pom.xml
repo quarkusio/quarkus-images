@@ -33,7 +33,7 @@
                     <args>
                         <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
                         <argument>--ubi-minimal=${ubi-min.base}</argument>
-                        <argument>--out=quay.io/cescoffi/ubi-quarkus-native-binary-s2i:1.0</argument>
+                        <argument>--out=quay.io/cescoffi/ubi-quarkus-native-binary-s2i:2.0</argument>
                         <argument>--basedir=${project.basedir}</argument>
                         <argument>--dry-run=${jdock.dry-run}</argument>
                     </args>
