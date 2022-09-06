@@ -35,6 +35,7 @@
                         <argument>--ubi-minimal=${ubi-min.base}</argument>
                         <argument>--ubi-micro=${ubi-micro.base}</argument>
                         <argument>--out=quay.io/cescoffi/quarkus-micro-image:2.0</argument>
+                        <argument>--dry-run=${jdock.dry-run}</argument>
                     </args>
                 </configuration>
             </plugin>

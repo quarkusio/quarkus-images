@@ -33,6 +33,9 @@ public class Build implements Callable<Integer> {
     @CommandLine.Option(names = { "--ubi-minimal" }, description = "The UBI Minimal base image")
     private String base;
 
+    @CommandLine.Option(names = "--dry-run", description = "Just generate the docker file and skip the container build")
+    private boolean dryRun;
+
     @Override
     public Integer call() throws Exception {
         JDock.setDockerFileDir(dockerFileDir);
@@ -46,13 +49,13 @@ public class Build implements Callable<Integer> {
             if (architectures.size() == 1) {
                 // Single-Arch
                 System.out.println("\uD83D\uDD25\tBuilding single-architecture image " + groupImageName);
-                architectures.values().iterator().next().buildLocalImage(groupImageName);
+                architectures.values().iterator().next().buildLocalImage(groupImageName, dryRun);
             } else {
                 // Multi-Arch
                 System.out.println("Building multi-architecture image " + groupImageName + " with the following architectures: "
                         + architectures.keySet());
                 MultiArchImage multi = new MultiArchImage(groupImageName, architectures);
-                multi.buildLocalImages();
+                multi.buildLocalImages(dryRun);
             }
             Tag.createTagIfAny(config, image, false);
         }

@@ -35,6 +35,8 @@
 
         <ubi-min.base>registry.access.redhat.com/ubi8/ubi-minimal:8.5</ubi-min.base>
         <ubi-micro.base>registry.access.redhat.com/ubi8-micro:8.6</ubi-micro.base>
+
+        <jdock.dry-run>false</jdock.dry-run>
     </properties>
     <developers>
         <developer>

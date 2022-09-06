@@ -47,8 +47,8 @@ public class MultiStageDockerFile implements Buildable {
     }
 
     @Override
-    public void buildLocalImage(String imageName) {
-        Exec.buildLocal(this, imageName, "amd64");
+    public void buildLocalImage(String imageName, boolean dryRun) {
+        Exec.buildLocal(this, imageName, "amd64", dryRun);
     }
 
     @Override

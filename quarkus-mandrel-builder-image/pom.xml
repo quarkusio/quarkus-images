@@ -35,6 +35,7 @@
                         <argument>--ubi-minimal=${ubi-min.base}</argument>
                         <argument>--out=quay.io/cescoffi/ubi-quarkus-mandrel</argument>
                         <argument>--in=${project.basedir}/mandrel.yaml</argument>
+                        <argument>--dry-run=${jdock.dry-run}</argument>
                     </args>
                 </configuration>
             </plugin>

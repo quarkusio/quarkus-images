@@ -15,12 +15,16 @@ public class MultiArchImage {
         this.images = images;
     }
 
-    public void buildLocalImages() {
-        System.out.println("⚙️\tBuilding local images only (no push)");
-        _buildLocalImages();
+    public void buildLocalImages(boolean dryRun) {
+        if (dryRun) {
+            System.out.println("⚙️\tGenerating docker files");
+        } else {
+            System.out.println("⚙️\tBuilding local images only (no push)");
+        }
+        _buildLocalImages(dryRun);
     }
 
-    private Map<String, String> _buildLocalImages() {
+    private Map<String, String> _buildLocalImages(boolean dryRun) {
         Map<String, String> built = new HashMap<>();
         // Step 1 - build each image
         for (Map.Entry<String, Buildable> entry : images.entrySet()) {
@@ -40,11 +44,16 @@ public class MultiArchImage {
                 throw new IllegalStateException("File " + dockerfile.getAbsolutePath() + " does not exist");
             }
 
-            // docker buildx build --load --platform linux/arm64 --tag cescoffier/mandrel-java17-22.1.0.0-final-arm64 -f mandrel-java17-22.1.0.0-Final-arm64.Dockerfile .
-            // Build the image (platform-specific)
-            Exec.execute(List.of("docker", "buildx", "build", "--load", "--platform=linux/" + arch, "--tag", imageName,
-                    "-f", JDock.dockerFileDir + "/" + fileName, "."),
-                    e -> new RuntimeException("Unable to build image for " + dockerfile.getAbsolutePath(), e));
+            if (!dryRun) {
+                // docker buildx build --load --platform linux/arm64 --tag cescoffier/mandrel-java17-22.1.0.0-final-arm64 -f mandrel-java17-22.1.0.0-Final-arm64.Dockerfile .
+                // Build the image (platform-specific)
+                Exec.execute(List.of("docker", "buildx", "build", "--load", "--platform=linux/" + arch, "--tag", imageName,
+                        "-f", JDock.dockerFileDir + "/" + fileName, "."),
+                        e -> new RuntimeException("Unable to build image for " + dockerfile.getAbsolutePath(), e));
+            } else {
+                System.out.println("⚠️️\tSkipping the container build for " + imageName
+                        + " (dry-run), the Dockerfile has been generated in " + dockerfile.getAbsolutePath());
+            }
 
             built.put(arch, imageName);
         }
@@ -54,7 +63,7 @@ public class MultiArchImage {
     public void buildAndPush() {
         System.out.println("⚙️\tBuilding multi-arch images: " + name);
 
-        Map<String, String> built = _buildLocalImages();
+        Map<String, String> built = _buildLocalImages(false); // no dry run when pushing images
 
         System.out.println("⚙️\tPush the images: " + built.values());
 

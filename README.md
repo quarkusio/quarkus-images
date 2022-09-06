@@ -46,11 +46,21 @@ For this reason, we recommend using a stable version.
 > mvn install
 ```
 
+`Dockerfiles` are created in `target/docker`.
+
+To skip the image creation (and just create the `Dockerfiles`), append `-Djdock.dry-run=true` to the command line:
+`mvn install -Djdock.dry-run=true`.
+The location of each `Dockerfile` is printed in the log.
+
+**LIMITATION:** When using the dry-run option with a multi-arch image, only the individual `Dockerfiles` are dumped on the file system (so, you cannot check the multi-arch _manifest_).
+
 Push images using:
 
 ```shell
 > mvn install -Ppush
 ```
+
+**IMPORTANT:** You cannot combine `-Ppush` with the `-Djdock.dry-run=true` option.
 
 ## Images
 

@@ -8,7 +8,7 @@ public interface Buildable {
 
     void build(File output);
 
-    void buildLocalImage(String imageName);
+    void buildLocalImage(String imageName, boolean dryRun);
 
     void buildAndPush(String imageName);
 }

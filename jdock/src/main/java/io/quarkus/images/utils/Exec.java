@@ -28,11 +28,11 @@ public class Exec {
         }
     }
 
-    public static void buildLocal(Buildable df, String name, String arch) {
-        build(df, name, arch, true);
+    public static void buildLocal(Buildable df, String name, String arch, boolean dryRun) {
+        build(df, name, arch, true, dryRun);
     }
 
-    private static void build(Buildable df, String name, String arch, boolean local) {
+    private static void build(Buildable df, String name, String arch, boolean local, boolean dryRun) {
         String imageName = name;
         if (arch != null) {
             imageName = name + "-" + arch;
@@ -55,27 +55,36 @@ public class Exec {
         }
         System.out.println("⚙️\tDockerfile created in: " + dockerfile.getAbsolutePath());
 
-        System.out.println("⚙️\tLaunching the build process: ");
-        List<String> list = new ArrayList<>(
-                Arrays.asList("docker", "buildx", "build", "--load", "-f", JDock.dockerFileDir + "/" + fileName));
-        if (arch != null) {
-            list.add("--platform=linux/" + arch);
+        if (!dryRun) {
+            System.out.println("⚙️\tLaunching the build process: ");
+            List<String> list = new ArrayList<>(
+                    Arrays.asList("docker", "buildx", "build", "--load", "-f", JDock.dockerFileDir + "/" + fileName));
+            if (arch != null) {
+                list.add("--platform=linux/" + arch);
+            }
+            list.add("--tag");
+            list.add(imageName);
+            list.add(".");
+            Exec.execute(list,
+                    e -> new RuntimeException("Unable to build image for " + dockerfile.getAbsolutePath(), e));
+            System.out.println("⚙️\tImage " + imageName + " created");
+        } else {
+            System.out.println("⚠️️\tSkipping the container build for " + imageName
+                    + " (dry-run), the Dockerfile has been generated in " + dockerfile.getAbsolutePath());
         }
-        list.add("--tag");
-        list.add(imageName);
-        list.add(".");
-        Exec.execute(list,
-                e -> new RuntimeException("Unable to build image for " + dockerfile.getAbsolutePath(), e));
-        System.out.println("⚙️\tImage " + imageName + " created");
-        if (!local) {
+
+        if (!local && !dryRun) {
             String t = imageName;
             Exec.execute(List.of("docker", "push", imageName),
                     e -> new RuntimeException("Unable to push image " + t, e));
             System.out.println("⚙️\tImage " + imageName + " pushed");
+        } else if (!local) {
+            System.out.println("⚙️\tSkipping docker push (dry-run)");
         }
+
     }
 
     public static void buildAndPush(Buildable df, String name, String arch) {
-        build(df, name, arch, false);
+        build(df, name, arch, false, false); // no dry run when pushing images.
     }
 }
