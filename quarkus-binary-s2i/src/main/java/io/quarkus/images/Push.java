@@ -25,6 +25,9 @@ public class Push implements Callable<Integer> {
     @CommandLine.Option(names = { "--basedir" }, description = "The base directory")
     private File basedir;
 
+    @CommandLine.Option(names = "--dry-run", description = "Just generate the docker file and skip the container build")
+    private boolean dryRun;
+
     @Override
     public Integer call() throws Exception {
         JDock.setDockerFileDir(dockerFileDir);

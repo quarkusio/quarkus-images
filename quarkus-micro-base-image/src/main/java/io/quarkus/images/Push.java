@@ -25,6 +25,9 @@ public class Push implements Callable<Integer> {
             "--dockerfile-dir" }, description = "The location where the docker file should be created", defaultValue = "target/docker")
     private File dockerFileDir;
 
+    @CommandLine.Option(names = "--dry-run", description = "Just generate the docker file and skip the container build")
+    private boolean dryRun;
+
     @Override
     public Integer call() throws Exception {
         JDock.setDockerFileDir(dockerFileDir);

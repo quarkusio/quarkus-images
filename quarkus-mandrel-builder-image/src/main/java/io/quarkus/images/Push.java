@@ -33,6 +33,9 @@ public class Push implements Callable<Integer> {
     @CommandLine.Option(names = { "--ubi-minimal" }, description = "The UBI Minimal base image")
     private String base;
 
+    @CommandLine.Option(names = "--dry-run", description = "Just generate the docker file and skip the container build")
+    private boolean dryRun;
+
     @Override
     public Integer call() throws Exception {
         JDock.setDockerFileDir(dockerFileDir);
