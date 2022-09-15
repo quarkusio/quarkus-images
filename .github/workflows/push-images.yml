@@ -11,6 +11,7 @@ jobs:
     name: Build and Push images
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         include:
           - name: "base images"
