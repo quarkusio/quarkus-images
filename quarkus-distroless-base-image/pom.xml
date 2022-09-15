@@ -32,7 +32,7 @@
                 <configuration>
                     <args>
                         <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
-                        <argument>--out=quay.io/cescoffi/quarkus-distroless-image:2.0</argument>
+                        <argument>--out=quay.io/quarkus/quarkus-distroless-image:2.0</argument>
                         <argument>--dry-run=${jdock.dry-run}</argument>
                     </args>
                 </configuration>
