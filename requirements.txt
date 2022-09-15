@@ -1,6 +1,0 @@
-cekit==4.1.0
-odcs
-docker
-docker_squash
-behave
-lxml

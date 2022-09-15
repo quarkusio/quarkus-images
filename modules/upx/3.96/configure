@@ -1,8 +1,0 @@
-#!/bin/sh
-set -e
-
-SOURCES_DIR=/tmp/artifacts
-
-tar xf ${SOURCES_DIR}/upx-${UPX_VERSION}-amd64_linux.tar.xz
-cd upx-${UPX_VERSION}-amd64_linux
-mv upx /usr/bin/upx

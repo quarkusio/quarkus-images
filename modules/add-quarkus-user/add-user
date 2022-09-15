@@ -1,3 +1,0 @@
-#!/bin/sh
-
-groupadd -r quarkus -g 1001 && useradd -u 1001 -r -g 1001 -m -d ${APP_HOME} -s /sbin/nologin -c "Quarkus user" quarkus

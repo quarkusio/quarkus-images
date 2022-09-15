@@ -1,4 +1,0 @@
-# Unused by build, but require for tests.
-schema_version: 1
-version: "SNAPSHOT"
-name: "IMAGE-NAME"
