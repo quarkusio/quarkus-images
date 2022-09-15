@@ -44,6 +44,9 @@ public class Config {
         }
 
         public String fullname(Config config, Variant variant) {
+            if (! isMultiArch()) {
+                return config.image + ":" + graalvmVersion + "-java" + javaVersion;
+            }
             if (variant.arch() != null) {
                 return config.image + ":" + graalvmVersion + "-java" + javaVersion + "-" + variant.arch();
             }

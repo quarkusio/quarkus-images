@@ -47,17 +47,10 @@ public class Config {
             return variants.size() > 1;
         }
 
-        public String filename(Variant variant) {
-            if (variant.arch() != null) {
-                return "graalvm-java-%d-linux-%s-%s.tar.gz".formatted(
-                        javaVersion, variant.arch(), graalvmVersion);
-            } else {
-                return "graalvm-java-%d-linux-amd64-%s.tar.gz".formatted(
-                        javaVersion, graalvmVersion);
-            }
-        }
-
         public String fullname(Config config, Variant variant) {
+            if (! isMultiArch()) {
+                return config.image + ":" + graalvmVersion + "-java" + javaVersion;
+            }
             if (variant.arch() != null) {
                 return config.image + ":" + graalvmVersion + "-java" + javaVersion + "-" + variant.arch();
             }
