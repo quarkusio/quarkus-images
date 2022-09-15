@@ -14,6 +14,8 @@ sudo apt-get clean
 docker rmi $(docker image ls -aq)
 df -h
 
+docker image prune -a -f
+
 # Install s2i (needed for tests)
 echo "Installing s2i"
 mkdir s2i && cd s2i 
