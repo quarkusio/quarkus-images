@@ -2,7 +2,7 @@
 
 This repository contains the container images used by Quarkus.
 
-NOTE: Require CEKit 3.10.x
+NOTE: Requires CEKit 4.1.x
 
 ## Quarkus images
 
