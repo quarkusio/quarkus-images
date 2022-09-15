@@ -24,7 +24,7 @@ s2i version
 echo "Generating ${PREFIX_NAME}:${VERSION}"
 cekit --descriptor ${IMAGE} build \
     --overrides "${OVERRIDES}" \
-    ${BUILD_ENGINE} --tag="${PREFIX_NAME}:${VERSION}"
+    ${BUILD_ENGINE} --no-squash --tag="${PREFIX_NAME}:${VERSION}"
 
 echo "Verifying ${PREFIX_NAME}:${VERSION}"
 export CTF_WAIT_TIME=120
