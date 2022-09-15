@@ -9,7 +9,7 @@ NAME=${PREFIX_NAME}:1.0
 virtualenv --python=python3 .cekit
 source .cekit/bin/activate
 
-cekit --descriptor ${IMAGE} build ${BUILD_ENGINE} --tag="${NAME}"
+cekit --descriptor ${IMAGE} build ${BUILD_ENGINE} --no-squash --tag="${NAME}"
 
 docker image prune -f
 docker images | grep quay.io/quarkus/ubi-quarkus-native-binary-s2i
