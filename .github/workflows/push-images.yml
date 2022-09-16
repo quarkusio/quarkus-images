@@ -24,6 +24,13 @@ jobs:
             modules: "quarkus-graalvm-builder-image"
 
     steps:
+      - run: |
+          # Re-claim some disk space
+          sudo swapoff -a
+          sudo rm -f /swapfile
+          sudo apt-get clean
+          docker rmi $(docker image ls -aq)
+          df -h
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v3
         with:
@@ -52,4 +59,7 @@ jobs:
       - name: Build images
         run: mvn install --projects ${{ matrix.modules }} --also-make -DskipTests -Ppush
       - name: Print ${{ matrix.name}}
-        run: docker images
+        if: always()
+        run: |
+          df -h
+          docker images

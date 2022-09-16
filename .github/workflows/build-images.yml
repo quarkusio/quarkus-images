@@ -58,4 +58,5 @@ jobs:
     - name: Build ${{ matrix.name }}
       run: mvn install --projects ${{ matrix.modules }} --also-make -DskipTests
     - name: Print ${{ matrix.name}}
+      if: always()
       run: docker images
