@@ -1,21 +1,4 @@
 images:
-  - graalvm-version: 22.0.0.2
-    java-version: 11
-    tag: 22.0-java11
-    variants:
-      - sha: bc86083bb7e2778c7e4fe4f55d74790e42255b96f7806a7fefa51d06f3bc7103
-        arch: amd64
-      - sha: 1cc0263d95f642dada4e290dca7f49c0456cefa7b690b67e3e5c159b537b2c58
-        arch: arm64
-  - graalvm-version: 22.0.0.2
-    java-version: 17
-    tag: 22.0-java17
-    variants:
-      - sha: 4f743e0ed3d974b7d619ca2ed6014554e8c12e5ebbb38b9bc9e820b182169bd4
-        arch: amd64
-      - sha: c7d78387d2a144944f26773697c1b61d3478a081a1c5e7fc20f47f1f5f3c82c7
-        arch: arm64
-
   - graalvm-version: 22.1.0
     java-version: 11
     tag: 22.1-java11

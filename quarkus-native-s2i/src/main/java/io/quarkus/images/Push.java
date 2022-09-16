@@ -11,9 +11,11 @@ package io.quarkus.images;
 
 import io.quarkus.images.config.Config;
 import io.quarkus.images.config.Tag;
+import io.quarkus.images.utils.Exec;
 import picocli.CommandLine;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -67,6 +69,7 @@ public class Push implements Callable<Integer> {
                 MultiArchImage multi = new MultiArchImage(groupImageName, architectures);
                 multi.buildAndPush();
             }
+            Exec.execute(List.of("docker images"), RuntimeException::new);
             Tag.createTagIfAny(config, image, true);
         }
         return 0;
