@@ -122,7 +122,7 @@ public class Dockerfile implements Buildable {
 
     @Override
     public void buildAndPush(String imageName) {
-        Exec.buildAndPush(this, imageName, null);
+        Exec.buildAndPush(this, imageName, "amd64");
     }
 
     public Dockerfile expose(int port) {

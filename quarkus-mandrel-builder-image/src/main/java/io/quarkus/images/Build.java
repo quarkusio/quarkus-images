@@ -42,8 +42,14 @@ public class Build implements Callable<Integer> {
 
         Config config = Config.read(output, in);
         for (Config.ImageConfig image : config.images) {
-            System.out
-                    .println("\uD83D\uDD25\tBuilding images " + image.fullname(config) + " : " + image.getNestedImages(config));
+            if (image.isMultiArch()) {
+                System.out
+                        .println("\uD83D\uDD25\tBuilding multi-arch image " + image.fullname(config) + " referencing "
+                                + image.getNestedImages(config));
+            } else {
+                System.out
+                        .println("\uD83D\uDD25\tBuilding single-arch image " + image.fullname(config));
+            }
             String groupImageName = image.fullname(config);
             Map<String, Buildable> architectures = QuarkusMandrelBuilder.collect(image, base);
             if (architectures.size() == 1) {
