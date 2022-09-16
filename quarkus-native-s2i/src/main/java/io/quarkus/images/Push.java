@@ -69,7 +69,7 @@ public class Push implements Callable<Integer> {
                 MultiArchImage multi = new MultiArchImage(groupImageName, architectures);
                 multi.buildAndPush();
             }
-            Exec.execute(List.of("docker images"), RuntimeException::new);
+            Exec.execute(List.of("docker", "images"), RuntimeException::new);
             Tag.createTagIfAny(config, image, true);
         }
         return 0;
