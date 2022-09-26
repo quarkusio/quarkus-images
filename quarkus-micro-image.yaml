@@ -1,6 +1,6 @@
 - name: ubi
   version: latest
-  from: registry.access.redhat.com/ubi8/ubi-minimal:8.5
+  from: registry.access.redhat.com/ubi8/ubi-minimal:8.6
 
 # need to rename from image into "scratch" to disable /tmp cleanup
 - name: scratch

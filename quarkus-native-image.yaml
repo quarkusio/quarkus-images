@@ -1,6 +1,6 @@
 schema_version: 1
 version: "SNAPSHOT"
-from: "registry.access.redhat.com/ubi8/ubi-minimal:8.5"
+from: "registry.access.redhat.com/ubi8/ubi-minimal:8.6"
 
 
 name: "quay.io/quarkus/ubi-quarkus-native-image"
