@@ -1,10 +1,10 @@
 schema_version: 1
 name: maven-binary
-version: "3.6.3"
+version: "3.8.6"
 
 envs:
   - name: "MAVEN_VERSION"
-    value: "3.6.3"
+    value: "3.8.6"
   - name: " MAVEN_HOME"
     value: "/usr/share/maven"
   - name: "MAVEN_OPTS"
@@ -12,9 +12,9 @@ envs:
 
 # unfortunately by now the version needs to be hardcoded.
 artifacts:
-  - name: apache-maven-3.6.3-bin.tar.gz
-    url: https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-    md5: 9792c717f5845d952907d5144b8253c3
+  - name: apache-maven-3.8.6-bin.tar.gz
+    url: https://archive.apache.org/dist/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
+    sha256: c7047a48deb626abf26f71ab3643d296db9b1e67f1faa7d988637deac876b5a9
 
 execute:
   - script: configure

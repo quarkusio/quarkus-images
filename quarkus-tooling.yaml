@@ -28,9 +28,9 @@ modules:
   - name: add-quarkus-user
   - name: centos8-powertools
   - name: maven-binary
-    version: "3.8.4"
+    version: "3.8.6"
   - name: gradle-binary
-    version: "7.3"
+    version: "7.5.1"
   - name: maven-config
   - name: graalvm
     version: "_version_"
