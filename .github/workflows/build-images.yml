@@ -4,9 +4,11 @@ on:
   pull_request:
       branches:
         - main
+        - quarkus-2.13
   push:
       branches:
         - main
+        - quarkus-2.13
       paths-ignore:
         - '.build/**'
 
