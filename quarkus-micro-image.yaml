@@ -5,7 +5,7 @@
 # need to rename from image into "scratch" to disable /tmp cleanup
 - name: scratch
   version: latest
-  from: registry.access.redhat.com/ubi8/ubi-micro
+  from: registry.access.redhat.com/ubi8/ubi-micro:8.6
 
 - name: quay.io/quarkus/quarkus-micro-image
   version: latest
