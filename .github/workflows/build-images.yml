@@ -49,11 +49,11 @@ jobs:
     - name: Build Distroless images
       run: .github/build-distroless-images.sh
 
-  micro:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1    
-    - name: Prerequisites
-      run: .github/ci-prerequisites.sh
-    - name: Build Micro images
-      run: .github/build-micro-images.sh
+  # micro:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v1    
+  #   - name: Prerequisites
+  #     run: .github/ci-prerequisites.sh
+  #   - name: Build Micro images
+  #     run: .github/build-micro-images.sh
