@@ -14,6 +14,7 @@
 
     <properties>
         <jbang.script>${project.build.sourceDirectory}/io/quarkus/images/Build.java</jbang.script>
+        <images.file>${project.basedir}/graalvm.yaml</images.file>
     </properties>
 
     <build>
@@ -34,7 +35,7 @@
                         <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
                         <argument>--ubi-minimal=${ubi-min.base}</argument>
                         <argument>--out=quay.io/quarkus/ubi-quarkus-graalvmce-builder-image</argument>
-                        <argument>--in=${project.basedir}/graalvm.yaml</argument>
+                        <argument>--in=${images.file}</argument>
                         <argument>--dry-run=${jdock.dry-run}</argument>
                     </args>
                 </configuration>
@@ -62,6 +63,13 @@
             <id>push</id>
             <properties>
                 <jbang.script>${project.build.sourceDirectory}/io/quarkus/images/Push.java</jbang.script>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>older-graalvm</id>
+            <properties>
+                <images.file>${project.basedir}/graalvm-21-22.yaml</images.file>
             </properties>
         </profile>
     </profiles>

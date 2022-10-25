@@ -16,13 +16,16 @@ jobs:
         include:
           - name: "base images"
             modules: "quarkus-distroless-base-image,quarkus-micro-base-image"
+            args: ""
           - name: "s2i images"
             modules: "quarkus-binary-s2i,quarkus-native-s2i"
+            args: ""
           - name: "mandrel builder images"
             modules: "quarkus-mandrel-builder-image"
+            args: ""
           - name: "graalvm ce builder images"
             modules: "quarkus-graalvm-builder-image"
-
+            args: "-Polder-graalvm"
     steps:
       - run: |
           # Re-claim some disk space
@@ -57,7 +60,7 @@ jobs:
           username: ${{ secrets.QUAY_USER }}
           password: ${{ secrets.QUAY_TOKEN }}
       - name: Build images
-        run: mvn install --projects ${{ matrix.modules }} --also-make -DskipTests -Ppush
+        run: mvn install --projects ${{ matrix.modules }} --also-make -DskipTests -Ppush ${{ matrix.args }}
       - name: Print ${{ matrix.name}}
         if: always()
         run: |
