@@ -25,6 +25,9 @@ jobs:
             args: ""
           - name: "graalvm ce builder images"
             modules: "quarkus-graalvm-builder-image"
+            args: ""
+          - name: "graalvm ce builder images 21 and 22.0"
+            modules: "quarkus-graalvm-builder-image"
             args: "-Polder-graalvm"
     steps:
       - run: |
