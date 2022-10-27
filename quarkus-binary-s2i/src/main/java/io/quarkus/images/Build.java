@@ -29,11 +29,12 @@ public class Build implements Callable<Integer> {
     private boolean dryRun;
 
     @Override
-    public Integer call() throws Exception {
+    public Integer call() {
         JDock.setDockerFileDir(dockerFileDir);
         JDock.basedir = basedir;
-        QuarkusBinaryS2I.define(minimal)
-                .buildLocalImage(output, dryRun);
+
+        QuarkusBinaryS2I.define(minimal, output)
+                .buildLocalImages(dryRun);
 
         return 0;
     }

@@ -3,10 +3,13 @@ package io.quarkus.images;
 import io.quarkus.images.modules.QuarkusUserModule;
 import io.quarkus.images.modules.UsLangModule;
 
+import java.util.Map;
+
 public class QuarkusBinaryS2I {
 
-    static Dockerfile define(String minimal) {
+    private static Dockerfile define(String minimal) {
         return Dockerfile.from(minimal)
+                .user("root") // Switch to 1001 later
                 .install("tar", "gzip", "gcc", "glibc-devel", "zlib-devel", "shadow-utils", "unzip", "gcc-c++",
                         "glibc-langpack-en")
                 .module(new UsLangModule())
@@ -24,5 +27,12 @@ public class QuarkusBinaryS2I {
                 .workdir("${APP_HOME}")
                 .expose(8080)
                 .cmd("/usr/libexec/s2i/usage");
+    }
+
+    static MultiArchImage define(String minimal, String output) {
+        Dockerfile img = define(minimal);
+        return new MultiArchImage(output, Map.of(
+                "arm64", img,
+                "amd64", img));
     }
 }
