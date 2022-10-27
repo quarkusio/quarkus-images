@@ -32,8 +32,8 @@ public class Push implements Callable<Integer> {
     public Integer call() throws Exception {
         JDock.setDockerFileDir(dockerFileDir);
         JDock.basedir = basedir;
-        QuarkusBinaryS2I.define(minimal)
-                .buildAndPush(output);
+        QuarkusBinaryS2I.define(minimal, output)
+                .buildAndPush();
         return 0;
     }
 
