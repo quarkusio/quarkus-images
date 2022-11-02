@@ -64,6 +64,13 @@
                 <jbang.script>${project.build.sourceDirectory}/io/quarkus/images/Push.java</jbang.script>
             </properties>
         </profile>
+
+        <profile>
+            <id>older-mandrel</id>
+            <properties>
+                <images.file>${project.basedir}/mandrel-21-22.yaml</images.file>
+            </properties>
+        </profile>
     </profiles>
 
 </project>
