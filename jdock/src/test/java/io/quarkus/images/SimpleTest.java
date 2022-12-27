@@ -17,8 +17,8 @@ class SimpleTest {
     @Test
     public void testMandrelAmd64() {
         String arch = "amd64";
-        String mandrel_version = "22.1.0.0-Final";
-        String sha = "b40bf617fd957fcb7fe61acc2621d0a84931822498b83b968f704b47e1e2edaf";
+        String mandrel_version = "22.3.0.1-Final";
+        String sha = "72ba94f4ca8e48eaa905433a6d0cfff5e7a657fb4f5419e86d7b8f5332ed0345";
         String java_version = "17";
 
         String filename = "mandrel-java%s-%s-%s.Dockerfile".formatted(
@@ -29,10 +29,10 @@ class SimpleTest {
     }
 
     @Test
-    public void testMandrelArm4() {
+    public void testMandrelArm64() {
         String arch = "arm64";
-        String mandrel_version = "22.1.0.0-Final";
-        String sha = "d6c7304b3ad6a3ca17664be092a5420905b2190407b45b40ef4312f723b38208";
+        String mandrel_version = "22.3.0.1-Final";
+        String sha = "729ad2496191d4e0bc0dea3d19ac3ede0f4561e0ba4c3468d5824ca5a160d81b";
         String java_version = "17";
 
         String filename = "mandrel-java%s-%s-%s.Dockerfile".formatted(
@@ -58,14 +58,14 @@ class SimpleTest {
 
     @Test
     public void testRunWithExecForm() {
-        Dockerfile df = Dockerfile.from("registry.access.redhat.com/ubi8/ubi-minimal:8.5");
+        Dockerfile df = Dockerfile.from("registry.access.redhat.com/ubi8/ubi-minimal:8.7");
         df.exec("/bin/bash", "-c", "echo hello");
         assertThat(df.build()).contains("RUN [ \"/bin/bash\", \"-c\", \"echo hello\" ]\n");
     }
 
     @Test
     public void testRunWithShellForm() {
-        Dockerfile df = Dockerfile.from("registry.access.redhat.com/ubi8/ubi-minimal:8.5");
+        Dockerfile df = Dockerfile.from("registry.access.redhat.com/ubi8/ubi-minimal:8.7");
         df.run("source $HOME/.bashrc", "echo $HOME");
         assertThat(df.build()).contains("RUN source $HOME/.bashrc \\\n && echo $HOME\n");
     }
