@@ -6,16 +6,6 @@
 
 set -ex
 
-#############################################
-# Configure maven - for a complete list of
-# supported values, please refer the module.yaml
-# file.
-CONFIGURE_SCRIPTS=(
-  ${APP_HOME}/.m2/configure-maven.sh
-)
-source ${APP_HOME}/.m2/configure.sh
-#############################################
-
 SRC_DIR=${SRC_DIR:-'/tmp/src/'}
 
 cd $SRC_DIR
