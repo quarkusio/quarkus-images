@@ -48,7 +48,7 @@ jobs:
           # Set up UBI params
           if [ "${{ matrix.ubi }}" != "default" ]; then
           IFS='.' read -r ubi_major ubi_minor <<< "${{ matrix.ubi }}"
-          echo "ubi-args='-Dubi.tag=ubi${ubi_major} -Dubi.rel.major=${ubi_major} -Dubi.rel.minor=${ubi_minor}'" >> "$GITHUB_OUTPUT"
+          echo "ubi-args=-Dubi.tag=ubi${ubi_major} -Dubi.rel.major=${ubi_major} -Dubi.rel.minor=${ubi_minor}" >> "$GITHUB_OUTPUT"
           else
           echo "ubi-args=" >> "$GITHUB_OUTPUT"
           fi
