@@ -33,10 +33,17 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <!-- See https://catalog.redhat.com/software/containers/ubi8/ubi-minimal/5c359a62bed8bd75a2c3fba8 -->
-        <ubi-min.base>registry.access.redhat.com/ubi8/ubi-minimal:8.7</ubi-min.base>
-        <!-- See https://catalog.redhat.com/software/containers/ubi8/ubi-micro/5ff3f50a831939b08d1b832a -->
-        <ubi-micro.base>registry.access.redhat.com/ubi8-micro:8.7</ubi-micro.base>
+        <!-- Will be used as a prefix to the output image name -->
+        <ubi.tag>ubi</ubi.tag>
+        <ubi.release>${ubi.rel.major}.${ubi.rel.minor}</ubi.release>
+
+        <!-- ubi-minimal: https://catalog.redhat.com/software/containers/ubi8/ubi-minimal/5c359a62bed8bd75a2c3fba8 -->
+        <!-- ubi-micro:   https://catalog.redhat.com/software/containers/ubi8/ubi-micro/5ff3f50a831939b08d1b832a -->
+        <ubi.rel.major>8</ubi.rel.major>
+        <ubi.rel.minor>7</ubi.rel.minor>
+
+        <ubi-min.base>registry.access.redhat.com/ubi${ubi.rel.major}/ubi-minimal:${ubi.release}</ubi-min.base>
+        <ubi-micro.base>registry.access.redhat.com/ubi${ubi.rel.major}-micro:${ubi.release}</ubi-micro.base>
 
         <jdock.dry-run>false</jdock.dry-run>
     </properties>

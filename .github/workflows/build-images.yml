@@ -18,6 +18,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        ubi:
+          - "default"
+          - "9.1"
         include:
           - name: "base images"
             modules: "quarkus-distroless-base-image,quarkus-micro-base-image"
@@ -39,23 +42,32 @@ jobs:
             args: "-Polder-graalvm"            
 
     steps:
-    - run: |
+    - id: prepare
+      run: |
         # Re-claim some disk space
         sudo swapoff -a
         sudo rm -f /swapfile
         sudo apt-get clean
-        docker rmi $(docker image ls -aq)
+        docker image ls -aq | xargs -r docker rmi
         df -h
-    - uses: actions/checkout@v1
+        
+        # Set up UBI params
+        if [ "${{ matrix.ubi }}" != "default" ]; then
+          IFS='.' read -r ubi_major ubi_minor <<< "${{ matrix.ubi }}"
+          echo "ubi-args='-Dubi.tag=ubi${ubi_major} -Dubi.rel.major=${ubi_major} -Dubi.rel.minor=${ubi_minor}'" >> "$GITHUB_OUTPUT"
+        else
+          echo "ubi-args=" >> "$GITHUB_OUTPUT"
+        fi
+    - uses: actions/checkout@v3
     - uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: '17'
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v1
+      uses: docker/setup-qemu-action@v2
     - name: Set up Docker Buildx
       id: buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v2
       with:
         install: true
     - name: Inspect builder
@@ -65,8 +77,14 @@ jobs:
         echo "Status:    ${{ steps.buildx.outputs.status }}"
         echo "Flags:     ${{ steps.buildx.outputs.flags }}"
         echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
-    - name: Build ${{ matrix.name }}
-      run: mvn install --projects ${{ matrix.modules }} --also-make -DskipTests ${{ matrix.args }}
+    - name: Build ${{ matrix.name }} on ${{ matrix.ubi }}
+      run:
+        mvn install
+          --projects ${{ matrix.modules }}
+          --also-make
+          -DskipTests
+          ${{ matrix.args }}
+          ${{ steps.prepare.outputs.ubi-args }}
     - name: Print ${{ matrix.name}}
       if: always()
       run: docker images

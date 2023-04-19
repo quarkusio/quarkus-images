@@ -33,7 +33,7 @@
                     <args>
                         <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
                         <argument>--ubi-minimal=${ubi-min.base}</argument>
-                        <argument>--out=quay.io/quarkus/ubi-quarkus-graalvmce-s2i</argument>
+                        <argument>--out=quay.io/quarkus/${ubi.tag}-quarkus-graalvmce-s2i</argument>
                         <argument>--in=${project.basedir}/graalvm.yaml</argument>
                         <argument>--basedir=${project.basedir}</argument>
                         <argument>--dry-run=${jdock.dry-run}</argument>
