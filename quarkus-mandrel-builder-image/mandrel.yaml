@@ -1,38 +1,4 @@
 images:
-  - graalvm-version: 22.2.0.0-Final
-    java-version: 11
-    tag: 22.2-java11
-    variants:
-      - sha: e2304a9ec19c959b6050753342192ee27333b3b10beabc822d6861a2ed58bc1f
-        arch: amd64
-      - sha: 882ab974d95ce78d16eb7c2d8485ad02ce8e9f1ae18d3a3f2339fef2770ae9a0
-        arch: arm64
-
-  - graalvm-version: 22.2.0.0-Final
-    java-version: 17
-    tag: 22.2-java17
-    variants:
-      - sha: b338fb26ec1ad956c8b7f890d9e978e0f580afec492a7ff8eeea78e85720c4de
-        arch: amd64
-      - sha: 26db51213bdea70cde576ac4011b2f504ad08056053f90e1d08a98216e594718
-        arch: arm64
-
-  - graalvm-version: 22.3.0.1-Final
-    java-version: 17
-    variants:
-      - sha: 72ba94f4ca8e48eaa905433a6d0cfff5e7a657fb4f5419e86d7b8f5332ed0345
-        arch: amd64
-      - sha: 729ad2496191d4e0bc0dea3d19ac3ede0f4561e0ba4c3468d5824ca5a160d81b
-        arch: arm64
-
-  - graalvm-version: 22.3.1.0-Final
-    java-version: 17
-    tag: 22.3-java17
-    variants:
-      - sha: 3c31169724c1fa23dc5cf5688d9d7f90d0d7bef9e90c9aea2419db9eb946b62c
-        arch: amd64
-      - sha: e1146e100bf97c4adb67814fc7f6b52928eee02b61d5e54a789e1a590ac50fb0
-        arch: arm64
 
   - graalvm-version: 22.3.2.0-Final
     java-version: 17
