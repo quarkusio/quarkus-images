@@ -34,7 +34,7 @@
                     <args>
                         <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
                         <argument>--ubi-minimal=${ubi-min.base}</argument>
-                        <argument>--out=quay.io/quarkus/ubi-quarkus-graalvmce-builder-image</argument>
+                        <argument>--out=quay.io/quarkus/${ubi.tag}-quarkus-graalvmce-builder-image</argument>
                         <argument>--in=${images.file}</argument>
                         <argument>--dry-run=${jdock.dry-run}</argument>
                     </args>

@@ -18,6 +18,9 @@ public class Push implements Callable<Integer> {
     @CommandLine.Option(names = { "--ubi-micro" }, description = "The UBI Micro base image")
     private String micro;
 
+    @CommandLine.Option(names = { "--ubi-tag" }, description = "The tag to add to the output image tag")
+    private String ubiTag;
+
     @CommandLine.Option(names = { "--out" }, description = "The output image")
     private String output;
 
@@ -31,7 +34,7 @@ public class Push implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         JDock.setDockerFileDir(dockerFileDir);
-        QuarkusMicro.define(minimal, micro, output)
+        QuarkusMicro.define(minimal, micro, output, ubiTag)
                 .buildAndPush();
         return 0;
     }
