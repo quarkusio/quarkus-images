@@ -9,6 +9,7 @@ public class MultiArchImage {
 
     private final Map<String, Buildable> images;
     private final String name;
+    private Map<String, String> locals = Collections.emptyMap();
 
     public MultiArchImage(String name, Map<String, Buildable> images) {
         this.name = name;
@@ -63,17 +64,18 @@ public class MultiArchImage {
     public void buildAndPush() {
         System.out.println("⚙️\tBuilding multi-arch images: " + name);
 
-        Map<String, String> built = _buildLocalImages(false); // no dry run when pushing images
+        // no dry run when pushing images
+        locals = _buildLocalImages(false);
 
-        System.out.println("⚙️\tPush the images: " + built.values());
+        System.out.println("⚙️\tPush the images: " + locals.values());
 
-        for (Map.Entry<String, String> entry : built.entrySet()) {
+        for (Map.Entry<String, String> entry : locals.entrySet()) {
             System.out.println("⚙️\tPushing " + entry.getValue() + " (" + entry.getKey() + ")");
             Exec.execute(List.of("docker", "push", entry.getValue()),
                     e -> new RuntimeException("Unable to push " + entry.getValue(), e));
         }
 
-        createAndPushManifest(name, built);
+        createAndPushManifest(name, locals);
     }
 
     public static void createAndPushManifest(String name, Map<String, String> archToImage) {
@@ -96,4 +98,7 @@ public class MultiArchImage {
 
     }
 
+    public Map<String, String> getLocalImages() {
+        return locals;
+    }
 }

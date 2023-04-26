@@ -7,6 +7,7 @@ package io.quarkus.images;
 import picocli.CommandLine;
 
 import java.io.File;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "build")
@@ -21,6 +22,9 @@ public class Push implements Callable<Integer> {
     @CommandLine.Option(names = { "--out" }, description = "The output image")
     private String output;
 
+    @CommandLine.Option(names = { "--alias" }, description = "An optional alias for the output image")
+    private Optional<String> alias;
+
     @CommandLine.Option(names = {
             "--dockerfile-dir" }, description = "The location where the docker file should be created", defaultValue = "target/docker")
     private File dockerFileDir;
@@ -29,10 +33,15 @@ public class Push implements Callable<Integer> {
     private boolean dryRun;
 
     @Override
-    public Integer call() throws Exception {
+    public Integer call() {
         JDock.setDockerFileDir(dockerFileDir);
-        QuarkusMicro.define(minimal, micro, output)
-                .buildAndPush();
+        MultiArchImage image = QuarkusMicro.define(minimal, micro, output);
+        image.buildAndPush();
+        alias.ifPresent(s -> {
+            if (!s.isBlank()) {
+                MultiArchImage.createAndPushManifest(s, image.getLocalImages());
+            }
+        });
         return 0;
     }
 
