@@ -16,31 +16,8 @@ images:
       - sha: 3025cc887bdaa088c89601b42931abc61dfd108aaad386abee8c1e08c913504d
         arch: arm64
 
-  - graalvm-version: 22.3.0
-    java-version: 11
-    variants:
-      - sha: d4200bcc43e5ad4e6949c1b1edc1e59f63066e3a2280d5bd82d0c9b1d67c3f2c
-        arch: amd64
-      - sha: c6646149dad486a0b02c5fc10649786240f275efda65aa14a25d01d2f5bafe15
-        arch: arm64
-  - graalvm-version: 22.3.0
-    java-version: 17
-    variants:
-      - sha: 3473d8b3b1bc682e95adfb3ac1d9a59b51b0f43e2b752f2a5b550e4ebfa2fd17
-        arch: amd64
-      - sha: e27249d9eef4504deb005cf14c6a028aad1adfa37209e12e9d7407710c08ed90
-        arch: arm64
-  - graalvm-version: 22.3.0
-    java-version: 19
-    variants:
-      - sha: ae9cb1afe327d49a8c049ab588090838e622d9d832b9a1c0523821a6f38d6b4d
-        arch: amd64
-      - sha: c7292bb4be302a8fc7a3feab583a7afcdab53349afd161da9fe57a18a18e8e57
-        arch: arm64
-
   - graalvm-version: 22.3.1
     java-version: 11
-    tag: 22.3-java11
     variants:
       - sha: 55547725a8be3ceb0a1da29a84cd3e958ba398ce4470ac89a8ba1bdb6d9bddb8
         arch: amd64
@@ -48,7 +25,6 @@ images:
         arch: arm64
   - graalvm-version: 22.3.1
     java-version: 17
-    tag: 22.3-java17
     variants:
       - sha: 3acf4a59ae38cb0cd331a81777f6d24f8fdc6179ac25e5b198b6e08c444c9129
         arch: amd64
@@ -61,4 +37,21 @@ images:
       - sha: 7cd99d805e7a8b7d4c4576802fb107fb862944e47ce5f2e4f37c0f469a70dd2f
         arch: amd64
       - sha: 95b0d0b1bf7e586695d8cf595df7a532b25314745397bb3d044cd00c409f6a0d
+        arch: arm64
+
+  - graalvm-version: 22.3.2
+    java-version: 11
+    tag: 22.3-java11
+    variants:
+      - sha: 0e638d2b7406fabc15a1079fc65431a4f33f6f754da77e4073de8433b40e7c4a
+        arch: amd64
+      - sha: 506c99fef656653ccbc57facb9f200303bfcc21ea29679e7391046d0990493da
+        arch: arm64
+  - graalvm-version: 22.3.2
+    java-version: 17
+    tag: 22.3-java17
+    variants:
+      - sha: e5a5868c9b498643fadebfba2040e4d9a19a13ea58ec77cec8d64ab6ee691d1e
+        arch: amd64
+      - sha: 5d8614c75f5496b37ba52c3ae80a5e887a03981c2d22ade187e8793562b66e84
         arch: arm64
