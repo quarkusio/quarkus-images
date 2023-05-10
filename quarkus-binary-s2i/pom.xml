@@ -14,6 +14,7 @@
 
     <properties>
         <jbang.script>${project.build.sourceDirectory}/io/quarkus/images/Build.java</jbang.script>
+        <jdock.alias></jdock.alias>
     </properties>
 
     <build>
@@ -36,6 +37,7 @@
                         <argument>--out=quay.io/quarkus/ubi-quarkus-native-binary-s2i:2.0</argument>
                         <argument>--basedir=${project.basedir}</argument>
                         <argument>--dry-run=${jdock.dry-run}</argument>
+                        <argument>--alias=${jdock.alias}</argument>
                     </args>
                 </configuration>
             </plugin>
@@ -58,6 +60,8 @@
             <id>push</id>
             <properties>
                 <jbang.script>${project.build.sourceDirectory}/io/quarkus/images/Push.java</jbang.script>
+                <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+                <jdock.alias>quay.io/quarkus/ubi-quarkus-native-binary-s2i:2.0-${maven.build.timestamp}</jdock.alias>
             </properties>
         </profile>
     </profiles>

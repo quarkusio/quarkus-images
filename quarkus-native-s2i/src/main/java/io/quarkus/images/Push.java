@@ -17,6 +17,7 @@ import picocli.CommandLine;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "build")
@@ -42,6 +43,9 @@ public class Push implements Callable<Integer> {
     @CommandLine.Option(names = "--dry-run", description = "Just generate the docker file and skip the container build")
     private boolean dryRun;
 
+    @CommandLine.Option(names = { "--alias" }, description = "An optional alias for the output image")
+    private Optional<String> alias;
+
     @Override
     public Integer call() throws Exception {
         JDock.setDockerFileDir(dockerFileDir);
@@ -61,13 +65,26 @@ public class Push implements Callable<Integer> {
             if (architectures.size() == 1) {
                 // Single-Arch
                 System.out.println("\uD83D\uDD25\tBuilding single-architecture image " + groupImageName);
-                architectures.values().iterator().next().buildAndPush(groupImageName);
+                Buildable img = architectures.values().iterator().next();
+                img.buildAndPush(groupImageName);
+                alias.ifPresent(a -> {
+                    if (!a.isBlank()) {
+                        var name = a.replace("__VERSION__", image.graalvmVersion + "-java" + image.javaVersion);
+                        img.buildAndPush(name);
+                    }
+                });
             } else {
                 // Multi-Arch
                 System.out.println("Building multi-architecture image " + groupImageName + " with the following architectures: "
                         + architectures.keySet());
                 MultiArchImage multi = new MultiArchImage(groupImageName, architectures);
                 multi.buildAndPush();
+                alias.ifPresent(a -> {
+                    if (!a.isBlank()) {
+                        var name = a.replace("__VERSION__", image.graalvmVersion + "-java" + image.javaVersion);
+                        MultiArchImage.createAndPushManifest(name, multi.getLocalImages());
+                    }
+                });
             }
             Exec.execute(List.of("docker", "images"), RuntimeException::new);
             Tag.createTagIfAny(config, image, true);

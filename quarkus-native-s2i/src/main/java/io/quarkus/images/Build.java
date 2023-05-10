@@ -15,6 +15,7 @@ import picocli.CommandLine;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "build")
@@ -38,6 +39,10 @@ public class Build implements Callable<Integer> {
 
     @CommandLine.Option(names = "--dry-run", description = "Just generate the docker file and skip the container build")
     private boolean dryRun;
+
+    @CommandLine.Option(names = { "--alias" }, description = "An optional alias for the output image (ignored)")
+    @Deprecated
+    private Optional<String> alias;
 
     @Override
     public Integer call() throws Exception {
