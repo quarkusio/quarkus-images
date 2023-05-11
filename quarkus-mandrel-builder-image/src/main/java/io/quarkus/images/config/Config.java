@@ -44,7 +44,7 @@ public class Config {
         }
 
         public String fullname(Config config, Variant variant) {
-           if (variant.arch() != null) {
+            if (variant.arch() != null) {
                 return config.image + ":" + graalvmVersion + "-java" + javaVersion + "-" + variant.arch();
             }
             return config.image + ":" + graalvmVersion + "-java" + javaVersion;
