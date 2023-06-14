@@ -51,6 +51,10 @@
             <artifactId>jdock</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.quarkus.images</groupId>
+            <artifactId>jdock-variant-helper</artifactId>
+        </dependency>
+        <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
         </dependency>

@@ -33,7 +33,7 @@ public class QuarkusGraalVMBuilder {
     }
 
     public static Dockerfile getGraalvmDockerFile(Config.ImageConfig image, Variant variant, String base) {
-        return getGraalvmDockerFile(base, image.graalvmVersion(), Integer.toString(image.javaVersion()), variant.arch(),
+        return getGraalvmDockerFile(base, image.graalvmVersion(), image.javaVersion(), variant.arch(),
                 variant.sha());
     }
 

@@ -3,7 +3,9 @@ package io.quarkus.images.config;
 import io.quarkus.images.MultiArchImage;
 import io.quarkus.images.utils.Exec;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Tag {
 
@@ -11,9 +13,9 @@ public class Tag {
         // Avoid direct instantiation.
     }
 
-    public static void createTagIfAny(Config config, Config.ImageConfig img, boolean push) {
-        if (img.tag != null) {
-            String fn = config.image + ":" + img.tag;
+    public static void createTagsIfAny(Config config, Config.ImageConfig img, boolean push) {
+        img.tags().forEach(tag -> {
+            String fn = config.image + ":" + tag;
             String src;
             if (img.isMultiArch()) {
                 if (!push) {
@@ -31,6 +33,20 @@ public class Tag {
                             e -> new RuntimeException("Unable to push tag " + fn));
                 }
             }
-        }
+        });
+    }
+
+    /**
+     * Comma-separated list of tags.
+     *
+     * @param tags the list
+     * @return the parsed list
+     */
+    public static List<String> parse(String tags) {
+        String[] segments = tags.split(",");
+        return Arrays.stream(segments)
+                .map(String::trim)
+                .filter(s -> !s.isBlank())
+                .collect(Collectors.toList());
     }
 }
