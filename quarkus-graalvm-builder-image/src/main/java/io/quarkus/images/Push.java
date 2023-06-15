@@ -70,12 +70,17 @@ public class Push implements Callable<Integer> {
                 multi.buildAndPush();
                 alias.ifPresent(a -> {
                     if (!a.isBlank()) {
-                        var name = a.replace("__VERSION__", image.graalvmVersion + "-java" + image.javaVersion);
+                        String name;
+                        if (image.graalvmVersion != null) {
+                            name = a.replace("__VERSION__", image.graalvmVersion + "-java" + image.javaVersion);
+                        } else {
+                            name = a.replace("__VERSION__", "jdk-" + image.javaVersion);
+                        }
                         MultiArchImage.createAndPushManifest(name, multi.getLocalImages());
                     }
                 });
             }
-            Tag.createTagIfAny(config, image, true);
+            Tag.createTagsIfAny(config, image, true);
         }
         return 0;
     }
