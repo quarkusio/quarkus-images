@@ -25,7 +25,7 @@ public class Config {
     }
 
     public static class ImageConfig {
-        @JsonProperty("graalvm-version") // Optional can be null.
+        @JsonProperty("graalvm-version") // Optional, can be null.
         public String graalvmVersion;
         @JsonProperty("java-version")
         public String javaVersion;

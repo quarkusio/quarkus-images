@@ -12,6 +12,12 @@ public class GraalVMModule extends AbstractModule {
     private final String sha;
     private final String filename;
 
+    /**
+     * Indicates whether the graalvm version is using the old scheme (21.x, 22.x) ({@code true}),
+     * or the new ones (17/20...)
+     */
+    private final boolean isLegacyGraalVm;
+
     private static final String TEMPLATE = """
             tar xzf %s -C /opt \\
               && mv /opt/graalvm-ce-*-%s* /opt/graalvm \\
@@ -30,6 +36,7 @@ public class GraalVMModule extends AbstractModule {
                         : arch != null ? version + "-java" + javaVersion + "-" + arch
                                 : version + "-java" + javaVersion + "-amd64");
 
+        isLegacyGraalVm = version != null;
         if (arch == null) {
             arch = "amd64";
         } else if (arch.equalsIgnoreCase("arm64")) {
@@ -39,7 +46,7 @@ public class GraalVMModule extends AbstractModule {
         }
 
         // local file name:
-        if (version != null) {
+        if (isLegacyGraalVm) {
             this.filename = "graalvm-java-%s-linux-%s-%s.tar.gz"
                     .formatted(javaVersion, arch, version);
         } else {
@@ -47,17 +54,7 @@ public class GraalVMModule extends AbstractModule {
                     .formatted(javaVersion, arch);
         }
 
-        // jdk-20.0.1/graalvm-community-jdk-20.0.1_linux-x64_bin.tar.gz
-        // vm -> jdk
-        // the version is a 3 digit version
-        // graalvm-ce-java -> graalvm-community-jdk
-        // .tar.gz -> _bin.tar.gz
-
-        //graalvm version null...
-        // https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-20.0.1/graalvm-community-jdk-20.0.1_linux-x64_bin.tar.gz
-        // https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-20.0.1/graalvm-community-jdk-20.0.1_linux-aarch64_bin.tar.gz
-
-        if (version != null) {
+        if (isLegacyGraalVm) {
             this.url = "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-%s/graalvm-ce-java%s-linux-%s-%s.tar.gz"
                     .formatted(version, javaVersion, arch, version);
         } else {
@@ -72,7 +69,7 @@ public class GraalVMModule extends AbstractModule {
     public List<Command> commands(BuildContext bc) {
         Artifact artifact = bc.addArtifact(new Artifact(filename, url, sha));
         String script;
-        if (version == null) {
+        if (isLegacyGraalVm) {
             script = TEMPLATE.formatted(
                     "/tmp/" + artifact.name, // tar
                     graalvmVersion,
