@@ -1,11 +1,7 @@
 ///usr/bin/env jbang "$0" "$@" ; exit $?
-//DEPS io.quarkus.images:jdock:1.0-SNAPSHOT
-//DEPS info.picocli:picocli:4.6.3
-//DEPS com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3
+//DEPS io.quarkus.images:jdock-variant-helper:1.0-SNAPSHOT
+//DEPS info.picocli:picocli:4.7.4
 //SOURCES QuarkusGraalVMBuilder.java
-//SOURCES config/Config.java
-//SOURCES config/Tag.java
-//SOURCES config/Variant.java
 package io.quarkus.images;
 
 import io.quarkus.images.config.Config;
@@ -74,12 +70,17 @@ public class Push implements Callable<Integer> {
                 multi.buildAndPush();
                 alias.ifPresent(a -> {
                     if (!a.isBlank()) {
-                        var name = a.replace("__VERSION__", image.graalvmVersion + "-java" + image.javaVersion);
+                        String name;
+                        if (image.graalvmVersion != null) {
+                            name = a.replace("__VERSION__", image.graalvmVersion + "-java" + image.javaVersion);
+                        } else {
+                            name = a.replace("__VERSION__", "jdk-" + image.javaVersion);
+                        }
                         MultiArchImage.createAndPushManifest(name, multi.getLocalImages());
                     }
                 });
             }
-            Tag.createTagIfAny(config, image, true);
+            Tag.createTagsIfAny(config, image, true);
         }
         return 0;
     }

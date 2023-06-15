@@ -1,6 +1,6 @@
 ///usr/bin/env jbang "$0" "$@" ; exit $?
 //DEPS io.quarkus.images:jdock:1.0-SNAPSHOT
-//DEPS info.picocli:picocli:4.6.3
+//DEPS info.picocli:picocli:4.7.4
 //SOURCES QuarkusMicro.java
 package io.quarkus.images;
 

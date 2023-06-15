@@ -16,6 +16,7 @@
         <jbang.script>${project.build.sourceDirectory}/io/quarkus/images/Build.java</jbang.script>
         <images.file>${project.basedir}/graalvm.yaml</images.file>
         <jdock.alias></jdock.alias>
+        <org>quarkus</org>
     </properties>
 
     <build>
@@ -35,7 +36,7 @@
                     <args>
                         <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
                         <argument>--ubi-minimal=${ubi-min.base}</argument>
-                        <argument>--out=quay.io/quarkus/ubi-quarkus-graalvmce-builder-image</argument>
+                        <argument>--out=quay.io/${org}/ubi-quarkus-graalvmce-builder-image</argument>
                         <argument>--in=${images.file}</argument>
                         <argument>--dry-run=${jdock.dry-run}</argument>
                         <argument>--alias=${jdock.alias}</argument>
@@ -49,6 +50,10 @@
         <dependency>
             <groupId>io.quarkus.images</groupId>
             <artifactId>jdock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus.images</groupId>
+            <artifactId>jdock-variant-helper</artifactId>
         </dependency>
         <dependency>
             <groupId>info.picocli</groupId>
@@ -66,14 +71,14 @@
             <properties>
                 <jbang.script>${project.build.sourceDirectory}/io/quarkus/images/Push.java</jbang.script>
                 <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
-                <jdock.alias>quay.io/quarkus/ubi-quarkus-graalvmce-builder-image:__VERSION__-${maven.build.timestamp}</jdock.alias>
+                <jdock.alias>quay.io/${org}/ubi-quarkus-graalvmce-builder-image:__VERSION__-${maven.build.timestamp}</jdock.alias>
             </properties>
         </profile>
 
         <profile>
             <id>older-graalvm</id>
             <properties>
-                <images.file>${project.basedir}/graalvm-21-22.yaml</images.file>
+                <images.file>${project.basedir}/graalvm-22.yaml</images.file>
             </properties>
         </profile>
     </profiles>

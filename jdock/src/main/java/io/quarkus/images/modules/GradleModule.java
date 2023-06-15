@@ -12,8 +12,8 @@ import java.util.List;
 
 public class GradleModule extends AbstractModule {
 
-    private static final String VERSION = "7.5.1";
-    private static final String SHA = "f6b8596b10cce501591e92f229816aa4046424f3b24d771751b06779d58c8ec4";
+    private static final String VERSION = "8.1.1";
+    private static final String SHA = "e111cb9948407e26351227dabce49822fb88c37ee72f1d1582a69c68af2e702f";
 
     private static final String SCRIPT_INSTALL = """
             unzip %s \\
@@ -25,7 +25,7 @@ public class GradleModule extends AbstractModule {
     private final String url;
 
     public GradleModule() {
-        super("gradle", "7.5.1");
+        super("gradle", VERSION);
         this.url = "https://services.gradle.org/distributions/gradle-%s-bin.zip".formatted(VERSION);
     }
 

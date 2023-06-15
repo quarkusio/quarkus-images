@@ -34,7 +34,7 @@ public class QuarkusMandrelBuilder {
     }
 
     public static Dockerfile getMandrelDockerFile(Config.ImageConfig image, Variant variant, String base) {
-        return getMandrelDockerFile(base, image.graalvmVersion(), Integer.toString(image.javaVersion()), variant.arch(),
+        return getMandrelDockerFile(base, image.graalvmVersion(), image.javaVersion(), variant.arch(),
                 variant.sha());
     }
 
