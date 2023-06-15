@@ -12,14 +12,6 @@ import java.util.Map;
 
 public class QuarkusNativeS2IBuilder {
 
-    static Config readConfig(File in, String image) throws IOException {
-        // Read the graalvm.yaml file
-        YAMLMapper mapper = new YAMLMapper();
-        Config config = mapper.readerFor(Config.class).readValue(in);
-        config.image = image;
-        return config;
-    }
-
     public static Dockerfile getS2iImage(Config.ImageConfig config, Variant image, String base) {
         return Dockerfile.from(base)
                 .user("root")
@@ -27,7 +19,7 @@ public class QuarkusNativeS2IBuilder {
                 .install("glibc-langpack-en")
                 .module(new UsLangModule())
                 .module(new QuarkusUserModule())
-                .module(new GraalVMModule(config.graalvmVersion, image.arch(), Integer.toString(config.javaVersion),
+                .module(new GraalVMModule(config.graalvmVersion, image.arch(), config.javaVersion,
                         image.sha()))
                 .module(new MavenModule())
                 .module(new GradleModule())
