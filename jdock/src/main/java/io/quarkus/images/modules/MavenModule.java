@@ -27,8 +27,8 @@ public class MavenModule extends AbstractModule {
               && sh ${APP_HOME}/.m2/configure-maven.sh""";
 
     private static final String MAVEN_HOME = "/usr/share/maven";
-    private static final String VERSION = "3.8.6";
-    private static final String SHA = "c7047a48deb626abf26f71ab3643d296db9b1e67f1faa7d988637deac876b5a9";
+    private static final String VERSION = "3.9.2";
+    private static final String SHA = "809ef3220c6d179195c06c324cb9a6d34d8ecba566c5cfd8eb83167bc034117d";
 
     private final String url;
 
@@ -40,7 +40,7 @@ public class MavenModule extends AbstractModule {
 
     @Override
     public List<Command> commands(BuildContext bc) {
-        Artifact artifact = bc.addArtifact(new Artifact("apache-maven-3.8.4.tar.gz", url, SHA));
+        Artifact artifact = bc.addArtifact(new Artifact("apache-maven-" + VERSION + ".tar.gz", url, SHA));
         Artifact settings = bc.addArtifact(new Artifact("maven-settings.xml", getUrl("settings.xml"), null));
         Artifact configure_maven = bc.addArtifact(new Artifact("configure-maven.sh", getUrl("configure-maven.sh"), null));
         return List.of(
