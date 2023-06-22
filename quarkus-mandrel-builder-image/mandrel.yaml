@@ -25,3 +25,12 @@ images:
         arch: amd64
       - sha: 5ee2ad025929fb4ea6f3c7c1933b04dbd9b5efd75d7c4ee7d82dd0cd47cafd9b
         arch: arm64
+
+  - graalvm-version: 23.0.0.0-Final
+    java-version: 20
+    tags: 23.0-java20, 23.0-jdk-20, jdk-20, jdk-20.0.1
+    variants:
+      - sha: 4b120a3272b4e637c3832b6245e100105ff07f46ad5b304f4844de5fad6b7fb7
+        arch: amd64
+      - sha: 3179c87dc9336a0283a5da2c3ba74ddbd4fbec52d9d8dd78cb6979b34ce8464a
+        arch: arm64
