@@ -19,13 +19,13 @@ public class GraalVMModule extends AbstractModule {
     private final boolean isLegacyGraalVm;
 
     private static final String TEMPLATE = """
-            --mount=type=bind,source=%s,target=/tmp/%s \\
+            --mount=type=bind,source=%s,target=%s \\
             tar xzf %s -C /opt \\
               && mv /opt/graalvm-ce-*-%s* /opt/graalvm \\
               && %s/bin/gu --auto-yes install native-image""";
 
     private static final String NEW_TEMPLATE = """
-            --mount=type=bind,source=%s,target=/tmp/%s \\
+            --mount=type=bind,source=%s,target=%s \\
             tar xzf %s -C /opt \\
               && mv /opt/graalvm-community-openjdk-%s* /opt/graalvm""";
     private final String graalvmVersion;
@@ -71,13 +71,13 @@ public class GraalVMModule extends AbstractModule {
         String script;
         if (isLegacyGraalVm) {
             script = TEMPLATE.formatted(
-                    artifact.path, artifact.name, // mount bind
+                    artifact.path, "/tmp/" + artifact.name, // mount bind
                     "/tmp/" + artifact.name, // tar
                     graalvmVersion, // mv
                     GRAALVM_HOME); // gu
         } else {
             script = NEW_TEMPLATE.formatted(
-                    artifact.path, artifact.name, // mount bind
+                    artifact.path, "/tmp/" + artifact.name, // mount bind
                     "/tmp/" + artifact.name, // tar
                     graalvmVersion);
         }

@@ -14,7 +14,7 @@ public class MandrelModule extends AbstractModule {
     private final String filename;
 
     private static final String TEMPLATE = """
-            --mount=type=bind,source=%s,target=/tmp/%s \\
+            --mount=type=bind,source=%s,target=%s \\
             mkdir -p %s \\
                 && tar xzf %s -C %s --strip-components=1""";
 
@@ -39,7 +39,7 @@ public class MandrelModule extends AbstractModule {
     public List<Command> commands(BuildContext bc) {
         Artifact artifact = bc.addArtifact(new Artifact(filename, url, sha));
         String script = TEMPLATE.formatted(
-                artifact.path, artifact.name, // mount bind
+                artifact.path, "/tmp/" + artifact.name, // mount bind
                 MANDREL_HOME, // mkdir
                 "/tmp/" + artifact.name, MANDREL_HOME, //tar
                 "/tmp/" + artifact.name); //rm
