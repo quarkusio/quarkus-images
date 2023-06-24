@@ -19,15 +19,15 @@ public class GraalVMModule extends AbstractModule {
     private final boolean isLegacyGraalVm;
 
     private static final String TEMPLATE = """
+            --mount=type=bind,source=%s,target=/tmp/%s \\
             tar xzf %s -C /opt \\
               && mv /opt/graalvm-ce-*-%s* /opt/graalvm \\
-              && %s/bin/gu --auto-yes install native-image \\
-              && rm -Rf %s""";
+              && %s/bin/gu --auto-yes install native-image""";
 
     private static final String NEW_TEMPLATE = """
+            --mount=type=bind,source=%s,target=/tmp/%s \\
             tar xzf %s -C /opt \\
-              && mv /opt/graalvm-community-openjdk-%s* /opt/graalvm \\
-              && rm -Rf %s""";
+              && mv /opt/graalvm-community-openjdk-%s* /opt/graalvm""";
     private final String graalvmVersion;
 
     public GraalVMModule(String version, String arch, String javaVersion, String sha) {
@@ -71,21 +71,20 @@ public class GraalVMModule extends AbstractModule {
         String script;
         if (isLegacyGraalVm) {
             script = TEMPLATE.formatted(
+                    artifact.path, artifact.name, // mount bind
                     "/tmp/" + artifact.name, // tar
-                    graalvmVersion,
-                    GRAALVM_HOME, // gu
-                    "/tmp/" + artifact.name); // rm
+                    graalvmVersion, // mv
+                    GRAALVM_HOME); // gu
         } else {
             script = NEW_TEMPLATE.formatted(
+                    artifact.path, artifact.name, // mount bind
                     "/tmp/" + artifact.name, // tar
-                    graalvmVersion,
-                    "/tmp/" + artifact.name); // rm
+                    graalvmVersion);
         }
 
         return List.of(
                 new EnvCommand("JAVA_HOME", GRAALVM_HOME, "GRAALVM_HOME", GRAALVM_HOME),
                 new MicrodnfCommand("fontconfig", "freetype-devel"),
-                new CopyCommand(artifact, "/tmp/" + artifact.name),
                 new RunCommand(script));
     }
 }
