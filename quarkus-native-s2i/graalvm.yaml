@@ -1,36 +1,36 @@
 images:
-   # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-17.0.7
-  - java-version: 17.0.7
+  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-17.0.8
+  - java-version: 17.0.8
     tags: jdk-17
     variants:
       - arch: amd64
-        sha: 094e5a7dcc4a903b70741d5c3c1688f83e83e2d44eb3d8d798c5d79ed902032c
+        sha: 1dffdf5c7cc5bf38558e9f093eef6a14072a6dff0be3a9906208b37b53ecc009
       - arch: arm64
-        sha: cb5bedf6244d30018856559a393029e98de48c9608eb35ec6c4937dcb7d97224
+        sha: c4f26318114d6bd125cc95ee070289afdd42c6683867adf832f2ab2819c3b685
 
-    # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-20.0.1
-  - java-version: 20.0.1
+  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-20.0.2
+  - java-version: 20.0.2
     tags: jdk-20
     variants:
       - arch: amd64
-        sha: 1c965f4698a5435bb8d094c9b2a13f7079e43d9934915964a2ee15fb81b53a79
+        sha: 941a85a690e7b1c4e1fcfac321561ca46033bba3ac4882dd15d4f45edd06726c
       - arch: arm64
-        sha: ffb205a6fc0b84cbc5d38e86ce12fe01294ba1507c1a72535f63a57c57513a35
+        sha: 6022709c124191da5087d0b0c62c3246943b3d5a386717c8d1af593637217028
 
-  - graalvm-version: 22.3.2
+  - graalvm-version: 22.3.3
     java-version: 11
     tag: 22.3-java11
     variants:
-      - sha: 0e638d2b7406fabc15a1079fc65431a4f33f6f754da77e4073de8433b40e7c4a
+      - sha: 959154e1248108dcd6eb279032cecdd2a6076bdebb345de9532681185231d255
         arch: amd64
-      - sha: 506c99fef656653ccbc57facb9f200303bfcc21ea29679e7391046d0990493da
+      - sha: 177d682f3455d00fa2491246e809d9c9b743187a82115ad3f578998b4935d5a1
         arch: arm64
-  - graalvm-version: 22.3.2
+  - graalvm-version: 22.3.3
     java-version: 17
     tag: 22.3-java17
     variants:
-      - sha: e5a5868c9b498643fadebfba2040e4d9a19a13ea58ec77cec8d64ab6ee691d1e
+      - sha: ebc3200057ca865f0389abceb210f2d4c77d02cf09acf5ede1631d6b70924b00
         arch: amd64
-      - sha: 5d8614c75f5496b37ba52c3ae80a5e887a03981c2d22ade187e8793562b66e84
+      - sha: 1a6bf2ea2715aa8feacc81a78c41b7f2fe6f94cdde56696f72238474f1fc2598
         arch: arm64
-     
+
