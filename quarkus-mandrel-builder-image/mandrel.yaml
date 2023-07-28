@@ -2,7 +2,6 @@ images:
 
   - graalvm-version: 22.3.2.1-Final
     java-version: 17
-    tag: 22.3-java17
     variants:
       - sha: 7c9f0cfc18137fd1ae976d9a4aacbadf764a6a07c7691481a8d8d9b78903212a
         arch: amd64
@@ -20,7 +19,7 @@ images:
 
   - graalvm-version: 23.0.0.0-Final
     java-version: 17
-    tags: 23.0-java17, 23.0-jdk-17, jdk-17, jdk-17.0.7
+    tags: jdk-17.0.7
     variants:
       - sha: 3b5d4ea87f6c1cac698942068702e111ad44fd975517fb859aac11dd573f6dbb
         arch: amd64
@@ -29,7 +28,7 @@ images:
 
   - graalvm-version: 23.0.0.0-Final
     java-version: 20
-    tags: 23.0-java20, 23.0-jdk-20, jdk-20, jdk-20.0.1
+    tags: jdk-20.0.1
     variants:
       - sha: 4b120a3272b4e637c3832b6245e100105ff07f46ad5b304f4844de5fad6b7fb7
         arch: amd64
@@ -38,7 +37,7 @@ images:
 
   - graalvm-version: 23.0.1.2-Final
     java-version: 17
-    tags: 23.0-java17, 23.0-jdk-17, jdk-17, jdk-17.0.7
+    tags: 23.0-java17, 23.0-jdk-17, jdk-17, jdk-17.0.8
     variants:
       - sha: cc73adfae094d05367e008d8ee3eebf7a08a3b45b504e55771dc739a7faabe3b
         arch: amd64
@@ -47,7 +46,7 @@ images:
 
   - graalvm-version: 23.0.1.2-Final
     java-version: 20
-    tags: 23.0-java20, 23.0-jdk-20, jdk-20, jdk-20.0.1
+    tags: 23.0-java20, 23.0-jdk-20, jdk-20, jdk-20.0.2
     variants:
       - sha: be992959df83beb9f5fe0ffe4606d76b2deba6cb86322b9d3614f09a8a2fbbc8
         arch: amd64
