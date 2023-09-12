@@ -14,9 +14,9 @@ public class MandrelModule extends AbstractModule {
     private final String filename;
 
     private static final String TEMPLATE = """
+            --mount=type=bind,source=%s,target=%s \\
             mkdir -p %s \\
-                && tar xzf %s -C %s --strip-components=1 \\
-                && rm -Rf %s""";
+                && tar xzf %s -C %s --strip-components=1""";
 
     public MandrelModule(String version, String arch, String javaVersion, String sha) {
         super("mandrel",
@@ -39,11 +39,14 @@ public class MandrelModule extends AbstractModule {
     public List<Command> commands(BuildContext bc) {
         Artifact artifact = bc.addArtifact(new Artifact(filename, url, sha));
         String script = TEMPLATE.formatted(
-                MANDREL_HOME, "/tmp/" + artifact.name, MANDREL_HOME, "/tmp/" + artifact.name);
+                artifact.path, "/tmp/" + artifact.name, // mount bind
+                MANDREL_HOME, // mkdir
+                "/tmp/" + artifact.name, MANDREL_HOME, //tar
+                "/tmp/" + artifact.name); //rm
+
         return List.of(
                 new EnvCommand("JAVA_HOME", MANDREL_HOME, "GRAALVM_HOME", MANDREL_HOME),
                 new MicrodnfCommand("fontconfig", "freetype-devel"),
-                new CopyCommand(artifact, "/tmp/" + artifact.name),
                 new RunCommand(script));
     }
 }
