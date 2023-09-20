@@ -25,8 +25,8 @@ public class GraalVMModule extends AbstractModule {
               && rm -Rf %s""";
 
     private static final String NEW_TEMPLATE = """
-            tar xzf %s -C /opt \\
-              && mv /opt/graalvm-community-openjdk-%s* /opt/graalvm \\
+            mkdir -p /opt/graalvm \\
+              && tar xzf %s -C /opt/graalvm --strip-components=1 \\
               && rm -Rf %s""";
     private final String graalvmVersion;
 
@@ -78,7 +78,6 @@ public class GraalVMModule extends AbstractModule {
         } else {
             script = NEW_TEMPLATE.formatted(
                     "/tmp/" + artifact.name, // tar
-                    graalvmVersion,
                     "/tmp/" + artifact.name); // rm
         }
 

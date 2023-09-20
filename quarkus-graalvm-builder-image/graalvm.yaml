@@ -16,3 +16,12 @@ images:
         sha: 941a85a690e7b1c4e1fcfac321561ca46033bba3ac4882dd15d4f45edd06726c
       - arch: arm64
         sha: 6022709c124191da5087d0b0c62c3246943b3d5a386717c8d1af593637217028
+
+  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-21.0.0
+  - java-version: 21.0.0
+    tags: jdk-21
+    variants:
+      - arch: amd64
+        sha: 6c422941ccc58be5b891bb6499feeb72cd2b74d6729a29bf1fb8cc1a7d58b319
+      - arch: arm64
+        sha: bb4e92cf7eae91e474061aeae5ae75053a65cd558dbee76947827bf54d1b30a5
