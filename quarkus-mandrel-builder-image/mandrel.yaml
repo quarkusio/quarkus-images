@@ -52,3 +52,12 @@ images:
         arch: amd64
       - sha: e6ed1f76292a5f44bff076225ebbb503b940180b14d6468d8722769ff7eb9e9e
         arch: arm64
+
+  - graalvm-version: 23.1.0.0-Final
+    java-version: 21
+    tags: 23.1-java21, 23.1-jdk-21, jdk-21, jdk-21.0.0
+    variants:
+      - sha: 49b5a7672c542a5636a92abc2bae53ab024207261f45766774b77ee44e40ba82
+        arch: amd64
+      - sha: 883b0505d721355864a7de1d32b4198c20bf41c43d93f3f2e5d0fda78e0c36bc
+        arch: arm64
