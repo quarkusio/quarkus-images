@@ -1,0 +1,10 @@
+images:
+
+  - graalvm-version: 22.3.3.1-Final
+    java-version: 17
+    tag: 22.3-java17
+    variants:
+      - sha: 8449acd4426dd0b4bc278b167d2a9e729695d45ba0c75a65e6a894ce11e0aa00
+        arch: amd64
+      - sha: c8232f58868aaf6356996ee2e1958e1164e77070458849bb1890870121694245
+        arch: arm64

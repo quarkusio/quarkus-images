@@ -76,7 +76,7 @@
         </profile>
 
         <profile>
-            <id>older-graalvm</id>
+            <id>graalvm-22.x</id>
             <properties>
                 <images.file>${project.basedir}/graalvm-22.yaml</images.file>
             </properties>
