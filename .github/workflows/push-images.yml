@@ -17,21 +17,30 @@ jobs:
           - name: "base images"
             modules: "quarkus-distroless-base-image,quarkus-micro-base-image"
             args: ""
-          - name: "s2i images"
-            modules: "quarkus-binary-s2i,quarkus-native-s2i"
+          - name: "s2i binary images"
+            modules: "quarkus-binary-s2i"
             args: ""
-          - name: "mandrel builder images"
+          - name: "s2i native images"
+            modules: "quarkus-native-s2i"
+            args: ""
+          - name: "mandrel builder images (latest)"
             modules: "quarkus-mandrel-builder-image"
             args: ""
-          - name: "graalvm ce builder images"
+          - name: "mandrel builder images (23.0.x)"
+            modules: "quarkus-mandrel-builder-image"
+            args: "-Pmandrel-23.0.x"
+          - name: "mandrel builder images (22.x)"
+            modules: "quarkus-mandrel-builder-image"
+            args: "-Pmandrel-22.x"
+          - name: "graalvm ce builder images (latest)"
             modules: "quarkus-graalvm-builder-image"
             args: ""
-          - name: "graalvm ce builder images 21 and 22.0"
+          - name: "graalvm ce builder images 22.x"
             modules: "quarkus-graalvm-builder-image"
-            args: "-Polder-graalvm"
+            args: "-Pgraalvm-22.x"
     steps:
-      - run: |
-          # Re-claim some disk space
+      - name: Re-claim some disk space
+        run: |
           sudo swapoff -a
           sudo rm -f /swapfile
           sudo apt-get clean
