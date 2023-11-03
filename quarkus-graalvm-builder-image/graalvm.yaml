@@ -8,15 +8,6 @@ images:
       - arch: arm64
         sha: c4f26318114d6bd125cc95ee070289afdd42c6683867adf832f2ab2819c3b685
 
-  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-20.0.2
-  - java-version: 20.0.2
-    tags: jdk-20
-    variants:
-      - arch: amd64
-        sha: 941a85a690e7b1c4e1fcfac321561ca46033bba3ac4882dd15d4f45edd06726c
-      - arch: arm64
-        sha: 6022709c124191da5087d0b0c62c3246943b3d5a386717c8d1af593637217028
-
   # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-21.0.0
   - java-version: 21.0.0
     variants:
