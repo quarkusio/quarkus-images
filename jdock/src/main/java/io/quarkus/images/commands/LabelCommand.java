@@ -14,7 +14,7 @@ public class LabelCommand implements Command {
                 name = s;
             } else {
                 if (builder.length() > 0) {
-                    builder.append("\\\n");
+                    builder.append(" \\\n");
                 }
                 builder.append(name).append("=\"").append(s).append("\"");
                 name = null;
