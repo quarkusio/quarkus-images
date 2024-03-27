@@ -50,7 +50,7 @@ jobs:
         sudo swapoff -a
         sudo rm -f /swapfile
         sudo apt-get clean
-        docker rmi $(docker image ls -aq)
+        yes | docker system prune -a
         df -h
     - uses: actions/checkout@v1
     - uses: actions/setup-java@v3
