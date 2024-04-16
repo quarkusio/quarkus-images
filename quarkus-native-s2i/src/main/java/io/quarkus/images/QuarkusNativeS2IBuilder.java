@@ -16,6 +16,7 @@ public class QuarkusNativeS2IBuilder {
         return Dockerfile.from(base)
                 .user("root")
                 .install("tar", "gzip", "gcc", "glibc-devel", "zlib-devel", "shadow-utils", "unzip", "gcc-c++")
+                .install("tzdata")
                 .install("glibc-langpack-en")
                 .module(new UsLangModule())
                 .module(new QuarkusUserModule())
