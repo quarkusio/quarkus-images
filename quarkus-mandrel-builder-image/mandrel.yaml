@@ -9,11 +9,11 @@ images:
       - sha: 4f8dbba1bab7ba92bd44cc716aee419c2aa06d96686134f940377b7fad8b3d89
         arch: arm64
 
-  - graalvm-version: 24.0.0.0-Final
+  - graalvm-version: 24.0.1.0-Final
     java-version: 22
-    tags: 24.0-java22, 24.0-jdk-22, jdk-22, jdk-22.0.0
+    tags: 24.0-java22, 24.0-jdk-22, jdk-22, jdk-22.0.1
     variants:
-      - sha: a536464c6276e9ba799fdc2506b5a119e470c951d7fbaaf89b03f70db8c42302
+      - sha: 0525d4c2109c8eb02a66d41d3bed04e5ae212b31e2bda40b6d1c36b946c6cbf7
         arch: amd64
-      - sha: 6c14416ed93b5dd684405b480228de3b466ba8e44745bf3f256130e383671a16
+      - sha: 125e3dca102575fad8b2d6c7a722ab639fde980320034f58c0abee3c9b7b6df6
         arch: arm64
