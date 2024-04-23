@@ -17,11 +17,11 @@ images:
       - arch: arm64
         sha: a34be691ce68f0acf4655c7c6c63a9a49ed276a11859d7224fd94fc2f657cd7a
 
-  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-22.0.0
-  - java-version: 22.0.0
+  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-22.0.1
+  - java-version: 22.0.1
     tags: jdk-22
     variants:
       - arch: amd64
-        sha: e5eeb486a23101753f18181d002c3ede9da13c463fb61d3ea448abe774db0657
+        sha: e34ec7e8e8c6a4bb99ab4fa32c3e04d01f2f2bd88920ddda7545fd35a0511f75
       - arch: arm64
-        sha: da9a0e11b110ebccff33ade502516d00f574ec3247868007e452cef4143e0904
+        sha: 2a510338cc6b63d2bb6aebe0ce0f8df9b76d9255207456cb1f0c9c820e6428cf
