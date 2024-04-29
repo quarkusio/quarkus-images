@@ -5,7 +5,7 @@ import io.quarkus.images.modules.*;
 public class Builders {
 
     public static Dockerfile getMandrelDockerFile(String version, String javaVersion, String arch, String sha) {
-        Dockerfile df = Dockerfile.from("registry.access.redhat.com/ubi8/ubi-minimal:8.8");
+        Dockerfile df = Dockerfile.from("registry.access.redhat.com/ubi8/ubi-minimal:8.9");
         df
                 .installer("microdnf")
                 .user("root")
@@ -29,7 +29,7 @@ public class Builders {
     }
 
     public static Dockerfile getGraalVmDockerFile(String version, String javaVersion, String arch, String sha) {
-        Dockerfile df = Dockerfile.from("registry.access.redhat.com/ubi8/ubi-minimal:8.8");
+        Dockerfile df = Dockerfile.from("registry.access.redhat.com/ubi8/ubi-minimal:8.9");
         df
                 .installer("microdnf")
                 .user("root")
