@@ -35,9 +35,9 @@
         <maven.compiler.target>17</maven.compiler.target>
 
         <!-- See https://catalog.redhat.com/software/containers/ubi8/ubi-minimal/5c359a62bed8bd75a2c3fba8 -->
-        <ubi-min.base>registry.access.redhat.com/ubi8/ubi-minimal:8.8</ubi-min.base>
+        <ubi-min.base>registry.access.redhat.com/ubi8/ubi-minimal:8.9</ubi-min.base>
         <!-- See https://catalog.redhat.com/software/containers/ubi8/ubi-micro/5ff3f50a831939b08d1b832a -->
-        <ubi-micro.base>registry.access.redhat.com/ubi8-micro:8.8</ubi-micro.base>
+        <ubi-micro.base>registry.access.redhat.com/ubi8-micro:8.9</ubi-micro.base>
 
         <jdock.dry-run>false</jdock.dry-run>
     </properties>
