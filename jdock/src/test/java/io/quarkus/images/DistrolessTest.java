@@ -28,7 +28,7 @@ public class DistrolessTest {
     void testBuildingMicroImage() {
         System.out.println(Dockerfile
                 .multistages()
-                .stage("ubi", Dockerfile.from("registry.access.redhat.com/ubi8/ubi-minimal:8.9"))
+                .stage("ubi", Dockerfile.from("registry.access.redhat.com/ubi8/ubi-minimal:8.10"))
                 .stage("scratch", Dockerfile.from("registry.access.redhat.com/ubi8/ubi-micro"))
                 .stage(Dockerfile.from("scratch")
                         .copyFromStage("ubi", "/usr/lib64/libgcc_s.so.1")
