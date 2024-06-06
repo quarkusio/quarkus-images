@@ -58,14 +58,14 @@ class SimpleTest {
 
     @Test
     public void testRunWithExecForm() {
-        Dockerfile df = Dockerfile.from("registry.access.redhat.com/ubi8/ubi-minimal:8.9");
+        Dockerfile df = Dockerfile.from("registry.access.redhat.com/ubi8/ubi-minimal:8.10");
         df.exec("/bin/bash", "-c", "echo hello");
         assertThat(df.build()).contains("RUN [ \"/bin/bash\", \"-c\", \"echo hello\" ]\n");
     }
 
     @Test
     public void testRunWithShellForm() {
-        Dockerfile df = Dockerfile.from("registry.access.redhat.com/ubi8/ubi-minimal:8.9");
+        Dockerfile df = Dockerfile.from("registry.access.redhat.com/ubi8/ubi-minimal:8.10");
         df.run("source $HOME/.bashrc", "echo $HOME");
         assertThat(df.build()).contains("RUN source $HOME/.bashrc \\\n && echo $HOME\n");
     }

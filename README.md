@@ -160,9 +160,9 @@ To update them, edit the `pom.xml` file:
 
 ```xml
 <!-- See https://catalog.redhat.com/software/containers/ubi8/ubi-minimal/5c359a62bed8bd75a2c3fba8 -->
-<ubi-min.base>registry.access.redhat.com/ubi8/ubi-minimal:8.9</ubi-min.base>
-<!-- See https://catalog.redhat.com/software/containers/ubi8/ubi-micro/5ff3f50a831939b08d1b832a -->
-<ubi-micro.base>registry.access.redhat.com/ubi8-micro:8.9</ubi-micro.base>
+<ubi-min.base>registry.access.redhat.com/ubi8/ubi-minimal:8.10</ubi-min.base>
+<!-- See https://catalog.redhat.com/software/containers/ubi8-micro/601a84aadd19c7786c47c8ea -->
+<ubi-micro.base>registry.access.redhat.com/ubi8-micro:8.10</ubi-micro.base>
 ```
 
 ### Pushing the image to quay
