@@ -14,7 +14,7 @@ public class QuarkusMandrelBuilder {
         df
                 .installer("microdnf")
                 .user("root")
-                .install("tar", "gzip", "gcc", "glibc-devel", "zlib-devel", "shadow-utils", "unzip", "gcc-c++")
+                .install("tar", "gzip", "gcc", "glibc-devel", "zlib-devel", "shadow-utils", "unzip", "gcc-c++", "findutils")
                 .install("glibc-langpack-en")
                 .module(new UsLangModule())
                 .module(new QuarkusUserModule())
