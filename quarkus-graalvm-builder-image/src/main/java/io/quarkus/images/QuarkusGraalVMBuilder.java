@@ -13,7 +13,7 @@ public class QuarkusGraalVMBuilder {
         Dockerfile df = Dockerfile.from(base);
         df
                 .user("root")
-                .install("tar", "gzip", "gcc", "glibc-devel", "zlib-devel", "shadow-utils", "unzip", "gcc-c++")
+                .install("tar", "gzip", "gcc", "glibc-devel", "zlib-devel", "shadow-utils", "unzip", "gcc-c++", "findutils")
                 .install("glibc-langpack-en")
                 .module(new UsLangModule())
                 .module(new QuarkusUserModule())
