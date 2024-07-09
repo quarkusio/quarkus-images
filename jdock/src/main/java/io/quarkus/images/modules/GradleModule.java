@@ -12,8 +12,8 @@ import java.util.List;
 
 public class GradleModule extends AbstractModule {
 
-    private static final String VERSION = "8.1.1";
-    private static final String SHA = "e111cb9948407e26351227dabce49822fb88c37ee72f1d1582a69c68af2e702f";
+    private static final String VERSION = "8.8";
+    private static final String SHA = "a4b4158601f8636cdeeab09bd76afb640030bb5b144aafe261a5e8af027dc612";
 
     private static final String SCRIPT_INSTALL = """
             unzip %s \\

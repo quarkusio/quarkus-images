@@ -27,8 +27,8 @@ public class MavenModule extends AbstractModule {
               && sh ${APP_HOME}/.m2/configure-maven.sh""";
 
     private static final String MAVEN_HOME = "/usr/share/maven";
-    private static final String VERSION = "3.9.2";
-    private static final String SHA = "809ef3220c6d179195c06c324cb9a6d34d8ecba566c5cfd8eb83167bc034117d";
+    private static final String VERSION = "3.9.8";
+    private static final String SHA = "067672629075b740e3d0a928e21021dd615a53287af36d4ccca44e87e081d102";
 
     private final String url;
 
