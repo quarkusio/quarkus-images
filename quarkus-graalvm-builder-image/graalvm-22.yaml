@@ -32,3 +32,11 @@ images:
         arch: amd64
       - sha: 1a6bf2ea2715aa8feacc81a78c41b7f2fe6f94cdde56696f72238474f1fc2598
         arch: arm64
+  - graalvm-version: 23.0.2
+    java-version: 17
+    tag: 23.0.2-java17
+    variants:
+      - sha: e47ba7229cef02393e19d5b8f46f7f1cab4829dd17bfe84d5431fc8ff0e22a96
+        arch: amd64
+      - sha: c3281b21f5220c2f76cf6fa0d646bc42e2d729af2c022bb06e557a613ba16102
+        arch: arm64
