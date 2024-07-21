@@ -1,10 +1,10 @@
 images:
 
-  - graalvm-version: 23.0.4.1-Final
+  - graalvm-version: 23.0.5.0-Final
     java-version: 17
-    tags: 23.0-java17, 23.0-jdk-17, jdk-17, jdk-17.0.11
+    tags: 23.0-java17, 23.0-jdk-17, jdk-17, jdk-17.0.12
     variants:
-      - sha: 30238b2d8fe8fb720c55eb40935ae2a81733fd63f215affeda7304c6fb2a9af4
+      - sha: 8884547da0dbb3044e23864aab44bd6031451d5686ec2d328106d03ea2281585
         arch: amd64
-      - sha: 3b6bb60617acaac4d07d4b92d8a57b2921123b354d089ba293b32e4c28236545
+      - sha: fa96a5405b513139971d71c55da0a9645c7a2cdb10c2bf758c3f6ba6152fdd23
         arch: arm64
