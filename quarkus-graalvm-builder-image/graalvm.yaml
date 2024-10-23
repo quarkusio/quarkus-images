@@ -26,11 +26,11 @@ images:
       - arch: arm64
         sha: 28ca4c815fa68b86141d9dcf1a46c1f58f74dead41de9042de1202337bb014d9
 
-  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-23.0.0
-  - java-version: 23.0.0
+  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-23.0.1
+  - java-version: 23.0.1
     tags: jdk-23
     variants:
       - arch: amd64
-        sha: 440eb64bf548f37086f97d236a028d0a6ccf5cee9ed9caed2f70ded5a68312a0
+        sha: e26a0a74064b1689c056b5f24d7cc3b271f57f576be063b139d27aafa1322951
       - arch: arm64
-        sha: 42ae53bdb4112d86eb3e12fe6d30a65b800a4ff8a658c7c3bc77e0a678078b20
+        sha: 5a456db9162a89be5fadd50e703c19313d25ef7f5043b750b639cd0460335e60

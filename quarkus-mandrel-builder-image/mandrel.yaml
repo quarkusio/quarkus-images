@@ -1,12 +1,12 @@
 images:
 
-  - graalvm-version: 23.1.4.0-Final
+  - graalvm-version: 23.1.5.0-Final
     java-version: 21
-    tags: 23.1-java21, 23.1-jdk-21, jdk-21, jdk-21.0.4
+    tags: 23.1-java21, 23.1-jdk-21, jdk-21, jdk-21.0.5
     variants:
-      - sha: 2b992e8621d93af541353d857ceeffbab0e8ac38257d3ff2404ba6f6486bbea4
+      - sha: f1184f6e9d19a1e5846c273a6d8dc68bfb66ddb4918593e1fc4059aaebcaff44
         arch: amd64
-      - sha: 2f80e4c9a0d1b908ece3b46b8296f815bc8563aeaed0fff7a66709e2801f485e
+      - sha: f956c886818a67856717e2abb42a7876bd85ecdc0f22811a94b06d37692085d5
         arch: arm64
 
   - graalvm-version: 24.0.2.0-Final
@@ -18,11 +18,11 @@ images:
       - sha: 98dc36277ed4f315449a0a14629d29a4bf61b73c90e9fa900f5bb7f3bea3d3be
         arch: arm64
 
-  - graalvm-version: 24.1.0.0-Final
+  - graalvm-version: 24.1.1.0-Final
     java-version: 23
-    tags: 24.1-java23, 24.1-jdk-23, jdk-23, jdk-23.0.0
+    tags: 24.1-java23, 24.1-jdk-23, jdk-23, jdk-23.0.1
     variants:
-      - sha: 6c0bc63c0d76badae3ff6a58ee64803431857e85dd88adc91a0037217f60fc91
+      - sha: 71fb04d09d5552a66d9df6217d72a64ac3d5b1fd2cbc65719abf5f43c7601269
         arch: amd64
-      - sha: a33a79850d985463eb519b2959011babdc9d738d4603ce9c4489e592f4c1ed2b
+      - sha: f463fbf2f47f6dc7a019afda68d2d3d06e86488c11762c98e9b3579feb5099ff
         arch: arm64
