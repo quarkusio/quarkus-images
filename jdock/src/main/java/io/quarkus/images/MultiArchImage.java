@@ -48,7 +48,7 @@ public class MultiArchImage {
             if (!dryRun) {
                 // docker buildx build --load --platform linux/arm64 --tag cescoffier/mandrel-java17-22.1.0.0-final-arm64 -f mandrel-java17-22.1.0.0-Final-arm64.Dockerfile .
                 // Build the image (platform-specific)
-                Exec.execute(List.of("docker", "buildx", "build", "--load", "--platform=linux/" + arch, "--tag", imageName,
+                Exec.execute(List.of(Exec.getContainerTool(), "buildx", "build", "--load", "--platform=linux/" + arch, "--tag", imageName,
                         "-f", JDock.dockerFileDir + "/" + fileName, "."),
                         e -> new RuntimeException("Unable to build image for " + dockerfile.getAbsolutePath(), e));
             } else {
@@ -71,7 +71,7 @@ public class MultiArchImage {
 
         for (Map.Entry<String, String> entry : locals.entrySet()) {
             System.out.println("⚙️\tPushing " + entry.getValue() + " (" + entry.getKey() + ")");
-            Exec.execute(List.of("docker", "push", entry.getValue()),
+            Exec.execute(List.of(Exec.getContainerTool(), "push", entry.getValue()),
                     e -> new RuntimeException("Unable to push " + entry.getValue(), e));
         }
 
@@ -86,14 +86,14 @@ public class MultiArchImage {
                     "⚙️\t\t" + entry.getKey() + " => " + entry.getValue());
         }
 
-        List<String> command = new ArrayList<>(Arrays.asList("docker", "manifest", "create", name));
+        List<String> command = new ArrayList<>(Arrays.asList(Exec.getContainerTool(), "manifest", "create", name));
         for (Map.Entry<String, String> entry : archToImage.entrySet()) {
             command.addAll(List.of("--amend", entry.getValue()));
         }
 
         Exec.execute(command, e -> new RuntimeException("Unable to build manifest for " + name, e));
 
-        Exec.execute(List.of("docker", "manifest", "push", name),
+        Exec.execute(List.of(Exec.getContainerTool(), "manifest", "push", name),
                 e -> new RuntimeException("Unable to push manifest for " + name, e));
 
     }
