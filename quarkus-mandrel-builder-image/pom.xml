@@ -25,42 +25,22 @@
                 <artifactId>jbang-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>ubi9</id>
                         <goals>
                             <goal>run</goal>
                         </goals>
                         <phase>package</phase>
-                        <configuration>
-                            <args>
-                                <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
-                                <argument>--ubi-minimal=${ubi-min.base}</argument>
-                                <argument>--out=quay.io/quarkus/ubi-quarkus-mandrel-builder-image</argument>
-                                <argument>--in=${images.file}</argument>
-                                <argument>--dry-run=${jdock.dry-run}</argument>
-                                <argument>--alias=${jdock.alias}</argument>
-                            </args>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>ubi8</id>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <args>
-                                <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
-                                <argument>--ubi-minimal=${ubi8-min.base}</argument>
-                                <argument>--out=quay.io/quarkus/ubi8-quarkus-mandrel-builder-image</argument>
-                                <argument>--in=${images.file}</argument>
-                                <argument>--dry-run=${jdock.dry-run}</argument>
-                                <argument>--alias=${jdock.alias}</argument>
-                            </args>
-                        </configuration>
                     </execution>
                 </executions>
-
+                <configuration>
+                    <args>
+                        <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
+                        <argument>--ubi-minimal=${ubi-min.base}</argument>
+                        <argument>--out=quay.io/quarkus/ubi-quarkus-mandrel-builder-image</argument>
+                        <argument>--in=${images.file}</argument>
+                        <argument>--dry-run=${jdock.dry-run}</argument>
+                        <argument>--alias=${jdock.alias}</argument>
+                    </args>
+                </configuration>
             </plugin>
         </plugins>
     </build>
