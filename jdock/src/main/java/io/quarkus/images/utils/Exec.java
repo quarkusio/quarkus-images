@@ -6,13 +6,10 @@ import org.zeroturnaround.exec.ProcessExecutor;
 import org.zeroturnaround.exec.stream.LogOutputStream;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class Exec {
     public static void execute(List<String> command, Function<Exception, RuntimeException> exceptionMapper) {
@@ -33,16 +30,6 @@ public class Exec {
 
     public static void buildLocal(Buildable df, String name, String arch, boolean dryRun) {
         build(df, name, arch, true, dryRun);
-    }
-
-    public static String getContainerTool() {
-        if (findExecutable("docker") != null) {
-            return "docker";
-        }
-        if (findExecutable("podman") != null) {
-            return "podman";
-        }
-        throw new IllegalStateException("No container tool found in system path");
     }
 
     private static void build(Buildable df, String name, String arch, boolean local, boolean dryRun) {
@@ -71,8 +58,7 @@ public class Exec {
         if (!dryRun) {
             System.out.println("⚙️\tLaunching the build process: ");
             List<String> list = new ArrayList<>(
-                    Arrays.asList(Exec.getContainerTool(), "buildx", "build", "--load", "-f",
-                            JDock.dockerFileDir + "/" + fileName));
+                    Arrays.asList("docker", "buildx", "build", "--load", "-f", JDock.dockerFileDir + "/" + fileName));
             if (arch != null) {
                 list.add("--platform=linux/" + arch);
             }
@@ -89,7 +75,7 @@ public class Exec {
 
         if (!local && !dryRun) {
             String t = imageName;
-            Exec.execute(List.of(Exec.getContainerTool(), "push", imageName),
+            Exec.execute(List.of("docker", "push", imageName),
                     e -> new RuntimeException("Unable to push image " + t, e));
             System.out.println("⚙️\tImage " + imageName + " pushed");
         } else if (!local) {
@@ -100,11 +86,5 @@ public class Exec {
 
     public static void buildAndPush(Buildable df, String name, String arch) {
         build(df, name, arch, false, false); // no dry run when pushing images.
-    }
-
-    public static String findExecutable(String exec) {
-        return Stream.of(System.getenv("PATH").split(Pattern.quote(File.pathSeparator))).map(Paths::get)
-                .map(path -> path.resolve(exec).toFile()).filter(File::exists).findFirst().map(File::getParent)
-                .orElse(null);
     }
 }
