@@ -6,10 +6,13 @@ import org.zeroturnaround.exec.ProcessExecutor;
 import org.zeroturnaround.exec.stream.LogOutputStream;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class Exec {
     public static void execute(List<String> command, Function<Exception, RuntimeException> exceptionMapper) {
@@ -84,7 +87,23 @@ public class Exec {
 
     }
 
+    public static String getContainerTool() {
+        if (findExecutable("docker") != null) {
+            return "docker";
+        }
+        if (findExecutable("podman") != null) {
+            return "podman";
+        }
+        throw new IllegalStateException("No container tool found in system path");
+    }
+
     public static void buildAndPush(Buildable df, String name, String arch) {
         build(df, name, arch, false, false); // no dry run when pushing images.
+    }
+
+    public static String findExecutable(String exec) {
+        return Stream.of(System.getenv("PATH").split(Pattern.quote(File.pathSeparator))).map(Paths::get)
+                .map(path -> path.resolve(exec).toFile()).filter(File::exists).findFirst().map(File::getParent)
+                .orElse(null);
     }
 }

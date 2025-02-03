@@ -15,11 +15,11 @@ The images are available on [Quay.io](https://quay.io/organization/quarkus)
 
 To pull these images use:
 
-* `docker pull quay.io/quarkus/ubi-quarkus-graalvmce-builder-image:VERSION` 
-* `docker pull quay.io/quarkus/ubi-quarkus-mandrel-builder-image:VERSION`
-* `docker pull quay.io/quarkus/ubi-quarkus-graalvmce-s2i:VERSION`
-* `docker pull quay.io/quarkus/ubi-quarkus-native-binary-s2i:2.0`
-* `docker pull quay.io/quarkus/quarkus-micro-image:2.0` 
+* `docker pull quay.io/quarkus/ubi-quarkus-graalvmce-builder-image:VERSION` (UBI 8), `docker pull quay.io/quarkus/ubi9-quarkus-graalvmce-builder-image:VERSION` (UBI 9)
+* `docker pull quay.io/quarkus/ubi-quarkus-mandrel-builder-image:VERSION` (UBI 8), `docker pull quay.io/quarkus/ubi9-quarkus-mandrel-builder-image:VERSION` (UBI 9)
+* `docker pull quay.io/quarkus/ubi-quarkus-graalvmce-s2i:VERSION` (UBI 8), `docker pull quay.io/quarkus/ubi9-quarkus-graalvmce-s2i:VERSION` (UBI 9)
+* `docker pull quay.io/quarkus/ubi-quarkus-native-binary-s2i:2.0` (UBI 8), `docker pull quay.io/quarkus/ubi-quarkus-native-binary-s2i:3.0` (UBI 9) 
+* `docker pull quay.io/quarkus/quarkus-micro-image:2.0` (UBI 8), `docker pull quay.io/quarkus/quarkus-micro-image:3.0` (UBI 9)
 * `docker pull quay.io/quarkus/quarkus-distroless-image:2.0`
 
 with _VERSION_ being the version. 
@@ -34,6 +34,8 @@ Navigate to the _tag_ tab on _quay.io_ to see the list of available tabs.
 
 NOTE: You may wonder why we don't use `latest`. It's because `latest` has introduced more problems than benefits especially when reproducing issues.
 For this reason, we recommend using a stable version.
+
+**IMPORTANT**: If you use a UBI9 builder image, you need to use a UBI9 runtime image.
 
 ## Build Prerequisites
 

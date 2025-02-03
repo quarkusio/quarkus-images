@@ -48,8 +48,10 @@ public class MultiArchImage {
             if (!dryRun) {
                 // docker buildx build --load --platform linux/arm64 --tag cescoffier/mandrel-java17-22.1.0.0-final-arm64 -f mandrel-java17-22.1.0.0-Final-arm64.Dockerfile .
                 // Build the image (platform-specific)
-                Exec.execute(List.of("docker", "buildx", "build", "--load", "--platform=linux/" + arch, "--tag", imageName,
-                        "-f", JDock.dockerFileDir + "/" + fileName, "."),
+                Exec.execute(
+                        List.of(Exec.getContainerTool(), "buildx", "build", "--load", "--platform=linux/" + arch, "--tag",
+                                imageName,
+                                "-f", JDock.dockerFileDir + "/" + fileName, "."),
                         e -> new RuntimeException("Unable to build image for " + dockerfile.getAbsolutePath(), e));
             } else {
                 System.out.println("⚠️️\tSkipping the container build for " + imageName

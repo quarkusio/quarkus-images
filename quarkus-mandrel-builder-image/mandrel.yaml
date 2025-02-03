@@ -1,5 +1,4 @@
 images:
-
   - graalvm-version: 23.1.6.0-Final
     java-version: 21
     tags: 23.1-java21, 23.1-jdk-21, jdk-21, jdk-21.0.6
