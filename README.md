@@ -18,8 +18,8 @@ To pull these images use:
 * `docker pull quay.io/quarkus/ubi-quarkus-graalvmce-builder-image:VERSION` (UBI 8), `docker pull quay.io/quarkus/ubi9-quarkus-graalvmce-builder-image:VERSION` (UBI 9)
 * `docker pull quay.io/quarkus/ubi-quarkus-mandrel-builder-image:VERSION` (UBI 8), `docker pull quay.io/quarkus/ubi9-quarkus-mandrel-builder-image:VERSION` (UBI 9)
 * `docker pull quay.io/quarkus/ubi-quarkus-graalvmce-s2i:VERSION` (UBI 8), `docker pull quay.io/quarkus/ubi9-quarkus-graalvmce-s2i:VERSION` (UBI 9)
-* `docker pull quay.io/quarkus/ubi-quarkus-native-binary-s2i:2.0` (UBI 8), `docker pull quay.io/quarkus/ubi-quarkus-native-binary-s2i:3.0` (UBI 9) 
-* `docker pull quay.io/quarkus/quarkus-micro-image:2.0` (UBI 8), `docker pull quay.io/quarkus/quarkus-micro-image:3.0` (UBI 9)
+* `docker pull quay.io/quarkus/ubi-quarkus-native-binary-s2i:2.0` (UBI 8), `docker pull quay.io/quarkus/ubi9-quarkus-native-binary-s2i:2.0` (UBI 9) 
+* `docker pull quay.io/quarkus/quarkus-micro-image:2.0` (UBI 8), `docker pull quay.io/quarkus/ubi9-quarkus-micro-image:2.0` (UBI 9)
 * `docker pull quay.io/quarkus/quarkus-distroless-image:2.0`
 
 with _VERSION_ being the version. 

@@ -52,9 +52,9 @@
                                 <argument>--dockerfile-dir=${pom.basedir}/target/docker</argument>
                                 <argument>--ubi-minimal=${ubi9-min.base}</argument>
                                 <argument>--ubi-micro=${ubi9-micro.base}</argument>
-                                <argument>--out=quay.io/quarkus/quarkus-micro-image:3.0</argument>
+                                <argument>--out=quay.io/quarkus/ubi9-quarkus-micro-image:2.0</argument>
                                 <argument>--dry-run=${jdock.dry-run}</argument>
-                                <argument>--alias=quay.io/quarkus/quarkus-micro-image:3.0-${maven.build.timestamp}</argument>
+                                <argument>--alias=quay.io/quarkus/ubi9-quarkus-micro-image:2.0-${maven.build.timestamp}</argument>
                             </args>
                         </configuration>
                     </execution>

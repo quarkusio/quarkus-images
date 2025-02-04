@@ -51,10 +51,10 @@
                             <args>
                                 <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
                                 <argument>--ubi-minimal=${ubi9-min.base}</argument>
-                                <argument>--out=quay.io/quarkus/ubi-quarkus-native-binary-s2i:3.0</argument>
+                                <argument>--out=quay.io/quarkus/ubi9-quarkus-native-binary-s2i:2.0</argument>
                                 <argument>--basedir=${project.basedir}</argument>
                                 <argument>--dry-run=${jdock.dry-run}</argument>
-                                <argument>--alias=quay.io/quarkus/ubi-quarkus-native-binary-s2i:3.0-${maven.build.timestamp}</argument>
+                                <argument>--alias=quay.io/quarkus/ubi9-quarkus-native-binary-s2i:2.0-${maven.build.timestamp}</argument>
                             </args>
                         </configuration>
                     </execution>
