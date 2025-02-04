@@ -34,10 +34,11 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <!-- See https://catalog.redhat.com/software/containers/ubi8/ubi-minimal/5c359a62bed8bd75a2c3fba8 -->
-        <ubi-min.base>registry.access.redhat.com/ubi8/ubi-minimal:8.10</ubi-min.base>
-        <!-- See https://catalog.redhat.com/software/containers/ubi8-micro/601a84aadd19c7786c47c8ea -->
-        <ubi-micro.base>registry.access.redhat.com/ubi8-micro:8.10</ubi-micro.base>
+        <ubi8-min.base>registry.access.redhat.com/ubi8/ubi-minimal:8.10</ubi8-min.base>
+        <ubi8-micro.base>registry.access.redhat.com/ubi8-micro:8.10</ubi8-micro.base>
+
+        <ubi9-min.base>registry.access.redhat.com/ubi9/ubi-minimal:9.5</ubi9-min.base>
+        <ubi9-micro.base>registry.access.redhat.com/ubi9-micro:9.5</ubi9-micro.base>
 
         <jdock.dry-run>false</jdock.dry-run>
     </properties>

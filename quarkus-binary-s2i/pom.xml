@@ -14,7 +14,7 @@
 
     <properties>
         <jbang.script>${project.build.sourceDirectory}/io/quarkus/images/Build.java</jbang.script>
-        <jdock.alias></jdock.alias>
+        <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
     </properties>
 
     <build>
@@ -24,22 +24,41 @@
                 <artifactId>jbang-maven-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>ubi8</id>
                         <goals>
                             <goal>run</goal>
                         </goals>
                         <phase>package</phase>
+                        <configuration>
+                            <args>
+                                <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
+                                <argument>--ubi-minimal=${ubi8-min.base}</argument>
+                                <argument>--out=quay.io/quarkus/ubi-quarkus-native-binary-s2i:2.0</argument>
+                                <argument>--basedir=${project.basedir}</argument>
+                                <argument>--dry-run=${jdock.dry-run}</argument>
+                                <argument>--alias=quay.io/quarkus/ubi-quarkus-native-binary-s2i:2.0-${maven.build.timestamp}</argument>
+                            </args>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>ubi9</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <args>
+                                <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
+                                <argument>--ubi-minimal=${ubi9-min.base}</argument>
+                                <argument>--out=quay.io/quarkus/ubi9-quarkus-native-binary-s2i:2.0</argument>
+                                <argument>--basedir=${project.basedir}</argument>
+                                <argument>--dry-run=${jdock.dry-run}</argument>
+                                <argument>--alias=quay.io/quarkus/ubi9-quarkus-native-binary-s2i:2.0-${maven.build.timestamp}</argument>
+                            </args>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <args>
-                        <argument>--dockerfile-dir=${project.basedir}/target/docker</argument>
-                        <argument>--ubi-minimal=${ubi-min.base}</argument>
-                        <argument>--out=quay.io/quarkus/ubi-quarkus-native-binary-s2i:2.0</argument>
-                        <argument>--basedir=${project.basedir}</argument>
-                        <argument>--dry-run=${jdock.dry-run}</argument>
-                        <argument>--alias=${jdock.alias}</argument>
-                    </args>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -60,8 +79,6 @@
             <id>push</id>
             <properties>
                 <jbang.script>${project.build.sourceDirectory}/io/quarkus/images/Push.java</jbang.script>
-                <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
-                <jdock.alias>quay.io/quarkus/ubi-quarkus-native-binary-s2i:2.0-${maven.build.timestamp}</jdock.alias>
             </properties>
         </profile>
     </profiles>
