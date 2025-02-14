@@ -91,6 +91,14 @@
             </properties>
         </profile>
         <profile>
+            <id>test</id>
+            <properties>
+                <jbang.script>${project.build.sourceDirectory}/io/quarkus/images/Test.java</jbang.script>
+                <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+                <jdock.alias>quay.io/quarkus/ubi-quarkus-mandrel-builder-image:__VERSION__-${maven.build.timestamp}</jdock.alias>
+            </properties>
+        </profile>
+        <profile>
             <id>mandrel-22.x</id>
             <properties>
                 <images.file>${project.basedir}/mandrel-22.x.yaml</images.file>

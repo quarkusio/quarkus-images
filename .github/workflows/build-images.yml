@@ -19,30 +19,30 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: "base images"
-            modules: "quarkus-distroless-base-image,quarkus-micro-base-image"
-            args: ""
-          - name: "s2i binary images"
-            modules: "quarkus-binary-s2i"
-            args: ""
-          - name: "s2i native images"
-            modules: "quarkus-native-s2i"
-            args: ""
+#          - name: "base images"
+#            modules: "quarkus-distroless-base-image,quarkus-micro-base-image"
+#            args: ""
+#          - name: "s2i binary images"
+#            modules: "quarkus-binary-s2i"
+#           args: ""
+#          - name: "s2i native images"
+#            modules: "quarkus-native-s2i"
+#            args: ""
           - name: "mandrel builder images (latest)"
             modules: "quarkus-mandrel-builder-image"
             args: ""
-          - name: "mandrel builder images (23.0.x)"
-            modules: "quarkus-mandrel-builder-image"
-            args: "-Pmandrel-23.0.x"
-          - name: "mandrel builder images (22.x)"
-            modules: "quarkus-mandrel-builder-image"
-            args: "-Pmandrel-22.x"
-          - name: "graalvm ce builder images (latest)"
-            modules: "quarkus-graalvm-builder-image"
-            args: ""
-          - name: "graalvm ce builder images 22.x"
-            modules: "quarkus-graalvm-builder-image"
-            args: "-Pgraalvm-22.x"
+#          - name: "mandrel builder images (23.0.x)"
+#            modules: "quarkus-mandrel-builder-image"
+#            args: "-Pmandrel-23.0.x"
+#          - name: "mandrel builder images (22.x)"
+#            modules: "quarkus-mandrel-builder-image"
+#            args: "-Pmandrel-22.x"
+#          - name: "graalvm ce builder images (latest)"
+#            modules: "quarkus-graalvm-builder-image"
+#            args: ""
+#          - name: "graalvm ce builder images 22.x"
+#            modules: "quarkus-graalvm-builder-image"
+#            args: "-Pgraalvm-22.x"
 
     steps:
     - name: Re-claim some disk space
@@ -74,8 +74,38 @@ jobs:
         echo "Status:    ${{ steps.buildx.outputs.status }}"
         echo "Flags:     ${{ steps.buildx.outputs.flags }}"
         echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
-    - name: Build ${{ matrix.name }}
-      run: mvn install --projects ${{ matrix.modules }} --also-make -DskipTests ${{ matrix.args }}
+#    - name: Build ${{ matrix.name }}
+#      run: mvn install --projects ${{ matrix.modules }} --also-make -DskipTests ${{ matrix.args }}
+    - name: Test ${{ matrix.name }}
+      env:
+        DOCKER_GHA_BUILDX: true
+# Just debugging the buildx docker :-(
+      run: |
+        set -x
+        set +e
+        id
+        ls -lah
+        git clone --branch testing-more-runtime-images https://github.com/Karm/mandrel-integration-tests.git
+        pushd mandrel-integration-tests/apps/imageio
+        mvn package
+        ls -lah
+        docker run -u $(id -u):$(id -g) -t --entrypoint java -v $(pwd):/project:z quay.io/karmkarm/ubi9-quarkus-mandrel-builder-image:jdk-21-Font -Djava.awt.headless=true -agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/native-image -jar target/imageio.jar
+        ls -lah
+        rm -rf ./mytest*
+        docker run -u $(id -u):$(id -g) -t --entrypoint jar -v $(pwd):/project:z quay.io/karmkarm/ubi9-quarkus-mandrel-builder-image:jdk-21-Font uf target/imageio.jar -C src/main/resources/ META-INF
+        docker run -u $(id -u):$(id -g) -t -v $(pwd):/project:z quay.io/karmkarm/ubi9-quarkus-mandrel-builder-image:jdk-21-Font -H:+UnlockExperimentalVMOptions -H:-UnlockExperimentalVMOptions -J-Djava.awt.headless=true --no-fallback -jar target/imageio.jar target/imageio
+        find . -name "Dockerfile.*" -exec sed -i "s~1000~$(id -u)~g" {} \;
+        find . -name "Dockerfile.*" -exec sed -i "s~root~$(id -g)~g" {} \;
+        cat Dockerfile*
+        docker build --network=host -f Dockerfile.ubi8 -t my-imageio-runner_ubi9 --load .
+        ls -lah
+        docker run -u $(id -u):$(id -g) -t -v $(pwd):/work:z my-imageio-runner_ubi8 /work/target/imageio -Djava.home=. -Djava.awt.headless=true
+        ls -lah
+#       sudo chgrp $(id -g) . -R
+#       sudo chown $(id -u) . -R
+#       sudo chmod ugo+rw . -R
+#       sudo chmod g+s . -R
+#       mvn clean install --projects ${{ matrix.modules }} -DskipTests -Ptest ${{ matrix.args }}
     - name: Print ${{ matrix.name}}
       if: always()
       run: docker images
