@@ -1,17 +1,16 @@
-name: Continuous Integration Build
+name: Build
 
 on:
   pull_request:
-      branches:
-        - main
+    branches:
+      - main
   push:
-      branches:
-        - main
-      paths-ignore:
-        - '.build/**'
+    branches:
+      - main
+    paths-ignore:
+      - '.build/**'
 
 jobs:
-
   build-images:
     name: Build images
     runs-on: ubuntu-latest
@@ -76,6 +75,83 @@ jobs:
         echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
     - name: Build ${{ matrix.name }}
       run: mvn install --projects ${{ matrix.modules }} --also-make -DskipTests ${{ matrix.args }}
+    - name: Test ${{ matrix.name }}
+      env:
+          DOCKER_GHA_BUILDX: true
+      run: |
+        set -x
+        set +e
+        # Deal with spaces in image descriptions
+        NM="${{ matrix.name }}"
+        NM="${NM// /_}"
+        # DOCKER_GHA_SUMMARY_NAME is used in the testsuite
+        export DOCKER_GHA_SUMMARY_NAME=testsuite-logs-${NM}.txt
+        echo "DOCKER_GHA_SUMMARY_NAME=${DOCKER_GHA_SUMMARY_NAME}" >> "$GITHUB_ENV"
+        EXIT_CODE=0
+        # GraalVM CE builder images should work too, merely saving time here...
+        if [[ "${{ matrix.modules }}" == quarkus-mandrel* ]]; then
+          echo "┌── Testing ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}
+          mvn install --projects ${{ matrix.modules }} --also-make -DskipTests -Ptest ${{ matrix.args }}
+          EXIT_CODE=$?
+          if [[ $EXIT_CODE -ne 0 ]]; then
+            echo "└── Done with errors: ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}
+          else
+            echo "└── Done: ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}
+          fi
+        else
+          echo "═╡ SKIPPED: Testing ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}
+        fi
+        exit $EXIT_CODE
+    - name: Upload test summary
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+          name: ${{ env.DOCKER_GHA_SUMMARY_NAME }}
+          path: ${{ github.workspace }}/${{ env.DOCKER_GHA_SUMMARY_NAME }}
     - name: Print ${{ matrix.name}}
       if: always()
       run: docker images
+
+  post-process-summary:
+    name: Summary
+    runs-on: ubuntu-latest
+    needs: build-images
+    if: always()
+    steps:
+      - name: Download all test summaries
+        if: always()
+        uses: actions/download-artifact@v4
+        with:
+          path: all-logs
+      - name: Aggregate summaries
+        if: always()
+        run: |
+          echo "Aggregated Summary for builder images" > final-summary.txt
+          echo "=====================================" >> final-summary.txt
+          for file in all-logs/*/*.txt; do
+            cat "$file" >> final-summary.txt
+          done
+      - name: Upload final aggregated summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-summary-log
+          path: final-summary.txt
+      - name: Prepare and upload comment data
+        if: always() && github.event_name == 'pull_request'
+        run: |
+          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          if [[ -z "$PR_NUMBER" || "$PR_NUMBER" == "null" ]]; then
+            echo "No PR found. No action."
+            exit 0
+          fi
+          ORG_NAME=$(jq --raw-output .repository.owner.login "$GITHUB_EVENT_PATH")
+          REPO_NAME=$(jq --raw-output .repository.name "$GITHUB_EVENT_PATH")
+          COMMENT_JSON_STRING=$(jq -Rs '.' < final-summary.txt)
+          echo "{\"pr_number\":\"$PR_NUMBER\",\"org\":\"$ORG_NAME\",\"repo\":\"$REPO_NAME\",\"comment_body\":$COMMENT_JSON_STRING}" > comment-data.json
+      - name: Upload comment data
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: comment-data-${{ github.event.pull_request.number }}
+          path: comment-data.json
