@@ -1,13 +1,4 @@
 images:
-  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-17.0.8
-  - java-version: 17.0.8
-    tags: jdk-17
-    variants:
-      - arch: amd64
-        sha: 1dffdf5c7cc5bf38558e9f093eef6a14072a6dff0be3a9906208b37b53ecc009
-      - arch: arm64
-        sha: c4f26318114d6bd125cc95ee070289afdd42c6683867adf832f2ab2819c3b685
-
   # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-21.0.2
   - java-version: 21.0.2
     tags: jdk-21
@@ -16,15 +7,6 @@ images:
         sha: b048069aaa3a99b84f5b957b162cc181a32a4330cbc35402766363c5be76ae48
       - arch: arm64
         sha: a34be691ce68f0acf4655c7c6c63a9a49ed276a11859d7224fd94fc2f657cd7a
-
-  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-22.0.2
-  - java-version: 22.0.2
-    tags: jdk-22
-    variants:
-      - arch: amd64
-        sha: ebac1dd96a5e0fbcd1dd9804fa58815f146390a40aae966f02a8c26d1974364f
-      - arch: arm64
-        sha: 28ca4c815fa68b86141d9dcf1a46c1f58f74dead41de9042de1202337bb014d9
 
   # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-23.0.2
   - java-version: 23.0.2

@@ -91,13 +91,6 @@
                 <jbang.script>${project.build.sourceDirectory}/io/quarkus/images/Push.java</jbang.script>
             </properties>
         </profile>
-
-        <profile>
-            <id>graalvm-22.x</id>
-            <properties>
-                <images.file>${project.basedir}/graalvm-22.yaml</images.file>
-            </properties>
-        </profile>
     </profiles>
 
 </project>
