@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 
@@ -79,7 +80,8 @@ public class Test implements Callable<Integer> {
                     "mvn", "clean", "verify",
                     "-Ptestsuite-builder-image",
                     "-Dtest=AppReproducersTest#imageioAWTContainerTest",
-                    "-Dquarkus.native.builder-image=" + image.fullname(config),
+                    // Why -amd64 suffix? At the time of testing, the manifests are not pushed to the registry yet.
+                    "-Dquarkus.native.builder-image=" + image.fullname(config) + "-amd64",
                     "-Dquarkus.native.container-runtime=docker",
                     "-Drootless.container-runtime=false",
                     "-Ddocker.with.sudo=false");
@@ -87,6 +89,11 @@ public class Test implements Callable<Integer> {
             testsuiteProcess.waitFor(10, TimeUnit.MINUTES); // We might be downloading 6+ base images on first run.
             if (testsuiteProcess.exitValue() != 0) {
                 System.err.println("Failed to run the mandrel-integration-tests.");
+                final String summaryFile = System.getenv("DOCKER_GHA_SUMMARY_NAME");
+                if (summaryFile != null) {
+                    final String summary = "│   ├❌ Testsuite failed to start for " + image.fullname(config) + "\n";
+                    Files.writeString(Path.of(summaryFile), summary, UTF_8, CREATE, APPEND);
+                }
             }
             returnCode = returnCode + testsuiteProcess.exitValue();
             System.out.println("=== BEGIN DETAILS === " + image.fullname(config) + "\n" +
