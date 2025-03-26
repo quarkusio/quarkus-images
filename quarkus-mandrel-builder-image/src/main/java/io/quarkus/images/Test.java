@@ -80,7 +80,8 @@ public class Test implements Callable<Integer> {
                     "mvn", "clean", "verify",
                     "-Ptestsuite-builder-image",
                     "-Dtest=AppReproducersTest#imageioAWTContainerTest",
-                    "-Dquarkus.native.builder-image=" + image.fullname(config),
+                    // Why -amd64 suffix? At the time of testing, the manifests are not pushed to the registry yet.
+                    "-Dquarkus.native.builder-image=" + image.fullname(config) + "-amd64",
                     "-Dquarkus.native.container-runtime=docker",
                     "-Drootless.container-runtime=false",
                     "-Ddocker.with.sudo=false");
