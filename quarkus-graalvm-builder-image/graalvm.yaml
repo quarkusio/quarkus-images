@@ -1,27 +1,9 @@
 images:
-  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-21.0.2
-  - java-version: 21.0.2
-    tags: jdk-21
-    variants:
-      - arch: amd64
-        sha: b048069aaa3a99b84f5b957b162cc181a32a4330cbc35402766363c5be76ae48
-      - arch: arm64
-        sha: a34be691ce68f0acf4655c7c6c63a9a49ed276a11859d7224fd94fc2f657cd7a
-
-  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-23.0.2
-  - java-version: 23.0.2
-    tags: jdk-23
-    variants:
-      - arch: amd64
-        sha: 0cf63e88153b759136947c14f0042c515ae1ff9abf346f143dc47af065b1d6dd
-      - arch: arm64
-        sha: 70d0ee8cb1922fbfe5a5db6a93360f63bbf0bdf72a6ca1f9b00906e600628c19
-
-  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-24.0.0
-  - java-version: 24.0.0
+  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-24.0.1
+  - java-version: 24.0.1
     tags: jdk-24
     variants:
       - arch: amd64
-        sha: 6476257f3e8e652860c9dfcfea213961ec88a74d7025299d3e95b9441ee5213a
+        sha: d2c544de672e400476a09c8f1da79ecc6b774a9441e234948542c3b3e6a84bde
       - arch: arm64
-        sha: d19c49df72b0d5017bed0467a7053baff3ee83cdff93a4341b3910fab45c68a4
+        sha: a3d1be8fadfb0d3df632252301f79a9b02b47e523da66539d370c62e683d762e
