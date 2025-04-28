@@ -1,27 +1,20 @@
 images:
-  - graalvm-version: 23.1.6.0-Final
+  # https://github.com/graalvm/mandrel/releases/tag/mandrel-23.1.7.0-Final
+  - graalvm-version: 23.1.7.0-Final
     java-version: 21
-    tags: 23.1-java21, 23.1-jdk-21, jdk-21, jdk-21.0.6
+    tags: 23.1-java21, 23.1-jdk-21, jdk-21, jdk-21.0.7
     variants:
-      - sha: b7d27a6917efcd6c7717f0fe107db5467789c2128dfbe0adf95ea72869ba14c0
+      - sha: a9fac281199d89da8c296cf8426a6d87a07aa9c6ca474bb6f34ab9ba88ae0d55
         arch: amd64
-      - sha: b58d5d4535fb17680c5a396115ad5c10d385fbe5f7661e300b7282bb0991f0a2
+      - sha: 25f47c3b41491e282c92f074a1b3af1940916be90ee87a9ef09d85ded5fb6a19
         arch: arm64
 
-  - graalvm-version: 24.1.2.0-Final
-    java-version: 23
-    tags: 24.1-java23, 24.1-jdk-23, jdk-23, jdk-23.0.2
-    variants:
-      - sha: b370586a4f0379aa76ecc788595177be501720f9a94300255fb083536c64b3a5
-        arch: amd64
-      - sha: a868a70d66a793c371b49235e263ca7fdd7669467d52b4e5f54def753676b515
-        arch: arm64
-
-  - graalvm-version: 24.2.0.0-Final
+  # https://github.com/graalvm/mandrel/releases/tag/mandrel-24.2.1.0-Final
+  - graalvm-version: 24.2.1.0-Final
     java-version: 24
-    tags: 24.2-java24, 24.2-jdk-24, jdk-24, jdk-24.0.0
+    tags: 24.2-java24, 24.2-jdk-24, jdk-24, jdk-24.0.1
     variants:
-      - sha: c5da72468bb83095557bfca8b91eb130753e1b29531109dea0727c51da6d63d1
+      - sha: fe60d0227695509879e6115afb9cd130775d9d712b382e3fb1f6dfad91687049
         arch: amd64
-      - sha: f6f9285a8e59c718b44e45cbb2e555d3e21af80fc42e3a6860e6840a8b66be8b
+      - sha: 36f5bfa6067201516ccb87066e419559a75966d343b42d73e0a306cdcfd2f567
         arch: arm64
