@@ -1,5 +1,6 @@
 name: Build
 
+# Do not merge, this is to verify https://github.com/Karm/mandrel-integration-tests/pull/313
 on:
   pull_request:
     branches:
