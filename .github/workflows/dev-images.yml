@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: "mandrel builder images (latest)"
+          - name: "mandrel builder images (devel)"
             modules: "quarkus-mandrel-builder-image"
             args: "-Pdevel-latest"
 
