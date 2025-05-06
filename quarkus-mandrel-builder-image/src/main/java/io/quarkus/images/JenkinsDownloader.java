@@ -1,4 +1,3 @@
-
 /// usr/bin/env jbang "$0" "$@" ; exit $?
 //DEPS com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2
 //DEPS info.picocli:picocli:4.7.4
@@ -88,8 +87,12 @@ public class JenkinsDownloader implements Callable<Integer> {
         final JsonNode root = om.readTree(get(BASE_URL + API));
         for (JsonNode config : root.path("activeConfigurations")) {
             final String name = config.path("name").asText();
-            /* These "LABEL" and "JDK_" bits are hardcoded, depends on our job configs:
-            https://github.com/graalvm/mandrel-packaging/blob/master/jenkins/jobs/builds/mandrel_master_linux_build_matrix.groovy */
+            /*
+            @formatter:off
+            These "LABEL" and "JDK_" bits are hardcoded, depends on our job configs:
+            https://github.com/graalvm/mandrel-packaging/blob/master/jenkins/jobs/builds/mandrel_master_linux_build_matrix.groovy
+            @formatter:on
+            */
             if (!name.contains("LABEL=" + label) || !name.contains("JDK_RELEASE=" + JDK_RELEASE)) {
                 continue;
             }

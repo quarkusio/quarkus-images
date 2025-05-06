@@ -2,6 +2,7 @@
 //DEPS io.quarkus.images:jdock-variant-helper:1.0-SNAPSHOT
 //DEPS info.picocli:picocli:4.7.4
 //SOURCES QuarkusMandrelBuilder.java
+//SOURCES JenkinsDownloader.java
 package io.quarkus.images;
 
 import io.quarkus.images.config.Config;
