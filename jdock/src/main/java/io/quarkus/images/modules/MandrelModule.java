@@ -2,7 +2,11 @@ package io.quarkus.images.modules;
 
 import io.quarkus.images.BuildContext;
 import io.quarkus.images.artifacts.Artifact;
-import io.quarkus.images.commands.*;
+import io.quarkus.images.commands.Command;
+import io.quarkus.images.commands.CopyCommand;
+import io.quarkus.images.commands.EnvCommand;
+import io.quarkus.images.commands.MicrodnfCommand;
+import io.quarkus.images.commands.RunCommand;
 
 import java.util.List;
 
@@ -32,6 +36,13 @@ public class MandrelModule extends AbstractModule {
                 .formatted(javaVersion, arch, version);
         this.url = "https://github.com/graalvm/mandrel/releases/download/mandrel-%s/mandrel-java%s-linux-%s-%s.tar.gz"
                 .formatted(version, javaVersion, arch, version);
+        this.sha = sha;
+    }
+
+    public MandrelModule(String sha, String url) {
+        super("mandrel", url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf(".tar")));
+        this.filename = url.substring(url.lastIndexOf('/') + 1);
+        this.url = url;
         this.sha = sha;
     }
 
