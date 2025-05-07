@@ -81,7 +81,7 @@ public class Push implements Callable<Integer> {
 
     public static String pickName(String alias, Config.ImageConfig image) {
         // "master" hardcoded in mandrel-devel.yaml, i.e., HEAD, tip, main, latest...
-        if("master".equals(image.graalvmVersion)) {
+        if ("master".equals(image.graalvmVersion)) {
             return alias.replace("__VERSION__", "devel-latest");
         }
         return alias.replace("__VERSION__", image.graalvmVersion + "-java" + image.javaVersion);
