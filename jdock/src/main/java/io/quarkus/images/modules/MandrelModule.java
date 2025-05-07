@@ -23,15 +23,7 @@ public class MandrelModule extends AbstractModule {
                 && rm -Rf %s""";
 
     public MandrelModule(String version, String arch, String javaVersion, String sha) {
-        super("mandrel",
-                arch != null ? version + "-java" + javaVersion + "-" + arch : version + "-java" + javaVersion + "-amd64");
-
-        if (arch == null) {
-            arch = "amd64";
-        } else if (arch.equalsIgnoreCase("arm64")) {
-            arch = "aarch64";
-        }
-
+        super("mandrel", version + "-java" + javaVersion + "-" + arch);
         this.filename = "mandrel-java%s-linux-%s-%s.tar.gz"
                 .formatted(javaVersion, arch, version);
         this.url = "https://github.com/graalvm/mandrel/releases/download/mandrel-%s/mandrel-java%s-linux-%s-%s.tar.gz"

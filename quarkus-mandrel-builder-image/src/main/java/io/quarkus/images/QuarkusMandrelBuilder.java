@@ -42,6 +42,11 @@ public class QuarkusMandrelBuilder {
     }
 
     private static MandrelModule pickMandrelModule(String version, String arch, String javaVersion, String sha) {
+        if (arch == null) {
+            arch = "amd64";
+        } else if (arch.equalsIgnoreCase("arm64")) {
+            arch = "aarch64";
+        }
         if ("master".equals(version)) {
             try {
                 return new MandrelModule(fetchSHA256(arch), fetchDownloadURL(arch));
