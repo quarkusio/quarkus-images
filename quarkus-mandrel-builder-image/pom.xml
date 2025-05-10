@@ -98,6 +98,12 @@
                 <jdock.alias>quay.io/quarkus/ubi-quarkus-mandrel-builder-image:__VERSION__-${maven.build.timestamp}</jdock.alias>
             </properties>
         </profile>
+        <profile>
+            <id>devel-latest</id>
+            <properties>
+                <images.file>${project.basedir}/mandrel-devel.yaml</images.file>
+            </properties>
+        </profile>
     </profiles>
 
 </project>

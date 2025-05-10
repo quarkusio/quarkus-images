@@ -1,5 +1,9 @@
 name: Push Images to Quay
 on:
+  # Todo remove later
+  pull_request:
+    branches:
+      - main
   deployment:
   schedule:
     - cron: '0 0 * * 0'

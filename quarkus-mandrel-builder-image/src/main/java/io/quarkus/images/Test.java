@@ -98,8 +98,9 @@ public class Test implements Callable<Integer> {
             returnCode = returnCode + testsuiteProcess.exitValue();
             System.out.println("=== BEGIN DETAILS === " + image.fullname(config) + "\n" +
                     Files.readString(Path.of("mandrel-integration-tests", "testsuite", "target", "archived-logs",
-                                    "org.graalvm.tests.integration.AppReproducersTest", "imageioAWTContainerTest", "build-and-run.log"),
-                            UTF_8) +
+                            "org.graalvm.tests.integration.AppReproducersTest", "imageioAWTContainerTest", "build-and-run.log"),
+                            UTF_8)
+                    +
                     "\n=== END DETAILS ===");
         }
         return returnCode;
@@ -131,8 +132,8 @@ public class Test implements Callable<Integer> {
             paths.forEach(path -> {
                 try {
                     Files.writeString(path, Files.readString(path, UTF_8)
-                                    .replace("1000", newUID)
-                                    .replace("root", newGID),
+                            .replace("1000", newUID)
+                            .replace("root", newGID),
                             UTF_8, CREATE, TRUNCATE_EXISTING);
                 } catch (IOException e) {
                     System.err.println("Failed to replace UID/GID in file " + path + ": " + e.getMessage());

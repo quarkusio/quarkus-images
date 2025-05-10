@@ -1,0 +1,9 @@
+images:
+  - graalvm-version: master
+    java-version: NOT_USED
+    tags: devel-latest
+    variants:
+      - sha: NOT_USED
+        arch: amd64
+      - sha: NOT_USED
+        arch: arm64

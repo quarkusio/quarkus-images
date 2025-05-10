@@ -1,41 +1,23 @@
-name: Build
+name: Dev
 
 on:
-  pull_request:
-    branches:
-      - main
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '.build/**'
+  deployment:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   build-images:
-    name: Build images
+    name: Dev images
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          #- name: "base images"
-          #  modules: "quarkus-distroless-base-image,quarkus-micro-base-image"
-          #  args: ""
-          #- name: "s2i binary images"
-          #  modules: "quarkus-binary-s2i"
-          #  args: ""
-          #- name: "s2i native images"
-          #  modules: "quarkus-native-s2i"
-          #  args: ""
-          - name: "mandrel builder images (latest)"
+          - name: "mandrel builder images (devel)"
             modules: "quarkus-mandrel-builder-image"
-            args: ""
-          #- name: "mandrel builder images (devel)"
-          #  modules: "quarkus-mandrel-builder-image"
-          #  args: "-Pdevel-latest"
-          #- name: "graalvm ce builder images (latest)"
-          #  modules: "quarkus-graalvm-builder-image"
-          #  args: ""
+            args: "-Pdevel-latest"
+
     steps:
     - name: Re-claim some disk space
       run: |
@@ -67,7 +49,7 @@ jobs:
         echo "Flags:     ${{ steps.buildx.outputs.flags }}"
         echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
     - name: Build ${{ matrix.name }}
-      run: mvn install --projects ${{ matrix.modules }} --also-make ${{ matrix.args }}
+      run: mvn install --batch --projects ${{ matrix.modules }} --also-make -DskipTests ${{ matrix.args }}
     - name: Test ${{ matrix.name }}
       env:
           DOCKER_GHA_BUILDX: true
@@ -84,12 +66,14 @@ jobs:
         # GraalVM CE builder images should work too, merely saving time here...
         if [[ "${{ matrix.modules }}" == quarkus-mandrel* ]]; then
           echo "┌── Testing ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}
-          mvn install --projects ${{ matrix.modules }} --also-make -DskipTests -Ptest ${{ matrix.args }}
+          #mvn install --batch --projects ${{ matrix.modules }} --also-make -DskipTests -Ptest ${{ matrix.args }}
+          docker run -t devel-latest-amd64 native-image --version
           EXIT_CODE=$?
           if [[ $EXIT_CODE -ne 0 ]]; then
             echo "└── Done with errors: ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}
           else
             echo "└── Done: ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}
+            mvn install --batch --projects ${{ matrix.modules }} --also-make -DskipTests -Ppush ${{ matrix.args }}
           fi
         else
           echo "═╡ SKIPPED: Testing ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}
