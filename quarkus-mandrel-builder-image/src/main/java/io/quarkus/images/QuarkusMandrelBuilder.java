@@ -42,11 +42,6 @@ public class QuarkusMandrelBuilder {
     }
 
     private static MandrelModule pickMandrelModule(String version, String arch, String javaVersion, String sha) {
-
-        System.out.println("Using Mandrel version " + version + " for architecture " +arch+
-                " and Java version " + javaVersion+ " with sha " + sha);
-
-
         if (arch == null) {
             arch = "amd64";
         } else if (arch.equalsIgnoreCase("arm64")) {

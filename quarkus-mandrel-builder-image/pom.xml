@@ -99,7 +99,7 @@
             </properties>
         </profile>
         <profile>
-            <id>devel-latest</id>
+            <id>dev</id>
             <properties>
                 <images.file>${project.basedir}/mandrel-devel.yaml</images.file>
             </properties>

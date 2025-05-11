@@ -6,7 +6,6 @@ on:
   workflow_dispatch:
 
 jobs:
-
   build-images:
     name: Build and Push images
     runs-on: ubuntu-latest

@@ -1,7 +1,8 @@
 images:
   - graalvm-version: master
     java-version: NOT_USED
-    tags: devel-latest
+    # latest is floating, for jdk-, it's feature.interim.update_build
+    tags: latest, jdk-%s.%s.%s_%s
     variants:
       - sha: NOT_USED
         arch: amd64

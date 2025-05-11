@@ -1,4 +1,4 @@
-/// usr/bin/env jbang "$0" "$@" ; exit $?
+///usr/bin/env jbang "$0" "$@" ; exit $?
 //DEPS com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2
 //DEPS info.picocli:picocli:4.7.4
 package io.quarkus.images;
@@ -10,6 +10,8 @@ import picocli.CommandLine;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.util.concurrent.Callable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.net.URI.create;
 import static java.net.http.HttpRequest.newBuilder;
@@ -42,6 +44,8 @@ public class JenkinsDownloader implements Callable<Integer> {
     // "Labels" are arbitrary strings configured on https://ci.modcluster.io Jenkins.
     private static final String AMD64_LABEL = "el8";
     private static final String AARCH64_LABEL = "el8_aarch64";
+    private static final Pattern VERSION_LABEL_RELEASE = Pattern.compile(
+            "^(?=.*JDK_VERSION=(?<JDKVERSION>\\d+))(?=.*LABEL=(?<LABEL>[\\w%-]+))(?=.*JDK_RELEASE=(?<JDKRELEASE>[a-zA-Z]+)).*$");
 
     /**
      * Note that this method call talks to Jenkins over the Internet, so it might hang, fail etc.
@@ -83,6 +87,7 @@ public class JenkinsDownloader implements Callable<Integer> {
         } else {
             throw new IllegalArgumentException("Unknown architecture: " + arch);
         }
+        System.out.println("Searching for " + label + " " + JDK_RELEASE + " " + arch + " " + postfix + " on Jenkins...");
         final ObjectMapper om = new ObjectMapper();
         final JsonNode root = om.readTree(get(BASE_URL + API));
         for (JsonNode config : root.path("activeConfigurations")) {
@@ -93,14 +98,19 @@ public class JenkinsDownloader implements Callable<Integer> {
             https://github.com/graalvm/mandrel-packaging/blob/master/jenkins/jobs/builds/mandrel_master_linux_build_matrix.groovy
             @formatter:on
             */
-            if (!name.contains("LABEL=" + label) || !name.contains("JDK_RELEASE=" + JDK_RELEASE)) {
+            final Matcher m = VERSION_LABEL_RELEASE.matcher(name);
+            if (!m.find()) {
                 continue;
             }
-            final String jdkVersion = extractVersion(name);
-            if (jdkVersion == null) {
+            if (m.group("JDKVERSION") == null) {
                 continue;
             }
-            if (!name.contains("JDK_VERSION=" + jdkVersion)) {
+            final String labelValue = m.group("LABEL");
+            if (labelValue == null || !labelValue.equalsIgnoreCase(label)) {
+                continue;
+            }
+            final String jdkRelease = m.group("JDKRELEASE");
+            if (jdkRelease == null || !jdkRelease.equalsIgnoreCase(JDK_RELEASE)) {
                 continue;
             }
             final String buildUrl = config.path("lastStableBuild").path("url").asText();
@@ -108,21 +118,13 @@ public class JenkinsDownloader implements Callable<Integer> {
             for (JsonNode artifact : artifacts) {
                 final String file = artifact.path("fileName").asText();
                 if (file != null && file.endsWith(postfix)) {
-                    return buildUrl + "artifact/" + file;
+                    final String fileUrl = buildUrl + "artifact/" + file;
+                    System.out.println("Found " + fileUrl);
+                    return fileUrl;
                 }
             }
         }
         return null;
-    }
-
-    private static String extractVersion(String name) {
-        final String jdkVersionToken = "JDK_VERSION=";
-        final int i = name.indexOf(jdkVersionToken);
-        if (i == -1) {
-            return null;
-        }
-        int j = name.indexOf(',', i);
-        return j == -1 ? name.substring(i + jdkVersionToken.length()) : name.substring(i + jdkVersionToken.length(), j);
     }
 
     private static String get(String url) throws IOException, InterruptedException {
