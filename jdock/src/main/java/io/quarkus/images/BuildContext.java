@@ -22,6 +22,8 @@ public class BuildContext {
     private final ArtifactManager artifacts;
     private String alias;
 
+    private int[] jdkVersion = new int[4];
+
     public BuildContext(File basedir, String from, String platform) {
         this.basedir = basedir;
         this.packages = PackageManagers.guess(from);
@@ -145,4 +147,11 @@ public class BuildContext {
         return basedir;
     }
 
+    public int[] getJdkVersion() {
+        return jdkVersion;
+    }
+
+    public void setJdkVersion(int[] jdkVersion) {
+        this.jdkVersion = jdkVersion;
+    }
 }

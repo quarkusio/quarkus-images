@@ -10,9 +10,12 @@ import io.quarkus.images.config.Tag;
 import picocli.CommandLine;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+
+import static io.quarkus.images.QuarkusMandrelBuilder.jdkVersionAcrossArchs;
 
 @CommandLine.Command(name = "build")
 public class Push implements Callable<Integer> {
@@ -74,7 +77,7 @@ public class Push implements Callable<Integer> {
                     }
                 });
             }
-            Tag.createTagsIfAny(config, image, true);
+            Tag.createTagsIfAny(config, image, true, jdkVersionAcrossArchs(architectures));
         }
         return 0;
     }

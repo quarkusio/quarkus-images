@@ -2,7 +2,7 @@ name: Dev
 on:
   deployment:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * 0'
   workflow_dispatch:
 
 jobs:
@@ -18,12 +18,6 @@ jobs:
             args: "-Pdev"
 
     steps:
-    - name: Login to Container Registry
-      uses: docker/login-action@v2
-      with:
-        registry: quay.io
-        username: ${{ secrets.QUAY_USER }}
-        password: ${{ secrets.QUAY_TOKEN }}
     - name: Re-claim some disk space
       run: |
         sudo swapoff -a
@@ -68,7 +62,6 @@ jobs:
         export DOCKER_GHA_SUMMARY_NAME=testsuite-logs-${NM}.txt
         echo "DOCKER_GHA_SUMMARY_NAME=${DOCKER_GHA_SUMMARY_NAME}" >> "$GITHUB_ENV"
         EXIT_CODE=0
-        # GraalVM CE builder images should work too, merely saving time here...
         if [[ "${{ matrix.modules }}" == quarkus-mandrel* ]]; then
           echo "┌── Testing ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}
           docker run -t dev-amd64 native-image --version

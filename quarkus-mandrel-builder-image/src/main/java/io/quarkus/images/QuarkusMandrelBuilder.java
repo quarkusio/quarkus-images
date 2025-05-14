@@ -9,6 +9,7 @@ import io.quarkus.images.modules.UpxModule;
 import io.quarkus.images.modules.UsLangModule;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,4 +72,22 @@ public class QuarkusMandrelBuilder {
         return architectures;
     }
 
+    public static int[] jdkVersionAcrossArchs(Map<String, Buildable> archs) {
+        final int[] jdkVersion = new int[] { -1, -1, -1, -1 };// feature, update, patch, build
+        archs.values().forEach(buildable -> {
+            int[] v = ((Dockerfile) buildable).context.getJdkVersion();
+            for (int i = 0; i < 4; i++) {
+                if (jdkVersion[i] == -1) {
+                    jdkVersion[i] = v[i];
+                } else if (jdkVersion[i] != v[i]) {
+                    throw new IllegalStateException(String.format(
+                            "Inconsistent JDK versions across archs: %s has different version than previously seen %s",
+                            Arrays.toString(v),
+                            Arrays.toString(jdkVersion)
+                    ));
+                }
+            }
+        });
+        return jdkVersion;
+    }
 }

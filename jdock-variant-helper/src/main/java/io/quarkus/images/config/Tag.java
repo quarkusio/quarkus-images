@@ -14,9 +14,16 @@ public class Tag {
     }
 
     public static void createTagsIfAny(Config config, Config.ImageConfig img, boolean push) {
+        createTagsIfAny(config, img, push, null);
+    }
+
+    public static void createTagsIfAny(Config config, Config.ImageConfig img, boolean push, int[] jdkVersion) {
         img.tags().forEach(tag -> {
             if (tag.startsWith("jdk-%")) {
-                tag = String.format(tag, "25", "0", "1", "18");
+                if (jdkVersion == null) {
+                    throw new IllegalStateException("Unable to create tag " + tag + " as the JDK jdkVersion is not set");
+                }
+                tag = String.format(tag, jdkVersion[0], jdkVersion[1], jdkVersion[2], jdkVersion[3]);
             }
             final String fn = config.image + ":" + tag;
             if (img.isMultiArch()) {

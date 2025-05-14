@@ -101,7 +101,7 @@
         <profile>
             <id>dev</id>
             <properties>
-                <images.file>${project.basedir}/mandrel-devel.yaml</images.file>
+                <images.file>${project.basedir}/mandrel-dev.yaml</images.file>
             </properties>
         </profile>
     </profiles>

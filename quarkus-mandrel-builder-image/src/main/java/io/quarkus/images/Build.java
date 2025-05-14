@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
+import static io.quarkus.images.QuarkusMandrelBuilder.jdkVersionAcrossArchs;
+
 @CommandLine.Command(name = "build")
 public class Build implements Callable<Integer> {
 
@@ -66,7 +68,7 @@ public class Build implements Callable<Integer> {
                 MultiArchImage multi = new MultiArchImage(groupImageName, architectures);
                 multi.buildLocalImages(dryRun);
             }
-            Tag.createTagsIfAny(config, image, false);
+            Tag.createTagsIfAny(config, image, false, jdkVersionAcrossArchs(architectures));
         }
 
         return 0;
