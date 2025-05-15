@@ -1,4 +1,4 @@
-name: Dev
+name: Push Dev Images to Quay
 on:
   deployment:
   schedule:
@@ -18,14 +18,6 @@ jobs:
             args: "-Pdev"
 
     steps:
-    - name: Re-claim some disk space
-      run: |
-        sudo swapoff -a
-        sudo rm -rf /swapfile /usr/share/dotnet /usr/local/lib/android \
-        /usr/local/share/powershell /usr/share/swift /usr/local/.ghcup
-        sudo apt-get clean
-        yes | docker system prune -a
-        df -h
     - uses: actions/checkout@v1
     - uses: actions/setup-java@v3
       with:
@@ -82,9 +74,11 @@ jobs:
       with:
         name: ${{ env.DOCKER_GHA_SUMMARY_NAME }}
         path: ${{ github.workspace }}/${{ env.DOCKER_GHA_SUMMARY_NAME }}
-    - name: Print ${{ matrix.name}}
+    - name: Print results ${{ matrix.name}}
       if: always()
-      run: docker images
+      run: |
+        docker images
+        cat '${{ github.workspace }}/${{ env.DOCKER_GHA_SUMMARY_NAME }}'
     - name: Login to Container Registry
       uses: docker/login-action@v2
       with:
@@ -93,49 +87,3 @@ jobs:
         password: ${{ secrets.QUAY_TOKEN }}
     - name: Push ${{ matrix.name }}
       run: mvn install --batch-mode --projects ${{ matrix.modules }} -DskipTests -Ppush ${{ matrix.args }}
-
-  post-process-summary:
-    name: Summary
-    runs-on: ubuntu-latest
-    needs: build-images
-    if: always()
-    steps:
-      - name: Download all test summaries
-        if: always()
-        uses: actions/download-artifact@v4
-        with:
-          path: all-logs
-      - name: Aggregate summaries
-        if: always()
-        run: |
-          echo "Aggregated Summary for builder images" > final-summary.txt
-          echo "=====================================" >> final-summary.txt
-          for file in all-logs/*/*.txt; do
-            cat "$file" >> final-summary.txt
-          done
-      - name: Upload final aggregated summary
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: final-summary-log
-          path: final-summary.txt
-      - name: Prepare and upload comment data
-        if: always() && github.event_name == 'pull_request'
-        run: |
-          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-          if [[ -z "$PR_NUMBER" || "$PR_NUMBER" == "null" ]]; then
-            echo "No PR found. No action."
-            exit 0
-          fi
-          ORG_NAME=$(jq --raw-output .repository.owner.login "$GITHUB_EVENT_PATH")
-          REPO_NAME=$(jq --raw-output .repository.name "$GITHUB_EVENT_PATH")
-          COMMENT_JSON_STRING=$(jq -Rs '.' < final-summary.txt)
-          echo "{\"pr_number\":\"$PR_NUMBER\",\"org\":\"$ORG_NAME\",\"repo\":\"$REPO_NAME\",\"comment_body\":$COMMENT_JSON_STRING}" > comment-data.json
-          cat comment-data.json | jq .
-          cat final-summary.txt
-      - name: Upload comment data
-        if: always() && github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: comment-data-${{ github.event.pull_request.number }}
-          path: comment-data.json

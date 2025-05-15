@@ -1,4 +1,4 @@
-name: Build
+name: Build and Test
 
 on:
   pull_request:
@@ -18,24 +18,24 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          #- name: "base images"
-          #  modules: "quarkus-distroless-base-image,quarkus-micro-base-image"
-          #  args: ""
-          #- name: "s2i binary images"
-          #  modules: "quarkus-binary-s2i"
-          #  args: ""
-          #- name: "s2i native images"
-          #  modules: "quarkus-native-s2i"
-          #  args: ""
+          - name: "base images"
+            modules: "quarkus-distroless-base-image,quarkus-micro-base-image"
+            args: ""
+          - name: "s2i binary images"
+            modules: "quarkus-binary-s2i"
+            args: ""
+          - name: "s2i native images"
+            modules: "quarkus-native-s2i"
+            args: ""
           - name: "mandrel builder images (latest)"
             modules: "quarkus-mandrel-builder-image"
             args: ""
           - name: "mandrel builder images (dev)"
             modules: "quarkus-mandrel-builder-image"
             args: "-Pdev"
-          #- name: "graalvm ce builder images (latest)"
-          #  modules: "quarkus-graalvm-builder-image"
-          #  args: ""
+          - name: "graalvm ce builder images (latest)"
+            modules: "quarkus-graalvm-builder-image"
+            args: ""
     steps:
     - name: Re-claim some disk space
       run: |
