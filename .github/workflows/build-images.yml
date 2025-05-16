@@ -1,4 +1,8 @@
 name: Build and Test
+# The name of this workflow is significant. Comment bot uses it to
+# identify the workflow to comment on, yaml.workflow.name key in
+# https://github.com/Karm/QCommenter/blob/main/src/main/resources/application.properties
+# or actually in its .env file.
 
 on:
   pull_request:
