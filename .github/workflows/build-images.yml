@@ -1,4 +1,8 @@
-name: Build
+name: Build and Test
+# The name of this workflow is significant. Comment bot uses it to
+# identify the workflow to comment on, yaml.workflow.name key in
+# https://github.com/Karm/QCommenter/blob/main/src/main/resources/application.properties
+# or actually in its .env file.
 
 on:
   pull_request:
@@ -12,7 +16,7 @@ on:
 
 jobs:
   build-images:
-    name: Build images
+    name: Build
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -30,10 +34,12 @@ jobs:
           - name: "mandrel builder images (latest)"
             modules: "quarkus-mandrel-builder-image"
             args: ""
+          - name: "mandrel builder images (dev)"
+            modules: "quarkus-mandrel-builder-image"
+            args: "-Pdev"
           - name: "graalvm ce builder images (latest)"
             modules: "quarkus-graalvm-builder-image"
             args: ""
-
     steps:
     - name: Re-claim some disk space
       run: |
@@ -65,7 +71,7 @@ jobs:
         echo "Flags:     ${{ steps.buildx.outputs.flags }}"
         echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
     - name: Build ${{ matrix.name }}
-      run: mvn install --projects ${{ matrix.modules }} --also-make -DskipTests ${{ matrix.args }}
+      run: mvn install --batch-mode --projects ${{ matrix.modules }} --also-make ${{ matrix.args }}
     - name: Test ${{ matrix.name }}
       env:
           DOCKER_GHA_BUILDX: true
@@ -82,7 +88,7 @@ jobs:
         # GraalVM CE builder images should work too, merely saving time here...
         if [[ "${{ matrix.modules }}" == quarkus-mandrel* ]]; then
           echo "┌── Testing ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}
-          mvn install --projects ${{ matrix.modules }} --also-make -DskipTests -Ptest ${{ matrix.args }}
+          mvn install --batch-mode --projects ${{ matrix.modules }} --also-make -DskipTests -Ptest ${{ matrix.args }}
           EXIT_CODE=$?
           if [[ $EXIT_CODE -ne 0 ]]; then
             echo "└── Done with errors: ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}

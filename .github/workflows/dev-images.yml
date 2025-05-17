@@ -1,0 +1,89 @@
+name: Push Dev Images to Quay
+on:
+  deployment:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  build-images:
+    name: Dev images
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: "mandrel builder images (dev)"
+            modules: "quarkus-mandrel-builder-image"
+            args: "-Pdev"
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+      with:
+        platforms: amd64,arm64
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v3
+      with:
+        install: true
+    - name: Inspect builder
+      run: |
+        echo "Name:      ${{ steps.buildx.outputs.name }}"
+        echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
+        echo "Status:    ${{ steps.buildx.outputs.status }}"
+        echo "Flags:     ${{ steps.buildx.outputs.flags }}"
+        echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
+    - name: Build ${{ matrix.name }}
+      run: mvn install --batch-mode --projects ${{ matrix.modules }} --also-make -DskipTests ${{ matrix.args }}
+    - name: Test ${{ matrix.name }}
+      env:
+          DOCKER_GHA_BUILDX: true
+      run: |
+        set -x
+        set +e
+        # Deal with spaces in image descriptions
+        NM="${{ matrix.name }}"
+        NM="${NM// /_}"
+        # DOCKER_GHA_SUMMARY_NAME is used in the testsuite
+        export DOCKER_GHA_SUMMARY_NAME=testsuite-logs-${NM}.txt
+        echo "DOCKER_GHA_SUMMARY_NAME=${DOCKER_GHA_SUMMARY_NAME}" >> "$GITHUB_ENV"
+        EXIT_CODE=0
+        if [[ "${{ matrix.modules }}" == quarkus-mandrel* ]]; then
+          echo "┌── Testing ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}
+          docker run -t dev-amd64 native-image --version
+          mvn install --batch-mode --projects ${{ matrix.modules }} --also-make -DskipTests -Ptest ${{ matrix.args }}
+          EXIT_CODE=$?
+          if [[ $EXIT_CODE -ne 0 ]]; then
+            echo "└── Done with errors: ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}
+          else
+            echo "└── Done: ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}
+          fi
+        else
+          echo "═╡ SKIPPED: Testing ${{ matrix.name }}" >> ${DOCKER_GHA_SUMMARY_NAME}
+        fi
+        exit $EXIT_CODE
+    - name: Upload test summary
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.DOCKER_GHA_SUMMARY_NAME }}
+        path: ${{ github.workspace }}/${{ env.DOCKER_GHA_SUMMARY_NAME }}
+    - name: Print results ${{ matrix.name}}
+      if: always()
+      run: |
+        docker images
+        cat '${{ github.workspace }}/${{ env.DOCKER_GHA_SUMMARY_NAME }}'
+    - name: Login to Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: quay.io
+        username: ${{ secrets.QUAY_USER }}
+        password: ${{ secrets.QUAY_TOKEN }}
+    - name: Push ${{ matrix.name }}
+      run: mvn install --batch-mode --projects ${{ matrix.modules }} -DskipTests -Ppush ${{ matrix.args }}

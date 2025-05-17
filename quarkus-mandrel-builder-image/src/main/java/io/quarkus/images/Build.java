@@ -2,6 +2,7 @@
 //DEPS io.quarkus.images:jdock-variant-helper:1.0-SNAPSHOT
 //DEPS info.picocli:picocli:4.7.4
 //SOURCES QuarkusMandrelBuilder.java
+//SOURCES JenkinsDownloader.java
 package io.quarkus.images;
 
 import io.quarkus.images.config.Config;
@@ -12,6 +13,8 @@ import java.io.File;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+
+import static io.quarkus.images.QuarkusMandrelBuilder.jdkVersionAcrossArchs;
 
 @CommandLine.Command(name = "build")
 public class Build implements Callable<Integer> {
@@ -65,7 +68,7 @@ public class Build implements Callable<Integer> {
                 MultiArchImage multi = new MultiArchImage(groupImageName, architectures);
                 multi.buildLocalImages(dryRun);
             }
-            Tag.createTagsIfAny(config, image, false);
+            Tag.createTagsIfAny(config, image, false, jdkVersionAcrossArchs(architectures));
         }
 
         return 0;
