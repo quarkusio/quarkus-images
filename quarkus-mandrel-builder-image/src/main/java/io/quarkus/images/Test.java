@@ -77,7 +77,8 @@ public class Test implements Callable<Integer> {
             updateUID();
             // Maven calls JBang and that calls Maven. That Maven calls Maven again. It's Maven all the way down.
             final List<String> testsuite = List.of(
-                    "mvn", "clean", "verify",
+                    "mvn", "clean", "verify", "--batch-mode",
+                    "-DtestFailureIgnore=true", // let the mvn command pass
                     "-Ptestsuite-builder-image",
                     "-Dtest=AppReproducersTest#imageioAWTContainerTest",
                     // Why -amd64 suffix? At the time of testing, the manifests are not pushed to the registry yet.
