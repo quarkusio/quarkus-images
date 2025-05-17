@@ -66,9 +66,11 @@ public class Test implements Callable<Integer> {
         }
         int returnCode = 0;
         for (Config.ImageConfig image : config.images) {
+            // Why -amd64 suffix? At the time of testing, the manifests are not pushed to the registry yet.
+            final String builderImage = image.fullname(config) + "-amd64";
             if (image.isMultiArch()) {
                 System.out
-                        .println("\uD83D\uDD25\tTesting multi-arch image " + image.fullname(config) + " referencing "
+                        .println("\uD83D\uDD25\tTesting multi-arch image " + builderImage + " referencing "
                                 + image.getNestedImages(config));
             } else {
                 System.out
@@ -78,11 +80,12 @@ public class Test implements Callable<Integer> {
             // Maven calls JBang and that calls Maven. That Maven calls Maven again. It's Maven all the way down.
             final List<String> testsuite = List.of(
                     "mvn", "clean", "verify", "--batch-mode",
-                    "-DtestFailureIgnore=true", // let the mvn command pass
+                    // let the mvn command pass
+                    "-Dmaven.surefire.testFailureIgnore=true",
+                    "-Dmaven.failsafe.testFailureIgnore=true",
                     "-Ptestsuite-builder-image",
                     "-Dtest=AppReproducersTest#imageioAWTContainerTest",
-                    // Why -amd64 suffix? At the time of testing, the manifests are not pushed to the registry yet.
-                    "-Dquarkus.native.builder-image=" + image.fullname(config) + "-amd64",
+                    "-Dquarkus.native.builder-image=" + builderImage,
                     "-Dquarkus.native.container-runtime=docker",
                     "-Drootless.container-runtime=false",
                     "-Ddocker.with.sudo=false");
@@ -92,7 +95,7 @@ public class Test implements Callable<Integer> {
                 System.err.println("Failed to run the mandrel-integration-tests.");
                 final String summaryFile = System.getenv("DOCKER_GHA_SUMMARY_NAME");
                 if (summaryFile != null) {
-                    final String summary = "│   ├❌ Testsuite failed to start for " + image.fullname(config) + "\n";
+                    final String summary = "│   ├❌ Testsuite failed for " + builderImage + "\n";
                     Files.writeString(Path.of(summaryFile), summary, UTF_8, CREATE, APPEND);
                 }
             }

@@ -65,7 +65,7 @@ jobs:
           username: ${{ secrets.QUAY_USER }}
           password: ${{ secrets.QUAY_TOKEN }}
       - name: Build images
-        run: mvn install --projects ${{ matrix.modules }} --also-make -DskipTests -Ppush ${{ matrix.args }}
+        run: mvn install --batch-mode --projects ${{ matrix.modules }} --also-make -DskipTests -Ppush ${{ matrix.args }}
       - name: Print ${{ matrix.name}}
         if: always()
         run: |
