@@ -14,9 +14,18 @@ public class Tag {
     }
 
     public static void createTagsIfAny(Config config, Config.ImageConfig img, boolean push) {
+        createTagsIfAny(config, img, push, null);
+    }
+
+    public static void createTagsIfAny(Config config, Config.ImageConfig img, boolean push, int[] jdkVersion) {
         img.tags().forEach(tag -> {
-            String fn = config.image + ":" + tag;
-            String src;
+            if (tag.startsWith("jdk-%")) {
+                if (jdkVersion == null) {
+                    throw new IllegalStateException("Unable to create tag " + tag + " as the JDK jdkVersion is not set");
+                }
+                tag = String.format(tag, jdkVersion[0], jdkVersion[1], jdkVersion[2], jdkVersion[3]);
+            }
+            final String fn = config.image + ":" + tag;
             if (img.isMultiArch()) {
                 if (!push) {
                     System.out.println("\uD83D\uDD25\tSkipping the creation of the tag " + fn + " as push is set to false");
@@ -24,7 +33,7 @@ public class Tag {
                 }
                 MultiArchImage.createAndPushManifest(fn, img.getArchToImage(config));
             } else {
-                src = img.fullname(config, img.variants.get(0));
+                final String src = img.fullname(config, img.variants.get(0));
                 System.out.println("\uD83D\uDD25\tCreating tag " + fn + " => " + src);
                 Exec.execute(List.of("docker", "tag", src, fn),
                         e -> new RuntimeException("Unable to create tag for " + src, e));

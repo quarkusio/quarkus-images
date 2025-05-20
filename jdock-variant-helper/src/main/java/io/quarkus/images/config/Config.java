@@ -61,12 +61,18 @@ public class Config {
 
         public String fullname(Config config, Variant variant) {
             if (graalvmVersion != null) {
-                if (variant.arch() != null) {
-                    return config.image + ":" + graalvmVersion + "-java" + javaVersion + "-" + variant.arch();
+                final String n;
+                if ("master".equals(graalvmVersion)) {
+                    n = config.image + ":dev";
+                } else {
+                    n = config.image + ":" + graalvmVersion + "-java" + javaVersion;
                 }
-                return config.image + ":" + graalvmVersion + "-java" + javaVersion;
+                if (variant != null && variant.arch() != null) {
+                    return n + "-" + variant.arch();
+                }
+                return n;
             } else {
-                if (variant.arch() != null) {
+                if (variant != null && variant.arch() != null) {
                     return config.image + ":jdk-" + javaVersion + "-" + variant.arch();
                 }
                 return config.image + ":jdk-" + javaVersion;
@@ -74,11 +80,7 @@ public class Config {
         }
 
         public String fullname(Config config) {
-            if (graalvmVersion != null) {
-                return config.image + ":" + graalvmVersion + "-java" + javaVersion;
-            } else {
-                return config.image + ":jdk-" + javaVersion;
-            }
+            return fullname(config, null);
         }
 
         public Map<String, String> getArchToImage(Config config) {
