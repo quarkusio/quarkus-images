@@ -9,8 +9,8 @@ import java.util.Objects;
 
 public class UpxModule extends AbstractModule {
 
-    public static final String UPX_VERSION = "3.96";
-    public static final String URL = "https://github.com/upx/upx/releases/download/v%s/upx-%s-%s_linux.tar.xz";
+    public static final String UPX_VERSION = "5.0.1";
+    public static final String URL = "https://github.com/upx/upx/releases/download/v%1$s/upx-%1$s-%2$s_linux.tar.xz";
     private final String arch;
 
     public UpxModule(String arch) {
@@ -21,7 +21,7 @@ public class UpxModule extends AbstractModule {
     @Override
     public List<Command> commands(BuildContext bc) {
         String archive = "upx-" + arch + ".xz";
-        Artifact artifact = bc.addArtifact(new Artifact(archive, URL.formatted(UPX_VERSION, UPX_VERSION, arch), null));
+        Artifact artifact = bc.addArtifact(new Artifact(archive, URL.formatted(UPX_VERSION, arch), null));
         return List.of(
                 new PackageCommand("xz"),
                 new EnvCommand("UPX_VERSION", UPX_VERSION),
