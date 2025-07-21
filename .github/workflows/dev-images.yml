@@ -18,6 +18,14 @@ jobs:
             args: "-Pdev"
 
     steps:
+    - name: Re-claim some disk space
+      run: |
+        sudo swapoff -a
+        sudo rm -rf /swapfile /usr/share/dotnet /usr/local/lib/android \
+        /usr/local/share/powershell /usr/share/swift /usr/local/.ghcup
+        sudo apt-get clean
+        yes | docker system prune -a
+        df -h
     - uses: actions/checkout@v1
     - uses: actions/setup-java@v3
       with:
