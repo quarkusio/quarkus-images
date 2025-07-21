@@ -80,5 +80,6 @@ class SimpleTest {
         assertArrayEquals(new int[] { 21, 0, 5, 4 }, parseJDKVersion("21.0.5-beta+4-ea"));
         assertArrayEquals(new int[] { 22, 0, 0, 36 }, parseJDKVersion("22+36"));
         assertArrayEquals(new int[] { 25, 0, 0, 20 }, parseJDKVersion("25-beta+20-ea"));
+        assertArrayEquals(new int[] { 26, 0, 0, 0 }, parseJDKVersion("26"));
     }
 }

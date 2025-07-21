@@ -85,7 +85,7 @@ public class MandrelModule extends AbstractModule {
             // Leaving the dir there, cleanup not necessary...
             final Path tempDir = Files.createTempDirectory("mandrel_version_check");
             // Mandrel has the file, copied from Temurin.
-            if(!a.store.exists()) {
+            if (!a.store.exists()) {
                 throw new RuntimeException("Artifact not found: " + a.store.getAbsolutePath());
             }
             final ProcessBuilder pb = new ProcessBuilder(
@@ -101,11 +101,11 @@ public class MandrelModule extends AbstractModule {
             final Process p = pb.start();
             p.waitFor(30, TimeUnit.SECONDS);
             final String jvmVersion = Files.readAllLines(tempDir.resolve("release")) // tiny file <2K
-                    .stream().filter(line -> line.startsWith("JVM_VERSION="))
+                    .stream().filter(line -> line.startsWith("JAVA_VERSION="))
                     .findFirst()
-                    .orElseThrow(() -> new RuntimeException("JVM_VERSION not found in release file"))
-                    .replace("JVM_VERSION=", "").replace("\"", "").trim();
-            System.out.println("JVM_VERSION: " + jvmVersion);
+                    .orElseThrow(() -> new RuntimeException("JAVA_VERSION not found in release file"))
+                    .replace("JAVA_VERSION=", "").replace("\"", "").trim();
+            System.out.println("JAVA_VERSION: " + jvmVersion);
             return parseJDKVersion(jvmVersion);
         } catch (InterruptedException | IOException e) {
             throw new RuntimeException("Unable to extract JDK version from Mandrel distribution tarball.", e);
