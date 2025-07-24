@@ -1,9 +1,9 @@
 images:
-  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-24.0.1
-  - java-version: 24.0.1
+  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-24.0.2
+  - java-version: 24.0.2
     tags: jdk-24
     variants:
       - arch: amd64
-        sha: d2c544de672e400476a09c8f1da79ecc6b774a9441e234948542c3b3e6a84bde
+        sha: 6d62846c826ddb9307deec71e7661c26fa5a5e3985d7bb9005ea42163a390720
       - arch: arm64
-        sha: a3d1be8fadfb0d3df632252301f79a9b02b47e523da66539d370c62e683d762e
+        sha: c54d951a858791483d58270ecbc0946f28c4742c7fac74a4ebb2764bbf66d6f5
