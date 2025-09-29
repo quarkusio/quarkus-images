@@ -18,3 +18,13 @@ images:
         arch: amd64
       - sha: 3f014073648e16d23eb0702b2c2a71b06f75f3cfad9db54c55eaf76524867778
         arch: arm64
+
+  # https://github.com/graalvm/mandrel/releases/tag/mandrel-25.0.0.1-Final
+  - graalvm-version: 25.0.0.1-Final
+    java-version: 25
+    tags: 25.0-java25, 25.0-jdk-25, jdk-25, jdk-25.0.0
+    variants:
+      - sha: d4eaeacc7737d7f0285164c56472d5cdd5f44228597b38329d8b436594c15af5
+        arch: amd64
+      - sha: eed4fd51dfc5b01b8f7c624d2bcd6790ddce8fac915cd05067218371881b6b85
+        arch: arm64
