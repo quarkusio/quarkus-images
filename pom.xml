@@ -37,11 +37,11 @@
         <ubi8-min.base>registry.access.redhat.com/ubi8/ubi-minimal:8.10</ubi8-min.base>
         <ubi8-micro.base>registry.access.redhat.com/ubi8-micro:8.10</ubi8-micro.base>
 
-        <ubi9-min.base>registry.access.redhat.com/ubi9/ubi-minimal:9.7</ubi9-min.base>
-        <ubi9-micro.base>registry.access.redhat.com/ubi9-micro:9.7</ubi9-micro.base>
+        <ubi9-min.base>registry.access.redhat.com/ubi9/ubi-minimal:9.8</ubi9-min.base>
+        <ubi9-micro.base>registry.access.redhat.com/ubi9-micro:9.8</ubi9-micro.base>
 
-        <ubi10-min.base>registry.access.redhat.com/ubi10/ubi-minimal:10.1</ubi10-min.base>
-        <ubi10-micro.base>registry.access.redhat.com/ubi10-micro:10.1</ubi10-micro.base>
+        <ubi10-min.base>registry.access.redhat.com/ubi10/ubi-minimal:10.2</ubi10-min.base>
+        <ubi10-micro.base>registry.access.redhat.com/ubi10-micro:10.2</ubi10-micro.base>
 
         <jdock.dry-run>false</jdock.dry-run>
     </properties>
