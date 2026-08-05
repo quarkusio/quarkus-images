@@ -12,6 +12,7 @@ import io.quarkus.images.utils.Exec;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -36,6 +37,16 @@ public class MandrelModule extends AbstractModule {
                 && tar xzf %s -C %s --strip-components=1 \\
                 && rm -Rf %s""";
 
+    /**
+     * Creates a native-image-utils symlink on PATH pointing to
+     * $JAVA_HOME/bin/native-image-configure
+     * 
+     * @see <a href="https://www.graalvm.org/jdk25/security-guide/native-image/sbom/#native-image-utils-tool">native-image-utils
+     *      tool</a>
+     */
+    private static final String NATIVE_IMAGE_UTILS_SYMLINK = "ln -s $JAVA_HOME/bin/native-image-configure /usr/bin/native-image-utils";
+    public static final int NATIVE_IMAGE_UTILS_MIN_JDK_FEATURE = 25;
+
     public MandrelModule(String version, String arch, String javaVersion, String sha) {
         super("mandrel", version + "-java" + javaVersion + "-" + arch);
         this.filename = "mandrel-java%s-linux-%s-%s.tar.gz"
@@ -57,12 +68,17 @@ public class MandrelModule extends AbstractModule {
         Artifact artifact = bc.addArtifact(new Artifact(filename, url, sha));
         String script = TEMPLATE.formatted(
                 MANDREL_HOME, "/tmp/" + artifact.name, MANDREL_HOME, "/tmp/" + artifact.name);
-        bc.setJdkVersion(getJDKVersion(artifact));
-        return List.of(
-                new EnvCommand("JAVA_HOME", MANDREL_HOME, "GRAALVM_HOME", MANDREL_HOME),
-                new MicrodnfCommand("fontconfig", "freetype-devel"),
-                new CopyCommand(artifact, "/tmp/" + artifact.name),
-                new RunCommand(script));
+        final int[] jdkVersion = getJDKVersion(artifact);
+        bc.setJdkVersion(jdkVersion);
+        final List<Command> commands = new ArrayList<>();
+        commands.add(new EnvCommand("JAVA_HOME", MANDREL_HOME, "GRAALVM_HOME", MANDREL_HOME));
+        commands.add(new MicrodnfCommand("fontconfig", "freetype-devel"));
+        commands.add(new CopyCommand(artifact, "/tmp/" + artifact.name));
+        commands.add(new RunCommand(script));
+        if (jdkVersion[0] >= NATIVE_IMAGE_UTILS_MIN_JDK_FEATURE) {
+            commands.add(new RunCommand(NATIVE_IMAGE_UTILS_SYMLINK));
+        }
+        return commands;
     }
 
     public static int[] parseJDKVersion(String version) {
