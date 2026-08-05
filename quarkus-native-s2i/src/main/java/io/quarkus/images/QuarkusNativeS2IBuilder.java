@@ -19,7 +19,7 @@ public class QuarkusNativeS2IBuilder {
                 .module(new UsLangModule())
                 .module(new QuarkusUserModule())
                 .module(new GraalVMModule(config.graalvmVersion, image.arch(), config.javaVersion,
-                        image.sha()))
+                        image.sha(), config.graalvmReleaseTag))
                 .module(new MavenModule())
                 .module(new GradleModule())
                 .module(new NativeS2IModule())

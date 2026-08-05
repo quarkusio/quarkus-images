@@ -30,6 +30,12 @@ public class Config {
         @JsonProperty("java-version")
         public String javaVersion;
 
+        /**
+         * Optional GitHub release tag for the new GraalVM Community Innovation-release naming scheme.
+         */
+        @JsonProperty("graalvm-release-tag") // Optional, can be null.
+        public String graalvmReleaseTag;
+
         // Optional, can be null
         public String tag;
 
@@ -39,6 +45,10 @@ public class Config {
 
         public String graalvmVersion() {
             return graalvmVersion;
+        }
+
+        public String graalvmReleaseTag() {
+            return graalvmReleaseTag;
         }
 
         public List<String> tags() {
