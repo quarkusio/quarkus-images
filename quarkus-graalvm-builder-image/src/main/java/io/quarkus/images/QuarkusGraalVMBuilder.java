@@ -10,7 +10,8 @@ import java.util.Map;
 
 public class QuarkusGraalVMBuilder {
 
-    public static Dockerfile getGraalvmDockerFile(String base, String version, String javaVersion, String arch, String sha) {
+    public static Dockerfile getGraalvmDockerFile(String base, String version, String javaVersion, String arch, String sha,
+            String releaseTag) {
         Dockerfile df = Dockerfile.from(base);
         df
                 .user("root")
@@ -21,7 +22,7 @@ public class QuarkusGraalVMBuilder {
                 .module(new QuarkusUserModule())
                 .module(new QuarkusDirectoryModule())
                 .module(new UpxModule(arch))
-                .module(new GraalVMModule(version, arch, javaVersion, sha))
+                .module(new GraalVMModule(version, arch, javaVersion, sha, releaseTag))
                 .env("PATH", "$PATH:$JAVA_HOME/bin")
                 .label("io.k8s.description", "Quarkus.io executable image providing the `native-image` executable.",
                         "io.k8s.display-name", "Quarkus.io executable (GraalVM Native)",
@@ -36,7 +37,7 @@ public class QuarkusGraalVMBuilder {
 
     public static Dockerfile getGraalvmDockerFile(Config.ImageConfig image, Variant variant, String base) {
         return getGraalvmDockerFile(base, image.graalvmVersion(), image.javaVersion(), variant.arch(),
-                variant.sha());
+                variant.sha(), image.graalvmReleaseTag());
     }
 
     public static Map<String, Buildable> collect(Config.ImageConfig image, String base) {
