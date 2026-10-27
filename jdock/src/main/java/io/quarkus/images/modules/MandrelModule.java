@@ -40,12 +40,40 @@ public class MandrelModule extends AbstractModule {
     /**
      * Creates a native-image-utils symlink on PATH pointing to
      * $JAVA_HOME/bin/native-image-configure
-     * 
+     *
      * @see <a href="https://www.graalvm.org/jdk25/security-guide/native-image/sbom/#native-image-utils-tool">native-image-utils
      *      tool</a>
      */
     private static final String NATIVE_IMAGE_UTILS_SYMLINK = "ln -s $JAVA_HOME/bin/native-image-configure /usr/bin/native-image-utils";
     public static final int NATIVE_IMAGE_UTILS_MIN_JDK_FEATURE = 25;
+
+    /**
+     * Removes compromised eMudhra root CA certificates from the JDK's cacerts keystore.
+     * <p>
+     * Mandrel is distributed as a Temurin-based standalone JDK runtime and therefore carries
+     * its own Mozilla-derived CA trust store ({@code $JAVA_HOME/lib/security/cacerts}), which
+     * includes the eMudhra root certificates whose private keys were compromised
+     * (CVE-2026-114820 / JDK-8395690, see <a href="https://openjdk.org/emudhra">openjdk.org/emudhra</a>).
+     * <p>
+     * Both the Temurin DN-style aliases actually present in the store <em>and</em> the canonical
+     * short aliases used by upstream OpenJDK releases are attempted; {@code || true} ensures the
+     * build does not fail when an alias is absent (e.g. future Temurin releases may use either
+     * naming scheme, and not every alias is present in every JDK version).
+     * <p>
+     * Mozilla still trusts G1 following its own analysis in Mozilla bug
+     * 2083449, so it remains in the Temurin trust store, and CheckCerts
+     * will correctly report it being present, but inappropriately
+     * report it as a BAD ROOT
+     */
+    private static final String EMUDHRA_CERT_REMOVAL = """
+            $JAVA_HOME/bin/keytool -delete -cacerts -storepass changeit -noprompt \\
+                -alias "cn_emsign_ecc_root_ca__g3,o_emudhra_technologies_limited,ou_emsign_pki,c_in [jdk]" || true \\
+                && $JAVA_HOME/bin/keytool -delete -cacerts -storepass changeit -noprompt \\
+                -alias "emsigneccrootcag3 [jdk]" || true \\
+                && $JAVA_HOME/bin/keytool -delete -cacerts -storepass changeit -noprompt \\
+                -alias "emsignrootcag2 [jdk]" || true \\
+                && $JAVA_HOME/bin/keytool -delete -cacerts -storepass changeit -noprompt \\
+                -alias "comodoaaaca [jdk]" || true""";
 
     public MandrelModule(String version, String arch, String javaVersion, String sha) {
         super("mandrel", version + "-java" + javaVersion + "-" + arch);
@@ -75,6 +103,7 @@ public class MandrelModule extends AbstractModule {
         commands.add(new MicrodnfCommand("fontconfig", "freetype-devel"));
         commands.add(new CopyCommand(artifact, "/tmp/" + artifact.name));
         commands.add(new RunCommand(script));
+        commands.add(new RunCommand(EMUDHRA_CERT_REMOVAL));
         if (jdkVersion[0] >= NATIVE_IMAGE_UTILS_MIN_JDK_FEATURE) {
             commands.add(new RunCommand(NATIVE_IMAGE_UTILS_SYMLINK));
         }
