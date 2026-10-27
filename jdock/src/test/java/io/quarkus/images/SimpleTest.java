@@ -72,6 +72,29 @@ class SimpleTest {
         assertThat(df.build()).contains("RUN source $HOME/.bashrc \\\n && echo $HOME\n");
     }
 
+    /**
+     * Verifies that the generated Mandrel Dockerfile removes the compromised eMudhra G3 root
+     * (CVE-2026-114820) but deliberately does NOT remove G1, which Mozilla continues to trust
+     * per Mozilla bug 2083449.
+     */
+    @Test
+    void testEmudhraG3RemovedG1Kept() {
+        String dockerfileContent = Builders.getMandrelDockerFile(
+                "23.1.12.1-Final", "21", "amd64",
+                "f5c62e29dc779a6dc574bb0bc4b40e4b0ec799d842fc979353b4c07e69057fb3")
+                .build();
+
+        // G3 aliases (Temurin DN-style and upstream OpenJDK short form) must be deleted
+        assertThat(dockerfileContent)
+                .contains("cn_emsign_ecc_root_ca__g3,o_emudhra_technologies_limited,ou_emsign_pki,c_in [jdk]")
+                .contains("emsigneccrootcag3 [jdk]");
+
+        // G1 must NOT be touched — Mozilla still trusts it (Mozilla bug 2083449)
+        assertThat(dockerfileContent)
+                .doesNotContain("cn_emsign_root_ca__g1,o_emudhra_technologies_limited,ou_emsign_pki,c_in [jdk]")
+                .doesNotContain("emsignrootcag1 [jdk]");
+    }
+
     @Test
     void testJDKVersionParsing() {
         assertArrayEquals(new int[] { 20, 0, 1, 9 }, parseJDKVersion("20.0.1+9"));
