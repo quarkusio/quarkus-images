@@ -44,7 +44,7 @@ jobs:
     - name: Install Podman and qemu
       run: |
         sudo apt-get update
-        sudo apt-get install podman qemu-user-static binfmt-support
+        sudo apt-get install podman qemu-user-binfmt binfmt-support
         sudo update-binfmts --enable qemu-aarch64
         sudo systemctl restart systemd-binfmt
     - name: Re-claim some disk space
