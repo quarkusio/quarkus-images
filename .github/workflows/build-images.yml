@@ -56,8 +56,8 @@ jobs:
         podman system prune -a -f
         sudo podman system prune -a -f
         df -h
-    - uses: actions/checkout@v6
-    - uses: actions/setup-java@v5
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
       with:
         distribution: 'temurin'
         java-version: '17'
@@ -91,13 +91,13 @@ jobs:
         exit $EXIT_CODE
     - name: Upload test summary
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       with:
           name: ${{ env.DOCKER_GHA_SUMMARY_NAME }}
           path: ${{ github.workspace }}/${{ env.DOCKER_GHA_SUMMARY_NAME }}
     - name: Upload archived logs
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       with:
           name: archived-logs-${{ matrix.name }}
           path: '**/target/archived-logs/**'
@@ -113,7 +113,7 @@ jobs:
     steps:
       - name: Download all test summaries
         if: always()
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           path: all-logs
       - name: Aggregate summaries
@@ -126,7 +126,7 @@ jobs:
           done
       - name: Upload final aggregated summary
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: final-summary-log
           path: final-summary.txt
@@ -144,7 +144,7 @@ jobs:
           echo "{\"pr_number\":\"$PR_NUMBER\",\"org\":\"$ORG_NAME\",\"repo\":\"$REPO_NAME\",\"comment_body\":$COMMENT_JSON_STRING}" > comment-data.json
       - name: Upload comment data
         if: always() && github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: comment-data-${{ github.event.pull_request.number }}
           path: comment-data.json
