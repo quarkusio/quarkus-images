@@ -1,12 +1,12 @@
 images:
-  # https://github.com/graalvm/mandrel/releases/tag/mandrel-23.1.12.1-Final
-  - graalvm-version: 23.1.12.1-Final
+  # https://github.com/graalvm/mandrel/releases/tag/mandrel-23.1.13.0-Final
+  - graalvm-version: 23.1.13.0-Final
     java-version: 21
-    tags: 23.1-java21, 23.1-jdk-21, jdk-21, jdk-21.0.12.1
+    tags: 23.1-java21, 23.1-jdk-21, jdk-21, jdk-21.0.13
     variants:
-      - sha: f5c62e29dc779a6dc574bb0bc4b40e4b0ec799d842fc979353b4c07e69057fb3
+      - sha: ac437f47821fce107018b90068298752e41bc346b0355ce2eca0402bc6252086
         arch: amd64
-      - sha: b9bda99eb95b10412ab2550631d852688c797c931346ddf48477b1c6fab985a7
+      - sha: 51bb7806d39f9bcc0f775528f53e206bec753468216317534783875a6729a1b5
         arch: arm64
 
   # https://github.com/graalvm/mandrel/releases/tag/mandrel-25.0.5.0-Final
