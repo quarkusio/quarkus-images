@@ -44,13 +44,13 @@ jobs:
           podman system prune -a -f
           sudo podman system prune -a -f
           df -h
-      - uses: actions/checkout@v1
-      - uses: actions/setup-java@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
           java-version: '17'
       - name: Log in to Quay.io
-        uses: redhat-actions/podman-login@v1
+        uses: redhat-actions/podman-login@v2
         with:
           registry: quay.io
           username: ${{ secrets.QUAY_USER }}

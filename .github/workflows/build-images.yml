@@ -56,8 +56,8 @@ jobs:
         podman system prune -a -f
         sudo podman system prune -a -f
         df -h
-    - uses: actions/checkout@v6
-    - uses: actions/setup-java@v5
+    - uses: actions/checkout@v7
+    - uses: actions/setup-java@v6
       with:
         distribution: 'temurin'
         java-version: '17'
@@ -91,13 +91,13 @@ jobs:
         exit $EXIT_CODE
     - name: Upload test summary
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v7
       with:
           name: ${{ env.DOCKER_GHA_SUMMARY_NAME }}
           path: ${{ github.workspace }}/${{ env.DOCKER_GHA_SUMMARY_NAME }}
     - name: Upload archived logs
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v7
       with:
           name: archived-logs-${{ matrix.name }}
           path: '**/target/archived-logs/**'
@@ -113,7 +113,7 @@ jobs:
     steps:
       - name: Download all test summaries
         if: always()
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           path: all-logs
       - name: Aggregate summaries
@@ -126,7 +126,7 @@ jobs:
           done
       - name: Upload final aggregated summary
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: final-summary-log
           path: final-summary.txt
@@ -144,7 +144,7 @@ jobs:
           echo "{\"pr_number\":\"$PR_NUMBER\",\"org\":\"$ORG_NAME\",\"repo\":\"$REPO_NAME\",\"comment_body\":$COMMENT_JSON_STRING}" > comment-data.json
       - name: Upload comment data
         if: always() && github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: comment-data-${{ github.event.pull_request.number }}
           path: comment-data.json
