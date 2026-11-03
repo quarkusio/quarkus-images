@@ -1,11 +1,11 @@
 images:
   # https://github.com/graalvm/graalvm-ce-builds/releases/tag/graal-25.3.4.1
-  - graalvm-version: 25i3
-    graalvm-release-tag: graal-25.3.4.1
-    java-version: 25.0.4.1
-    tags: jdk-25, 25.3.4.1-jdk-25
+  - graalvm-version: 25i5
+    graalvm-release-tag: graal-25.5.5.0.3
+    java-version: 25.0.5.0.3
+    tags: jdk-25, 25.5.5.0.3-jdk-25
     variants:
       - arch: amd64
-        sha: b2bc38d0c4141426eb44d0eefa3cc172c96faf92727d703b61541699128b6fc7
+        sha: c6438dee6c3ade2220d40b7ccdcad24b512d30e233e61bb4fc70519522de34ef
       - arch: arm64
-        sha: 7e8a3fbc2e4c28566107039a298cef690d86a37599a8e50536fc5a65b7f1bd56
+        sha: 41741c0650ae7564a78335f9e4fc353a902e6ff1d4140f2e4fabd1c55d5cce66
