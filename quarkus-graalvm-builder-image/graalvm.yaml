@@ -1,5 +1,5 @@
 images:
-  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/graal-25.3.4.1
+  # https://github.com/graalvm/graalvm-ce-builds/releases/tag/graal-25.5.5.0.3
   - graalvm-version: 25i5
     graalvm-release-tag: graal-25.5.5.0.3
     java-version: 25.0.5.0.3
