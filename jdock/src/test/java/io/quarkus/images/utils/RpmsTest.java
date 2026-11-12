@@ -22,28 +22,28 @@ class RpmsTest {
 
     @Test
     void testZlibDevelUbi9Minimal() {
-        String base = "registry.access.redhat.com/ubi9/ubi-minimal:9.8";
+        String base = "registry.access.redhat.com/ubi9/ubi-minimal:9.9";
         assertThat(Rpms.zlibDevel(base))
                 .isEqualTo("zlib-devel");
     }
 
     @Test
     void testZlibDevelUbi9Micro() {
-        String base = "registry.access.redhat.com/ubi9-micro:9.8";
+        String base = "registry.access.redhat.com/ubi9-micro:9.9";
         assertThat(Rpms.zlibDevel(base))
                 .isEqualTo("zlib-devel");
     }
 
     @Test
     void testZlibDevelUbi10Minimal() {
-        String base = "registry.access.redhat.com/ubi10/ubi-minimal:10.2";
+        String base = "registry.access.redhat.com/ubi10/ubi-minimal:10.3";
         assertThat(Rpms.zlibDevel(base))
                 .isEqualTo("zlib-ng-compat-devel");
     }
 
     @Test
     void testZlibDevelUbi10Micro() {
-        String base = "registry.access.redhat.com/ubi10-micro:10.2";
+        String base = "registry.access.redhat.com/ubi10-micro:10.3";
         assertThat(Rpms.zlibDevel(base))
                 .isEqualTo("zlib-ng-compat-devel");
     }
