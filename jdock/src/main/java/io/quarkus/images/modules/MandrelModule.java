@@ -23,14 +23,17 @@ public class MandrelModule extends AbstractModule {
     private final String url;
     private final String sha;
     private final String filename;
+    private final String arch;
 
     /*
      * e.g.
-     * "21.0.7+6-LTS" -> 21, 0, 7, 6
-     * "25-beta+20-ea" -> 25, 0, 0, 20
+     * "21.0.7+6-LTS" -> 21, 0, 7, 0, 6
+     * "21.0.13.1+1-LTS" -> 21, 0, 13, 1, 1
+     * "25.0.5+8-LTS" -> 25, 0, 5, 0, 8
+     * "25-beta+20-ea" -> 25, 0, 0, 0, 20
      */
     public static final Pattern TEMURIN_RELEASE_PATTERN = Pattern.compile(
-            "^(\\d+)(?:\\.(\\d+)\\.(\\d+))?(?:[^+]*\\+(\\d+))?.*$");
+            "^(\\d+)(?:\\.(\\d+)\\.(\\d+)(?:\\.(\\d+))?)?(?:[^+]*\\+(\\d+))?.*$");
 
     private static final String TEMPLATE = """
             mkdir -p %s \\
@@ -75,6 +78,12 @@ public class MandrelModule extends AbstractModule {
                 && $JAVA_HOME/bin/keytool -delete -cacerts -storepass changeit -noprompt \\
                 -alias "comodoaaaca [jdk]" || true""";
 
+    /**
+     * JVM option to disable BASE64 intrinsics for affected JDK versions on amd64.
+     * The arm64/aarch64 ISA is not affected.
+     */
+    private static final String BASE64_INTRINSICS_OFF = "-XX:-UseBASE64Intrinsics";
+
     public MandrelModule(String version, String arch, String javaVersion, String sha) {
         super("mandrel", version + "-java" + javaVersion + "-" + arch);
         this.filename = "mandrel-java%s-linux-%s-%s.tar.gz"
@@ -82,6 +91,7 @@ public class MandrelModule extends AbstractModule {
         this.url = "https://github.com/graalvm/mandrel/releases/download/mandrel-%s/mandrel-java%s-linux-%s-%s.tar.gz"
                 .formatted(version, javaVersion, arch, version);
         this.sha = sha;
+        this.arch = arch;
     }
 
     public MandrelModule(String sha, String url) {
@@ -89,6 +99,13 @@ public class MandrelModule extends AbstractModule {
         this.filename = url.substring(url.lastIndexOf('/') + 1);
         this.url = url;
         this.sha = sha;
+        if (filename.contains("amd64")) {
+            this.arch = "amd64";
+        } else if (filename.contains("arm64") || filename.contains("aarch64")) {
+            this.arch = "arm64";
+        } else {
+            this.arch = null;
+        }
     }
 
     @Override
@@ -100,6 +117,9 @@ public class MandrelModule extends AbstractModule {
         bc.setJdkVersion(jdkVersion);
         final List<Command> commands = new ArrayList<>();
         commands.add(new EnvCommand("JAVA_HOME", MANDREL_HOME, "GRAALVM_HOME", MANDREL_HOME));
+        if ("amd64".equals(arch) && needsBASE64IntrinsicsOFF(jdkVersion)) {
+            commands.add(new EnvCommand("JAVA_TOOL_OPTIONS", BASE64_INTRINSICS_OFF));
+        }
         commands.add(new MicrodnfCommand("fontconfig", "freetype-devel"));
         commands.add(new CopyCommand(artifact, "/tmp/" + artifact.name));
         commands.add(new RunCommand(script));
@@ -116,8 +136,9 @@ public class MandrelModule extends AbstractModule {
             final int feature = Integer.parseInt(m.group(1)); // Feature is always there...
             final int interim = (m.group(2) != null) ? Integer.parseInt(m.group(2)) : 0;
             final int update = (m.group(3) != null) ? Integer.parseInt(m.group(3)) : 0;
-            final int build = (m.group(4) != null) ? Integer.parseInt(m.group(4)) : 0;
-            return new int[] { feature, interim, update, build };
+            final int patch = (m.group(4) != null) ? Integer.parseInt(m.group(4)) : 0;
+            final int build = (m.group(5) != null) ? Integer.parseInt(m.group(5)) : 0;
+            return new int[] { feature, interim, update, patch, build };
         }
         throw new IllegalArgumentException("Unknown version format: " + version);
     }
@@ -164,5 +185,17 @@ public class MandrelModule extends AbstractModule {
         } catch (InterruptedException | IOException e) {
             throw new RuntimeException("Unable to extract JDK version from Mandrel distribution tarball.", e);
         }
+    }
+
+    private static boolean needsBASE64IntrinsicsOFF(int[] jdkVersion) {
+        // jdkVersion: [feature, interim, update, patch, build]
+        if (jdkVersion[0] == 25 && jdkVersion[1] == 0) {
+            // Affected: 25.0.x where x < 5, or 25.0.5.0 exactly (not 25.0.5.1+)
+            return jdkVersion[2] < 5 || (jdkVersion[2] == 5 && jdkVersion[3] == 0);
+        } else if (jdkVersion[0] == 21 && jdkVersion[1] == 0) {
+            // Affected: 21.0.x where x < 13, or 21.0.13.0 exactly (not 21.0.13.1+)
+            return jdkVersion[2] < 13 || (jdkVersion[2] == 13 && jdkVersion[3] == 0);
+        }
+        return false;
     }
 }
