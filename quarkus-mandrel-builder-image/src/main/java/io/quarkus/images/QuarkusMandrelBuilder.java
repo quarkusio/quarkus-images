@@ -54,7 +54,7 @@ public class QuarkusMandrelBuilder {
             try {
                 return new MandrelModule(fetchSHA256(arch), fetchDownloadURL(arch));
             } catch (IOException | InterruptedException e) {
-                throw new RuntimeException("Unable to fetch Mandrel image URL and SHA file from Jenkins", e);
+                throw new RuntimeException("Unable to fetch Mandrel image URL and SHA file from Jenkins: " + e.getMessage(), e);
             }
         }
         return new MandrelModule(version, arch, javaVersion, sha);

@@ -3,12 +3,14 @@
 //DEPS info.picocli:picocli:4.7.4
 package io.quarkus.images;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import picocli.CommandLine;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -88,8 +90,7 @@ public class JenkinsDownloader implements Callable<Integer> {
             throw new IllegalArgumentException("Unknown architecture: " + arch);
         }
         System.out.println("Searching for " + label + " " + JDK_RELEASE + " " + arch + " " + postfix + " on Jenkins...");
-        final ObjectMapper om = new ObjectMapper();
-        final JsonNode root = om.readTree(get(BASE_URL + API));
+        final JsonNode root = parseJson(BASE_URL + API, get(BASE_URL + API));
         for (JsonNode config : root.path("activeConfigurations")) {
             final String name = config.path("name").asText();
             /*
@@ -114,7 +115,8 @@ public class JenkinsDownloader implements Callable<Integer> {
                 continue;
             }
             final String buildUrl = config.path("lastStableBuild").path("url").asText();
-            final JsonNode artifacts = om.readTree(get(buildUrl + "api/json?tree=artifacts[*]")).path("artifacts");
+            final String artifactsUrl = buildUrl + "api/json?tree=artifacts[*]";
+            final JsonNode artifacts = parseJson(artifactsUrl, get(artifactsUrl)).path("artifacts");
             for (JsonNode artifact : artifacts) {
                 final String file = artifact.path("fileName").asText();
                 if (file != null && file.endsWith(postfix)) {
@@ -132,7 +134,33 @@ public class JenkinsDownloader implements Callable<Integer> {
             System.err.printf("Error: URL must be valid. Was: %s\n", url);
             return null;
         }
-        return CLIENT.send(newBuilder(create(url)).GET().build(), ofString()).body();
+        final HttpResponse<String> response = CLIENT.send(newBuilder(create(url)).GET().build(), ofString());
+        return responseBody(url, response.statusCode(),
+                response.headers().firstValue("Content-Type").orElse("unknown"), response.body());
+    }
+
+    static String responseBody(String url, int status, String contentType, String body) throws IOException {
+        if (status < 200 || status >= 300) {
+            throw new IOException("Unable to download Mandrel development build information from Jenkins: GET "
+                    + url + " returned HTTP " + status + " (Content-Type: " + contentType + "). "
+                    + "Check that the Jenkins service and job URL are available. "
+                    + "Development image builds require access to this service.");
+        }
+        return body;
+    }
+
+    static JsonNode parseJson(String url, String body) throws IOException {
+        try {
+            final JsonNode root = new ObjectMapper().readTree(body);
+            if (root != null && root.isObject()) {
+                return root;
+            }
+        } catch (JsonProcessingException ignored) {
+            // Do not dump a potentially large HTML error page into the build log.
+        }
+        throw new IOException("Expected a JSON object from the Jenkins API at " + url
+                + ", but received a non-JSON or invalid response. "
+                + "Check that this URL still points to the Jenkins API, rather than an HTML page or archive browser.");
     }
 
     @Override
