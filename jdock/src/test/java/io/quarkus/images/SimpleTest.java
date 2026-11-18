@@ -97,12 +97,26 @@ class SimpleTest {
 
     @Test
     void testJDKVersionParsing() {
-        assertArrayEquals(new int[] { 20, 0, 1, 9 }, parseJDKVersion("20.0.1+9"));
-        assertArrayEquals(new int[] { 21, 1, 3, 9 }, parseJDKVersion("21.1.3+9-LTS"));
-        assertArrayEquals(new int[] { 21, 0, 4, 7 }, parseJDKVersion("21.0.4+7-LTS"));
-        assertArrayEquals(new int[] { 21, 0, 5, 4 }, parseJDKVersion("21.0.5-beta+4-ea"));
-        assertArrayEquals(new int[] { 22, 0, 0, 36 }, parseJDKVersion("22+36"));
-        assertArrayEquals(new int[] { 25, 0, 0, 20 }, parseJDKVersion("25-beta+20-ea"));
-        assertArrayEquals(new int[] { 26, 0, 0, 0 }, parseJDKVersion("26"));
+        assertArrayEquals(new int[] { 20, 0, 1, 0, 9 }, parseJDKVersion("20.0.1+9"));
+        assertArrayEquals(new int[] { 21, 1, 3, 0, 9 }, parseJDKVersion("21.1.3+9-LTS"));
+        assertArrayEquals(new int[] { 21, 0, 4, 0, 7 }, parseJDKVersion("21.0.4+7-LTS"));
+        assertArrayEquals(new int[] { 21, 0, 5, 0, 4 }, parseJDKVersion("21.0.5-beta+4-ea"));
+        assertArrayEquals(new int[] { 22, 0, 0, 0, 36 }, parseJDKVersion("22+36"));
+        assertArrayEquals(new int[] { 25, 0, 0, 0, 20 }, parseJDKVersion("25-beta+20-ea"));
+        assertArrayEquals(new int[] { 26, 0, 0, 0, 0 }, parseJDKVersion("26"));
+        assertArrayEquals(new int[] { 21, 0, 13, 1, 7 }, parseJDKVersion("21.0.13.1+7-LTS"));
+        assertArrayEquals(new int[] { 25, 0, 5, 1, 20 }, parseJDKVersion("25.0.5.1+20"));
+    }
+
+    @Test
+    void testBASE64IntrinsicsWorkaroundApplied() {
+        // Mandrel 25.0.5.0-Final (JDK 25.0.5.0) amd64
+        final String dockerfileContent = Builders.getMandrelDockerFile(
+                "25.0.5.0-Final", "25", "amd64",
+                "2436bb98b96b2cf439e218dfa3df53978588bc23c6e9f2cfed6a408db189951d")
+                .build();
+        assertThat(dockerfileContent)
+                .as("Mandrel with JDK 25.0.5.0 amd64 should have JAVA_TOOL_OPTIONS with -XX:-UseBASE64Intrinsics")
+                .contains("ENV JAVA_TOOL_OPTIONS=\"-XX:-UseBASE64Intrinsics\"");
     }
 }
