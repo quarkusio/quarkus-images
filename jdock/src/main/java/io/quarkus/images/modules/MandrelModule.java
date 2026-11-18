@@ -79,17 +79,6 @@ public class MandrelModule extends AbstractModule {
                 -alias "comodoaaaca [jdk]" || true""";
 
     /**
-     * JVM option to disable BASE64 intrinsics for affected JDK versions on amd64.
-     * The arm64/aarch64 ISA is not affected.
-     * <p>
-     * Set as {@code JAVA_TOOL_OPTIONS} it covers the JVMs started directly in the image
-     * (e.g. {@code java}, {@code javac}). It is only a default, as users can override the variable,
-     * and it does <em>not</em> reach the native-image builder JVM, see
-     * {@link #BASE64_INTRINSICS_OFF_LAUNCHER_PATCH}.
-     */
-    private static final String BASE64_INTRINSICS_OFF = "-XX:-UseBASE64Intrinsics";
-
-    /**
      * Disables BASE64 intrinsics in the JVM that runs the native-image builder, for affected JDK
      * versions on amd64.
      * <p>
@@ -143,9 +132,9 @@ public class MandrelModule extends AbstractModule {
         bc.setJdkVersion(jdkVersion);
         final List<Command> commands = new ArrayList<>();
         commands.add(new EnvCommand("JAVA_HOME", MANDREL_HOME, "GRAALVM_HOME", MANDREL_HOME));
-        final boolean base64Workaround = "amd64".equals(arch) && needsBASE64IntrinsicsOFF(jdkVersion);
+        final boolean base64Workaround = "amd64".equals(arch) && Base64IntrinsicsWorkaround.isAffected(jdkVersion);
         if (base64Workaround) {
-            commands.add(new EnvCommand("JAVA_TOOL_OPTIONS", BASE64_INTRINSICS_OFF));
+            commands.add(new EnvCommand("JAVA_TOOL_OPTIONS", Base64IntrinsicsWorkaround.JVM_OPTION));
         }
         commands.add(new MicrodnfCommand("fontconfig", "freetype-devel"));
         commands.add(new CopyCommand(artifact, "/tmp/" + artifact.name));
@@ -215,17 +204,5 @@ public class MandrelModule extends AbstractModule {
         } catch (InterruptedException | IOException e) {
             throw new RuntimeException("Unable to extract JDK version from Mandrel distribution tarball.", e);
         }
-    }
-
-    private static boolean needsBASE64IntrinsicsOFF(int[] jdkVersion) {
-        // jdkVersion: [feature, interim, update, patch, build]
-        if (jdkVersion[0] == 25 && jdkVersion[1] == 0) {
-            // Affected: 25.0.x where x < 5, or 25.0.5.0 exactly (not 25.0.5.1+)
-            return jdkVersion[2] < 5 || (jdkVersion[2] == 5 && jdkVersion[3] == 0);
-        } else if (jdkVersion[0] == 21 && jdkVersion[1] == 0) {
-            // Affected: 21.0.x where x < 13, or 21.0.13.0 exactly (not 21.0.13.1+)
-            return jdkVersion[2] < 13 || (jdkVersion[2] == 13 && jdkVersion[3] == 0);
-        }
-        return false;
     }
 }
