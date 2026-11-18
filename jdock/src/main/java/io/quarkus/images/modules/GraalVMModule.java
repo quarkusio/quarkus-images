@@ -4,6 +4,7 @@ import io.quarkus.images.BuildContext;
 import io.quarkus.images.artifacts.Artifact;
 import io.quarkus.images.commands.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -12,6 +13,7 @@ public class GraalVMModule extends AbstractModule {
     private final String url;
     private final String sha;
     private final String filename;
+    private final boolean base64Workaround;
 
     /**
      * Indicates whether the graalvm version is using the old scheme (21.x, 22.x) ({@code true}),
@@ -40,6 +42,21 @@ public class GraalVMModule extends AbstractModule {
               && rm -Rf %s""";
     private final String graalvmVersion;
 
+    /**
+     * GraalVM CE ships a native driver, rather than Mandrel's bash launcher. Keep it in the same
+     * directory so it can locate the distribution, and wrap it with defaults protecting both the
+     * builder JVM (-J) and the generated executable (DisableIntrinsics). The latter is needed when
+     * targeting affected CPU features, e.g. with -march=native on an AVX-512 VBMI host.
+     * JAVA_TOOL_OPTIONS is stripped by the driver; NATIVE_IMAGE_OPTIONS can be replaced by users.
+     * Explicit user options follow the defaults and can still override them.
+     * The executable check makes an unexpected distribution layout fail the image build.
+     */
+    private static final String BASE64_INTRINSICS_OFF_LAUNCHER_WRAPPER = """
+            test -x $JAVA_HOME/lib/svm/bin/native-image \\
+                && mv $JAVA_HOME/lib/svm/bin/native-image $JAVA_HOME/lib/svm/bin/native-image.original \\
+                && printf '%s\\n' '#!/bin/bash' 'exec "$(dirname "$(readlink -f "$0")")/native-image.original" -J-XX:-UseBASE64Intrinsics -H:+UnlockExperimentalVMOptions "-H:DisableIntrinsics=java.util.Base64\\$Decoder.decodeBlock" -H:-UnlockExperimentalVMOptions "$@"' > $JAVA_HOME/lib/svm/bin/native-image \\
+                && chmod +x $JAVA_HOME/lib/svm/bin/native-image""";
+
     public GraalVMModule(String version, String arch, String javaVersion, String sha) {
         this(version, arch, javaVersion, sha, null);
     }
@@ -50,6 +67,8 @@ public class GraalVMModule extends AbstractModule {
                         : arch != null ? version + "-java" + javaVersion + "-" + arch
                                 : version + "-java" + javaVersion + "-amd64");
 
+        base64Workaround = (arch == null || "amd64".equalsIgnoreCase(arch) || "x64".equalsIgnoreCase(arch))
+                && Base64IntrinsicsWorkaround.isAffected(MandrelModule.parseJDKVersion(javaVersion));
         isNewCommunityNaming = version != null && COMMUNITY_VERSION_LABEL.matcher(version).matches();
         isLegacyGraalVm = version != null && !isNewCommunityNaming;
         if (arch == null) {
@@ -116,10 +135,17 @@ public class GraalVMModule extends AbstractModule {
                     "/tmp/" + artifact.name); // rm
         }
 
-        return List.of(
-                new EnvCommand("JAVA_HOME", GRAALVM_HOME, "GRAALVM_HOME", GRAALVM_HOME),
-                new MicrodnfCommand("fontconfig", "freetype-devel"),
-                new CopyCommand(artifact, "/tmp/" + artifact.name),
-                new RunCommand(script));
+        final List<Command> commands = new ArrayList<>();
+        commands.add(new EnvCommand("JAVA_HOME", GRAALVM_HOME, "GRAALVM_HOME", GRAALVM_HOME));
+        if (base64Workaround) {
+            commands.add(new EnvCommand("JAVA_TOOL_OPTIONS", Base64IntrinsicsWorkaround.JVM_OPTION));
+        }
+        commands.add(new MicrodnfCommand("fontconfig", "freetype-devel"));
+        commands.add(new CopyCommand(artifact, "/tmp/" + artifact.name));
+        commands.add(new RunCommand(script));
+        if (base64Workaround) {
+            commands.add(new RunCommand(BASE64_INTRINSICS_OFF_LAUNCHER_WRAPPER));
+        }
+        return commands;
     }
 }
