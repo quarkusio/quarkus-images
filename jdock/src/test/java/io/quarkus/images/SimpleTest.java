@@ -117,6 +117,10 @@ class SimpleTest {
                 .build();
         assertThat(dockerfileContent)
                 .as("Mandrel with JDK 25.0.5.0 amd64 should have JAVA_TOOL_OPTIONS with -XX:-UseBASE64Intrinsics")
-                .contains("ENV JAVA_TOOL_OPTIONS=\"-XX:-UseBASE64Intrinsics\"");
+                .contains("ENV JAVA_TOOL_OPTIONS=\"-XX:-UseBASE64Intrinsics\"")
+                .as("Mandrel with JDK 25.0.5.0 amd64 should have -XX:-UseBASE64Intrinsics baked into the native-image launcher")
+                .contains(
+                        "sed -i 's|^launcher_args=(|launcher_args=(-J-XX:-UseBASE64Intrinsics |' $JAVA_HOME/lib/svm/bin/native-image")
+                .contains("grep -q '^launcher_args=(-J-XX:-UseBASE64Intrinsics ' $JAVA_HOME/lib/svm/bin/native-image");
     }
 }
