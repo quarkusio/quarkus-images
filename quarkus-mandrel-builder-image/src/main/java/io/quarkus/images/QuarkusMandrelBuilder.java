@@ -14,8 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.quarkus.images.JenkinsDownloader.fetchDownloadURL;
-import static io.quarkus.images.JenkinsDownloader.fetchSHA256;
+import static io.quarkus.images.ArchiveBrowser.resolve;
 
 public class QuarkusMandrelBuilder {
 
@@ -52,9 +51,11 @@ public class QuarkusMandrelBuilder {
         }
         if ("master".equals(version)) {
             try {
-                return new MandrelModule(fetchSHA256(arch), fetchDownloadURL(arch));
+                final ArchiveBrowser.MandrelBuild build = resolve(arch);
+                return new MandrelModule(build.sha256(), build.url(), build.jdkVersion());
             } catch (IOException | InterruptedException e) {
-                throw new RuntimeException("Unable to fetch Mandrel image URL and SHA file from Jenkins", e);
+                throw new RuntimeException(
+                        "Unable to fetch Mandrel image URL, SHA256 and JDK version from the Archive Browser", e);
             }
         }
         return new MandrelModule(version, arch, javaVersion, sha);
@@ -75,20 +76,33 @@ public class QuarkusMandrelBuilder {
     }
 
     public static int[] jdkVersionAcrossArchs(Map<String, Buildable> archs) {
-        final int[] jdkVersion = new int[] { -1, -1, -1, -1 };// feature, update, patch, build
-        archs.values().forEach(buildable -> {
-            int[] v = ((Dockerfile) buildable).context.getJdkVersion();
-            for (int i = 0; i < 4; i++) {
-                if (jdkVersion[i] == -1) {
-                    jdkVersion[i] = v[i];
-                } else if (jdkVersion[i] != v[i]) {
-                    throw new IllegalStateException(String.format(
-                            "Inconsistent JDK versions across archs: %s has different version than previously seen %s",
-                            Arrays.toString(v),
-                            Arrays.toString(jdkVersion)));
-                }
+        // Every architecture of an image MUST report exactly the same JDK version (for dev images this
+        // comes from each job's MANDREL.md, for GA from each tarball's release file). The two archs are
+        // independent build jobs, so this is the point where a mismatch between them is caught: if they
+        // ever disagree, kill the build rather than shipping mismatched arches.
+        int[] reference = extractJdkVersion(archs);
+        if (reference == null) {
+            throw new IllegalStateException("Unable to determine the JDK version: no architectures were built");
+        }
+        // The dev tag is "jdk-%s.%s.%s_%s" == feature.interim.update_build. MandrelModule#parseJDKVersion
+        // yields { feature, interim, update, patch, build }, so we project indices 0, 1, 2 and 4 (the
+        // build number lives at index 4, the patch at index 3 is intentionally dropped for this tag).
+        return new int[] { reference[0], reference[1], reference[2], reference[4] };
+    }
+
+    private static int [] extractJdkVersion(Map<String, Buildable> archs) {
+        int[] reference = null;
+        for (Buildable buildable : archs.values()) {
+            final int[] v = ((Dockerfile) buildable).context.getJdkVersion();
+            if (reference == null) {
+                reference = v;
+            } else if (!Arrays.equals(reference, v)) {
+                throw new IllegalStateException(String.format(
+                        "Inconsistent JDK versions across archs: %s has different version than previously seen %s",
+                        Arrays.toString(v),
+                        Arrays.toString(reference)));
             }
-        });
-        return jdkVersion;
+        }
+        return reference;
     }
 }
