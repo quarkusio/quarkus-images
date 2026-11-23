@@ -24,6 +24,13 @@ public class MandrelModule extends AbstractModule {
     private final String sha;
     private final String filename;
     private final String arch;
+    /**
+     * Optional, authoritative OpenJDK version string (e.g. {@code 25.0.6-beta+3-ea}) used by the
+     * "dev" images. When set it takes precedence over the version read from the tarball's
+     * {@code release} file, whose {@code JAVA_VERSION} lacks the build number. {@code null} for
+     * GA releases, which keep deriving the version from the tarball.
+     */
+    private final String jdkVersionOverride;
 
     /*
      * e.g.
@@ -107,13 +114,19 @@ public class MandrelModule extends AbstractModule {
                 .formatted(version, javaVersion, arch, version);
         this.sha = sha;
         this.arch = arch;
+        this.jdkVersionOverride = null;
     }
 
     public MandrelModule(String sha, String url) {
+        this(sha, url, null);
+    }
+
+    public MandrelModule(String sha, String url, String jdkVersionOverride) {
         super("mandrel", url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf(".tar")));
         this.filename = url.substring(url.lastIndexOf('/') + 1);
         this.url = url;
         this.sha = sha;
+        this.jdkVersionOverride = jdkVersionOverride;
         if (filename.contains("amd64")) {
             this.arch = "amd64";
         } else if (filename.contains("arm64") || filename.contains("aarch64")) {
@@ -128,7 +141,9 @@ public class MandrelModule extends AbstractModule {
         Artifact artifact = bc.addArtifact(new Artifact(filename, url, sha));
         String script = TEMPLATE.formatted(
                 MANDREL_HOME, "/tmp/" + artifact.name, MANDREL_HOME, "/tmp/" + artifact.name);
-        final int[] jdkVersion = getJDKVersion(artifact);
+        final int[] jdkVersion = (jdkVersionOverride != null)
+                ? parseJDKVersion(jdkVersionOverride)
+                : getJDKVersion(artifact);
         bc.setJdkVersion(jdkVersion);
         final List<Command> commands = new ArrayList<>();
         commands.add(new EnvCommand("JAVA_HOME", MANDREL_HOME, "GRAALVM_HOME", MANDREL_HOME));

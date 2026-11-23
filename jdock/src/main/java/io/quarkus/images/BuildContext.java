@@ -22,7 +22,8 @@ public class BuildContext {
     private final ArtifactManager artifacts;
     private String alias;
 
-    private int[] jdkVersion = new int[4];
+    // { feature, interim, update, patch, build } as produced by MandrelModule#parseJDKVersion.
+    private int[] jdkVersion = new int[5];
 
     public BuildContext(File basedir, String from, String platform) {
         this.basedir = basedir;
