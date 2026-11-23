@@ -85,27 +85,6 @@ public class MandrelModule extends AbstractModule {
                 && $JAVA_HOME/bin/keytool -delete -cacerts -storepass changeit -noprompt \\
                 -alias "comodoaaaca [jdk]" || true""";
 
-    /**
-     * Disables BASE64 intrinsics in the JVM that runs the native-image builder, for affected JDK
-     * versions on amd64.
-     * <p>
-     * The flag is baked into the {@code launcher_args} of the {@code native-image} launcher script,
-     * i.e. it is passed to the driver as a {@code -J} option on every invocation. Unlike environment
-     * variables, it cannot be lost by a user or a child image setting their own value:
-     * <ul>
-     * <li>{@code JAVA_TOOL_OPTIONS} is stripped by the driver before it starts the builder JVM,
-     * so it never reaches the JVM that runs build-time initializers.</li>
-     * <li>{@code NATIVE_IMAGE_OPTIONS} does work, but any {@code ENV} or {@code -e} replaces it.</li>
-     * </ul>
-     * Options users pass with {@code -J} are appended after this one, so they keep working and
-     * users can still override the default by passing {@code -J-XX:+UseBASE64Intrinsics}.
-     * The {@code grep} fails the image build if the launcher layout changes and the {@code sed}
-     * no longer matches, rather than silently shipping an unprotected image.
-     */
-    private static final String BASE64_INTRINSICS_OFF_LAUNCHER_PATCH = """
-            sed -i 's|^launcher_args=(|launcher_args=(-J-XX:-UseBASE64Intrinsics |' $JAVA_HOME/lib/svm/bin/native-image \\
-                && grep -q '^launcher_args=(-J-XX:-UseBASE64Intrinsics ' $JAVA_HOME/lib/svm/bin/native-image""";
-
     public MandrelModule(String version, String arch, String javaVersion, String sha) {
         super("mandrel", version + "-java" + javaVersion + "-" + arch);
         this.filename = "mandrel-java%s-linux-%s-%s.tar.gz"
@@ -147,16 +126,9 @@ public class MandrelModule extends AbstractModule {
         bc.setJdkVersion(jdkVersion);
         final List<Command> commands = new ArrayList<>();
         commands.add(new EnvCommand("JAVA_HOME", MANDREL_HOME, "GRAALVM_HOME", MANDREL_HOME));
-        final boolean base64Workaround = "amd64".equals(arch) && Base64IntrinsicsWorkaround.isAffected(jdkVersion);
-        if (base64Workaround) {
-            commands.add(new EnvCommand("JAVA_TOOL_OPTIONS", Base64IntrinsicsWorkaround.JVM_OPTION));
-        }
         commands.add(new MicrodnfCommand("fontconfig", "freetype-devel"));
         commands.add(new CopyCommand(artifact, "/tmp/" + artifact.name));
         commands.add(new RunCommand(script));
-        if (base64Workaround) {
-            commands.add(new RunCommand(BASE64_INTRINSICS_OFF_LAUNCHER_PATCH));
-        }
         commands.add(new RunCommand(EMUDHRA_CERT_REMOVAL));
         if (jdkVersion[0] >= NATIVE_IMAGE_UTILS_MIN_JDK_FEATURE) {
             commands.add(new RunCommand(NATIVE_IMAGE_UTILS_SYMLINK));

@@ -107,20 +107,4 @@ class SimpleTest {
         assertArrayEquals(new int[] { 21, 0, 13, 1, 7 }, parseJDKVersion("21.0.13.1+7-LTS"));
         assertArrayEquals(new int[] { 25, 0, 5, 1, 20 }, parseJDKVersion("25.0.5.1+20"));
     }
-
-    @Test
-    void testBASE64IntrinsicsWorkaroundApplied() {
-        // Mandrel 25.0.5.0-Final (JDK 25.0.5.0) amd64
-        final String dockerfileContent = Builders.getMandrelDockerFile(
-                "25.0.5.0-Final", "25", "amd64",
-                "2436bb98b96b2cf439e218dfa3df53978588bc23c6e9f2cfed6a408db189951d")
-                .build();
-        assertThat(dockerfileContent)
-                .as("Mandrel with JDK 25.0.5.0 amd64 should have JAVA_TOOL_OPTIONS with -XX:-UseBASE64Intrinsics")
-                .contains("ENV JAVA_TOOL_OPTIONS=\"-XX:-UseBASE64Intrinsics\"")
-                .as("Mandrel with JDK 25.0.5.0 amd64 should have -XX:-UseBASE64Intrinsics baked into the native-image launcher")
-                .contains(
-                        "sed -i 's|^launcher_args=(|launcher_args=(-J-XX:-UseBASE64Intrinsics |' $JAVA_HOME/lib/svm/bin/native-image")
-                .contains("grep -q '^launcher_args=(-J-XX:-UseBASE64Intrinsics ' $JAVA_HOME/lib/svm/bin/native-image");
-    }
 }
